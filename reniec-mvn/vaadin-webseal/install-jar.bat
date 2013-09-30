@@ -1,0 +1,1 @@
+mvn install:install-file -Dfile=vaadin-6.8.3-webseal.jar -DpomFile=vaadin-webseal.pom
