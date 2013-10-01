@@ -1,7 +1,43 @@
-<!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd" >
+<?xml version="1.0" encoding="UTF-8"?>
 
-<web-app>
-  <display-name>Archetype Created Web Application</display-name>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+  	<display-name>Vaadin Web Application</display-name>
+	
+	<context-param>
+		<description>Vaadin production mode</description>
+		<param-name>productionMode</param-name>
+		<param-value>false</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:applicationContext.xml</param-value>
+  	</context-param>
+
+	<listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  	</listener>
+
+	<listener>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+
+	<servlet>
+    <servlet-name>Vaadin Application Servlet</servlet-name>
+    <servlet-class>com.vaadin.terminal.gwt.server.ApplicationServlet</servlet-class>
+    <init-param>
+		<description>Vaadin application class to start</description>
+		<param-name>application</param-name>
+		<param-value>pe.com.bbva.reniec.ui.ReniecApplication</param-value>
+	</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Vaadin Application Servlet</servlet-name>
+		<url-pattern>/*</url-pattern>
+	</servlet-mapping>
+
 </web-app>
