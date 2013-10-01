@@ -4,7 +4,7 @@
 /*==============================================================*/
 create table CONREC.CFG_LISTA 
 (
-   ID                   NUMBER(8)            not null,
+   ID                   NUMBER(16)            not null,
    CODIGO               NVARCHAR2(20)        not null,
    NOMBRE               NVARCHAR2(50)        not null,
    DESCRIPCION          NVARCHAR2(250),
@@ -87,7 +87,7 @@ create table CONREC.SEG_MEMBRESIA
    ID                   NUMBER(16)           not null,
    ROL                  NUMBER(8)            not null,
    TIPO                 NUMBER(16)           not null,
-   VALOR                NVARCHAR2(15)        not null,
+   VALOR                NVARCHAR2(20)        not null,
    ESTADO               NUMBER(16)           not null,
    CREADOR              NUMBER(16)           not null,
    CREACION             TIMESTAMP            not null,
@@ -110,8 +110,8 @@ create table CONREC.SEG_OPCION
 (
    ID                   NUMBER(8)            not null,
    PADRE                NUMBER(8),
-   CODIGO               NVARCHAR2(35)        not null,
-   NOMBRE               NVARCHAR2(50)        not null,
+   CODIGO               NVARCHAR2(50)        not null,
+   NOMBRE               NVARCHAR2(100)        not null,
    DESCRIPCION          NVARCHAR2(250),
    ORDEN                NUMBER(8),
    TIPO                 NUMBER(16)           not null,
@@ -140,8 +140,8 @@ grant DELETE,INSERT,SELECT,UPDATE on CONREC.SEG_OPCION to APP_RENIEC;
 create table CONREC.SEG_PERMISO 
 (
    ID                   NUMBER(16)           not null,
-   OPCION               NUMBER(8)            not null,
-   ROL                  NUMBER(8)            not null,
+   OPCION               NUMBER(16)            not null,
+   ROL                  NUMBER(16)            not null,
    ESTADO               NUMBER(16)           not null,
    CREADOR              NUMBER(16)           not null,
    CREACION             TIMESTAMP            not null,
@@ -159,10 +159,10 @@ grant DELETE,INSERT,SELECT,UPDATE on CONREC.SEG_PERMISO to APP_RENIEC;
 /*==============================================================*/
 create table CONREC.SEG_ROL 
 (
-   ID                   NUMBER(8)            not null,
+   ID                   NUMBER(16)            not null,
    PADRE                NUMBER(8),
    CODIGO               NVARCHAR2(10),
-   NOMBRE               NVARCHAR2(30),
+   NOMBRE               NVARCHAR2(50),
    DESCRIPCION          NVARCHAR2(250),
    ESTADO               NUMBER(16)           not null,
    CREADOR              NUMBER(16),
@@ -188,19 +188,18 @@ grant DELETE,INSERT,SELECT,UPDATE on CONREC.SEG_ROL to APP_RENIEC;
 /*==============================================================*/
 create table CONREC.SEG_USUARIO 
 (
-   ID                   NUMBER(16)           not null,
-   NOMBRES              NVARCHAR2(200)       not null,
-   PATERNO              NVARCHAR2(150)       not null,
-   MATERNO              NVARCHAR2(150)       not null,
-   REGISTRO             NCHAR(7)             not null,
-   CLAVE                NCHAR(10)            not null,
-   CARGO                NVARCHAR2(4)         not null,
-   DESC_CARGO           NVARCHAR2(45),
-   CORREO               NVARCHAR2(45),
-   OFICINA              NVARCHAR2(4)         not null,
-   DESC_OFICINA         NVARCHAR2(45),
+   ID                   NUMBER(16)            not null,
+   NOMBRES              NVARCHAR2(200)        not null,
+   PATERNO              NVARCHAR2(150)        not null,
+   MATERNO              NVARCHAR2(150)        not null,
+   REGISTRO             NVARCHAR2(10)         not null,
+   CARGO                NVARCHAR2(10)         not null,
+   CARGO_NOMBRE         NVARCHAR2(50),
+   CORREO               NVARCHAR2(100),
+   CENTRO               NVARCHAR2(10)         not null,
+   CENTRO_NOMBRE        NVARCHAR2(50),
    CREADOR              NUMBER(16),
-   CREACION             TIMESTAMP            not null,
+   CREACION             TIMESTAMP             not null,
    EDITOR               NUMBER(16),
    EDICION              TIMESTAMP
 );
