@@ -27,6 +27,8 @@ public interface BaseHibernate<Entidad, TipoLlave> extends Serializable {
 	
 	List<Entidad> buscar(final Busqueda filtro);
 	
+	List<Entidad> buscarHql(String sql, Object... object);
+	
 	boolean contiene(TipoLlave tipoLlave);
 
 }

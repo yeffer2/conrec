@@ -10,14 +10,11 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
-import pe.com.bbva.reniec.exception.ValidacionException;
 import pe.com.bbva.reniec.persistencia.hibernate.BaseHibernate;
 import pe.com.bbva.reniec.utileria.Busqueda;
-import pe.com.bbva.reniec.utileria.Constante;
 
 @SuppressWarnings("serial")
 public abstract class BaseHibernateImpl
@@ -26,7 +23,7 @@ public abstract class BaseHibernateImpl
 			
 	protected final static Log logger = LogFactory.getLog(BaseHibernateImpl.class);
 	
-	protected Class<Entidad> domainClass;// = getDomainClass();		
+	protected Class<Entidad> domainClass;
 	
 	@SuppressWarnings("unchecked")
 	public BaseHibernateImpl() {
@@ -38,10 +35,9 @@ public abstract class BaseHibernateImpl
 	public Entidad obtener(TipoLlave id) {		
 		return (Entidad) getHibernateTemplate().get(domainClass, id);
 	}
-
+	
 	public void actualizar(Entidad t) {
 		getHibernateTemplate().update(t);
-		getHibernateTemplate().flush();
 	}
 
 	public void crear(Entidad t) {
@@ -54,47 +50,30 @@ public abstract class BaseHibernateImpl
 	}
 
 	public void eliminar(Entidad t) {
-		try{
-			getHibernateTemplate().delete(t);
-			getHibernateTemplate().flush();
-		}catch (DataIntegrityViolationException e) {
-//			System.out.println("MostSpecificCause : "+e.getMostSpecificCause().fillInStackTrace().getMessage());
-//			System.out.println("MostSpecificCause : "+e.getMostSpecificCause().getMessage());
-			throw new ValidacionException(Constante.CODIGO_MENSAJE.VALIDAR_ELIMINAR_GENERICO,null,e);
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Entidad> obtenerTodos() {
-		return (getHibernateTemplate().find("from " + domainClass.getName()
-				+ " x"));
-	}
-
-	public void eliminarXId(TipoLlave id) {
-		try{
-			Object obj = obtener(id);
-			getHibernateTemplate().delete(obj);
-			getHibernateTemplate().flush();
-		}catch (DataIntegrityViolationException e) {
-			throw new ValidacionException(Constante.CODIGO_MENSAJE.VALIDAR_ELIMINAR_GENERICO,null,e);
-		}
+		getHibernateTemplate().delete(t);
 	}
 	
-	/*public void deleteAll() {
-        getHibernateTemplate().execute(new HibernateCallback() {
-            public Object doInHibernate(Session session) throws HibernateException {
-                String hqlDelete = "delete " + domainClass.getName();
-                int deletedEntities = session.createQuery(hqlDelete).executeUpdate();
-                return null;
-            }
-
-        });
-    }*/
+	public void eliminarXId(TipoLlave id) {
+		Object obj = obtener(id);
+		getHibernateTemplate().delete(obj);
+	}
 	
 	public void eliminarTodos(List<Entidad> list) {
 		getHibernateTemplate().deleteAll(list);
 	}
 
+	public List<Entidad> obtenerTodos() {
+		return getHibernateTemplate().loadAll(domainClass);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public int contar() {
+		List list = getHibernateTemplate().find(
+				"select count(*) from " + domainClass.getName() + " x");
+		Integer count = (Integer) list.get(0);
+		return count.intValue();
+	}
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<Entidad> buscar(final Busqueda filtro) {
 		return (List<Entidad>)this.getHibernateTemplate().execute(new HibernateCallback() {
@@ -109,18 +88,15 @@ public abstract class BaseHibernateImpl
 	        }
 	    });
 	}
-
-	public int contar() {
-		@SuppressWarnings("rawtypes")
-		List list = getHibernateTemplate().find(
-				"select count(*) from " + domainClass.getName() + " x");
-		Integer count = (Integer) list.get(0);
-		return count.intValue();
+	
+	@SuppressWarnings("unchecked")
+	public List<Entidad> buscarHql(String sql, Object... object){
+		List<Entidad> list=getHibernateTemplate().find(sql,object);
+		return list;
 	}
 	
 	public boolean contiene(TipoLlave tipoLlave) {
 		Entidad object = obtener(tipoLlave);
 		return object != null;
 	};
-
 }
