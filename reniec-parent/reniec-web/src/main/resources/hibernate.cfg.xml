@@ -5,7 +5,7 @@
 <hibernate-configuration>
 	<session-factory>
 		<property name="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</property>
-		<property name="hibernate.default_schema">HARECL</property>
+		<property name="hibernate.default_schema">CONREC</property>
 		<property name="show_sql">false</property>
 		
 		<mapping class="pe.com.bbva.reniec.dominio.Usuario" />
