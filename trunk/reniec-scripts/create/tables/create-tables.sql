@@ -250,6 +250,18 @@ alter table CONREC.CFG_PARAMETRO
 alter table CONREC.CFG_PARAMETRO
    add constraint FK_CFG_PARAMETRO_ESTADO foreign key (ESTADO)
       references CONREC.CFG_VALOR (ID);
+      
+alter table CONREC.CFG_VALOR
+   add constraint FK_CGF_VALOR_CGF_LISTA foreign key (LISTA)
+      references CONREC.CFG_LISTA (ID);
+      
+ alter table CONREC.CFG_VALOR
+   add constraint FK_CGF_VALOR_CREADOR foreign key (CREADOR)
+      references CONREC.SEG_USUARIO (ID);
+
+alter table CONREC.CFG_VALOR
+   add constraint FK_CGF_VALOR_EDITOR foreign key (EDITOR)
+      references CONREC.SEG_USUARIO (ID);
 
 alter table CONREC.SEG_MEMBRESIA
    add constraint FK_SEG_MEMBRESIA_CREADOR foreign key (CREADOR)
