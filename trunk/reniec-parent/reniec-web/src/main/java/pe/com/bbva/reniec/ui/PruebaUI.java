@@ -54,7 +54,7 @@ public class PruebaUI extends CustomComponent {
 	}
 
 	public void postConstruct(){
-		List<Usuario> list=usuarioService.obtenerTodos();
+		List<Usuario> list=usuarioService.buscar();
 		
 		IndexedContainer container = new IndexedContainer();
 		
