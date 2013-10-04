@@ -8,7 +8,15 @@
 		<property name="hibernate.default_schema">CONREC</property>
 		<property name="show_sql">false</property>
 		
+		<mapping class="pe.com.bbva.reniec.dominio.Entidad" />
+		<mapping class="pe.com.bbva.reniec.dominio.Lista" />
+		<mapping class="pe.com.bbva.reniec.dominio.Membresia" />
+		<mapping class="pe.com.bbva.reniec.dominio.Opcion" />
+		<mapping class="pe.com.bbva.reniec.dominio.Parametro" />
+		<mapping class="pe.com.bbva.reniec.dominio.Permiso" />
+		<mapping class="pe.com.bbva.reniec.dominio.Rol" />
 		<mapping class="pe.com.bbva.reniec.dominio.Usuario" />
+		<mapping class="pe.com.bbva.reniec.dominio.Valor" />
 		
 	</session-factory>
 </hibernate-configuration>
