@@ -37,7 +37,9 @@
 			<version>11.2.0.3</version>
 			<scope>provided</scope>
 		</dependency>
-
+		<!--  
+			Adición de las dependencias de Axis2 para la ejecucion del job.			
+		 -->
 		<dependency>
 			<groupId>org.apache.axis2</groupId>
 			<artifactId>axis2</artifactId>
