@@ -1,5 +1,7 @@
 package pe.com.bbva.reniec.ws;
-import javax.jws.WebService;
+
+import pe.com.bbva.reniec.ws.dominio.ConsultanteWS;
+import pe.com.bbva.reniec.ws.dominio.RespuestaAutorizacion;
 
 /**
  * Clase base del WSDL 
@@ -8,10 +10,11 @@ import javax.jws.WebService;
  * @since 03/10/2013
  *
  */
-@WebService(targetNamespace = "http://pe.com.bbva.reniec.ws/wsdl")
+
 public interface AutorizacionesWS {
 	
-	 String ConsultarAutorizacion(String identificador);
+	ConsultanteWS consultarAutorizacion(String identificador);
 	
+	RespuestaAutorizacion registrarAutorizacion(ConsultanteWS consultante);
 
 }
