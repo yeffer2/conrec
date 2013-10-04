@@ -130,6 +130,7 @@ public class LoginUI extends CustomComponent implements ClickListener {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void buttonClickLogin()
 	{
 		

@@ -8,4 +8,6 @@ public interface UsuarioService {
 	
 	public List<Usuario> obtenerTodos();
 	
+	public List<Usuario> buscar();
+	
 }
