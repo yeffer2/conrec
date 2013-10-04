@@ -135,10 +135,6 @@ public class Busqueda implements CriteriaSpecification, Serializable {
 		return criteria.toString();
 	}
 
-	/*CriteriaImpl getCriteriaImpl() {
-		return impl;
-	}*/
-
 	public Busqueda createAlias(String associationPath, String alias,
 			int joinType) throws HibernateException {
 		criteria.createAlias(associationPath, alias, joinType);
