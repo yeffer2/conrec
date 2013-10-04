@@ -4,16 +4,16 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import pe.com.bbva.reniec.dominio.Usuario;
-import pe.com.bbva.reniec.persistencia.UsuarioDAO;
+import pe.com.bbva.reniec.dominio.Opcion;
+import pe.com.bbva.reniec.persistencia.OpcionDAO;
 
 @Repository
 @SuppressWarnings("serial")
-public class UsuarioHibernate extends BaseHibernate<Usuario, Long>
-		implements UsuarioDAO {
+public class OpcionHibernate extends BaseHibernate<Opcion, Long>
+		implements OpcionDAO {
 
 	@Autowired
-	public UsuarioHibernate(SessionFactory sessionFactory) {
+	public OpcionHibernate(SessionFactory sessionFactory) {
 		setSessionFactory(sessionFactory);
 	}
 	
