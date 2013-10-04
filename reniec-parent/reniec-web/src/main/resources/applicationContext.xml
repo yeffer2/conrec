@@ -21,7 +21,6 @@
 	<import resource="applicationContext-persistencia.xml"/>
 	<import resource="applicationContext-negocio.xml"/>
 	<import resource="applicationContext-quartz.xml"/>
-	
 	<context:annotation-config />	
 
 </beans>
