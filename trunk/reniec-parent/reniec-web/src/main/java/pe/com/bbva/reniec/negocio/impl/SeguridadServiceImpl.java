@@ -1,7 +1,9 @@
 package pe.com.bbva.reniec.negocio.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,17 +63,17 @@ public class SeguridadServiceImpl implements SeguridadService{
 	}
 
 	@Override
-	public void obtenerOpciones() {
+	public Map<String, List<Opcion>> obtenerOpciones() {
 		Usuario usuario=ReniecUtil.obtenerUsuarioSesion();
+		Map<String, List<Opcion>> map=new HashMap<String, List<Opcion>>();
 		if(usuario!=null){
 			Membresia membresia=membresiaDAO.obtenerHql("select m from Membresia m where m.valor=?", usuario.getRegistro());
-			System.out.println(membresia.getRol().getCodigo());
-			System.out.println(membresia.getRol().getNombre());
-			List<Opcion> opcions=opcionDAO.buscarHql("select p.opcion from Permiso p where p.rol.id=?", membresia.getRol().getId());
-			for (Opcion opcion : opcions) {
-				System.out.println(opcion.getCodigo());
+			if(membresia!=null){
+				List<Opcion> opciones=opcionDAO.buscarHql("select p.opcion from Permiso p where p.rol.id=? order by p.opcion.padre desc, p.opcion.orden", membresia.getRol().getId());
+				map=ReniecUtil.ordenarOpciones(opciones);
 			}
 		}
+		return map;
 	}
 
 }
