@@ -54,6 +54,19 @@ public abstract class Constante
 	public static abstract class OPCION
 	{
 		public final static String KEY_PADRE = "padre";
+		public final static String CON = "CON";
+		public final static String CON_CONS = "CON_CONS";
+		public final static String CON_CARG_MAS = "CON_CARG_MAS";
+		public final static String CONF = "CONF";
+		public final static String CONF_PARAM = "CONF_PARAM";
+		public final static String CONF_LISTAS = "CONF_LISTAS";
+		public final static String CONF_JOB = "CONF_JOB";
+		public final static String CONF_DIAG = "CONF_DIAG";
+		public final static String CONF_FICHER = "CONF_FICHER";
+		public final static String SEG = "SEG";
+		public final static String SEG_ROL_MEMB = "SEG_ROL_MEMB";
+		public final static String SEG_OPCION = "SEG_OPCION";
+		public final static String SEG_PERM = "SEG_PERM";
 		
 	}
 	
