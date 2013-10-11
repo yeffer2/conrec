@@ -1,30 +1,18 @@
 package pe.com.bbva.reniec.dominio;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
+import pe.com.bbva.reniec.dominio.util.IdBean;
 import pe.com.bbva.reniec.utileria.Constante;
 
 @Entity
 @Table(name="SEG_USUARIO", schema=Constante.SCHEMA.CONREC)
 @SuppressWarnings("serial")
-public class Usuario implements Serializable {
-
-	@Id
-	@Column(unique=true, nullable=false, precision=16)
-	private Long id;
-	public Long getId() { return id; }
-	public void setId(Long id) { this.id = id; }
+public class Usuario extends IdBean implements Serializable {
 
 	@Column(nullable=false)
 	protected String nombres;
@@ -71,29 +59,5 @@ public class Usuario implements Serializable {
 	private String centroNombre;	
 	public String getCentroNombre() { return centroNombre;}
 	public void setCentroNombre(String centroNombre) { this.centroNombre = centroNombre; }
-
-	@ManyToOne(fetch= FetchType.LAZY)
-	@JoinColumn(name="CREADOR", nullable=false, insertable = true, updatable = false)
-	private Usuario creador;
-	public Usuario getCreador() { return creador;}
-	public void setCreador(Usuario creador) { this.creador = creador;}
-
-	@Column(name = "CREACION", nullable = false, insertable = true, updatable = false)
-	@Temporal( TemporalType.TIMESTAMP)
-	private Date creacion;
-	public Date getCreacion() {	return creacion;}
-	public void setCreacion(Date creacion) { this.creacion = creacion;}
-	
-	@ManyToOne(fetch= FetchType.LAZY)
-	@JoinColumn(name = "EDITOR", insertable = false, updatable = true)
-	private Usuario editor;
-	public Usuario getEditor() { return editor;}
-	public void setEditor(Usuario editor) {	this.editor = editor;}
-	
-	@Column(name = "EDICION", insertable = false, updatable = true)
-	@Temporal( TemporalType.TIMESTAMP)
-	private Date edicion;
-	public Date getEdicion() { return edicion;}
-	public void setEdicion(Date edicion) { this.edicion = edicion;}
 	
 }

@@ -12,6 +12,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "QRTZ_LOCKS")
+@SuppressWarnings("serial")
 public class QrtzLocks implements java.io.Serializable {
 
 	private String lockName;

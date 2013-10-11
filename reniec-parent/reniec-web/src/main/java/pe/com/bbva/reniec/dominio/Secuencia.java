@@ -8,7 +8,7 @@ import pe.com.bbva.reniec.utileria.Constante;
 @Entity
 @Table(name="SEQ_ENTIDAD", schema=Constante.SCHEMA.CONREC)
 @SuppressWarnings("serial")
-public class Entidad implements Serializable {
+public class Secuencia implements Serializable {
 
 	@Id
 	@Column(unique=true, nullable=false, length=500)
@@ -17,8 +17,8 @@ public class Entidad implements Serializable {
 	public void setEntidad(String entidad) { this.entidad = entidad;}
 
 	@Column(name="ULTIMO_ID", nullable=false, precision=16)
-	private Integer ultimoId;
-	public Integer getUltimoId() { return this.ultimoId;}
-	public void setUltimoId(Integer ultimoId) { this.ultimoId = ultimoId;}
+	private Long ultimoId;
+	public Long getUltimoId() { return this.ultimoId;}
+	public void setUltimoId(Long ultimoId) { this.ultimoId = ultimoId;}
 
 }

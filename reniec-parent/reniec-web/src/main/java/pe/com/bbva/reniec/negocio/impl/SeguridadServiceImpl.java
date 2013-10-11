@@ -1,6 +1,5 @@
 package pe.com.bbva.reniec.negocio.impl;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +18,7 @@ import pe.com.bbva.reniec.persistencia.UsuarioDAO;
 import pe.com.bbva.reniec.utileria.ReniecUtil;
 
 @Service
+@SuppressWarnings("serial")
 public class SeguridadServiceImpl implements SeguridadService{
 
 	@Autowired
@@ -38,11 +38,6 @@ public class SeguridadServiceImpl implements SeguridadService{
 			Usuario usuario=
 					usuarioDAO.obtenerHql("select u from Usuario u where u.registro=?", usuarioLDAP.getRegistro());
 			if(usuario==null){
-				usuarioLDAP.setId(13L);
-				Usuario creador=new Usuario();
-				creador.setId(1L);
-				usuarioLDAP.setCreador(creador);
-				usuarioLDAP.setCreacion(new Date());
 				usuarioDAO.crear(usuarioLDAP);
 				return usuarioLDAP;
 			}else{

@@ -3,15 +3,11 @@ package pe.com.bbva.reniec.dominio.quartz;
 // Generated 2/10/2013 03:54:44 PM by Hibernate Tools 3.4.0.CR1
 
 import java.sql.Blob;
-import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -19,6 +15,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "QRTZ_JOB_DETAILS")
+@SuppressWarnings("serial")
 public class QrtzJobDetails implements java.io.Serializable {
 
 	private QrtzJobDetailsId id;
