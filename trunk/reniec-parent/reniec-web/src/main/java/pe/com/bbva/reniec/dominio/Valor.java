@@ -1,22 +1,19 @@
 package pe.com.bbva.reniec.dominio;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.*;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
+import pe.com.bbva.reniec.dominio.util.IdBean;
 import pe.com.bbva.reniec.utileria.Constante;
 
 @Entity
 @Table(name="CFG_VALOR", schema=Constante.SCHEMA.CONREC)
 @SuppressWarnings("serial")
-public class Valor implements Serializable {
-
-	@Id
-	@Column(unique=true, nullable=false, precision=16)
-	private Long id;
-	public Long getId() { return id;}
-	public void setId(Long id) { this.id = id;}
+public class Valor extends IdBean implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name="LISTA", nullable=false)
@@ -49,28 +46,31 @@ public class Valor implements Serializable {
 	public String getEstado() { return estado;}
 	public void setEstado(String estado) { this.estado = estado;}
 
-	@ManyToOne(fetch= FetchType.LAZY)
-	@JoinColumn(name="CREADOR", nullable=false, insertable = true, updatable = false)
-	private Usuario creador;
-	public Usuario getCreador() { return creador;}
-	public void setCreador(Usuario creador) { this.creador = creador;}
-
-	@Column(name = "CREACION", nullable = false, insertable = true, updatable = false)
-	@Temporal( TemporalType.TIMESTAMP)
-	private Date creacion;
-	public Date getCreacion() {	return creacion;}
-	public void setCreacion(Date creacion) { this.creacion = creacion;}
+	@Override
+	public int hashCode() {
+		HashCodeBuilder hashCodeBuilder = new HashCodeBuilder(3, 7);
+		hashCodeBuilder.append(codigo);
+		if(lista != null)
+		{
+			hashCodeBuilder.append(lista.getCodigo());
+		}
+		return hashCodeBuilder.toHashCode();
+	}
 	
-	@ManyToOne(fetch= FetchType.LAZY)
-	@JoinColumn(name = "EDITOR", insertable = false, updatable = true)
-	private Usuario editor;
-	public Usuario getEditor() { return editor;}
-	public void setEditor(Usuario editor) {	this.editor = editor;}
+	@Override
+	public boolean equals(Object obj) {
+		boolean equals = false;
+		if (obj instanceof Valor) {
+			Valor bean = (Valor) obj;
+			EqualsBuilder equalsBuilder = new EqualsBuilder();
+			equalsBuilder.append(codigo, bean.codigo);
+			if(lista != null && bean.lista != null)
+			{
+				equalsBuilder.append(lista.getCodigo(), bean.lista.getCodigo());
+			}
+			equals = equalsBuilder.isEquals();
+		}
+		return equals;
+	}
 	
-	@Column(name = "EDICION", insertable = false, updatable = true)
-	@Temporal( TemporalType.TIMESTAMP)
-	private Date edicion;
-	public Date getEdicion() { return edicion;}
-	public void setEdicion(Date edicion) { this.edicion = edicion;}
-
 }

@@ -12,6 +12,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "QRTZ_FIRED_TRIGGERS")
+@SuppressWarnings("serial")
 public class QrtzFiredTriggers implements java.io.Serializable {
 
 	private String entryId;

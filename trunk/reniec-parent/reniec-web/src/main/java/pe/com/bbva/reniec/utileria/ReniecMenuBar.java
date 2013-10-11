@@ -14,6 +14,13 @@ public class ReniecMenuBar extends MenuBar {
 		return newItem;
 	}
 	
+	public ReniecMenuItem addItem(String codigo, String caption, Resource icon, Command command) {
+		ReniecMenuItem newItem = new ReniecMenuItem(caption, icon, command, codigo);
+		getItems().add((MenuItem)newItem);
+        requestRepaint();
+		return newItem;
+	}
+	
 	public class ReniecMenuItem extends MenuItem {
 		
 		
@@ -28,6 +35,7 @@ public class ReniecMenuBar extends MenuBar {
 		public String getCodigo() {
 			return codigo;
 		}
+
 		public ReniecMenuItem addItem(String codigo, 
 				String caption, Command command) {
 			MenuItem menuItem = super.addItem(caption, command);
@@ -40,6 +48,18 @@ public class ReniecMenuBar extends MenuBar {
 			return newItem;
 		}
 
+		public ReniecMenuItem addItem(String codigo, 
+				String caption, Resource icon, Command command) {
+			MenuItem menuItem = super.addItem(caption, command);
+			int index = getChildren().indexOf(menuItem);
+			
+			ReniecMenuItem newItem = new ReniecMenuItem(caption, icon, command, codigo);
+			newItem.setParent(this);
+			getChildren().set(index, newItem);
+			requestRepaint();
+			return newItem;
+		}
+		
 	}
 
 }

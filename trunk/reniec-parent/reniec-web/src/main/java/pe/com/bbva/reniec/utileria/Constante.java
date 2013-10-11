@@ -18,7 +18,15 @@ public abstract class Constante
 	{
 		public static abstract class CODIGO
 		{
-			//Ejemplo public final static String ESTADO = "REGISTRO_ESTADO";
+			public final static String REGISTRO_ESTADO = "REGISTRO_ESTADO";
+			public final static String MEMBRESIA_TIPO = "MEMBRESIA_TIPO";
+			public final static String OPCION_TIPO = "OPCION_TIPO";
+			public final static String ORIGEN = "ORIGEN";
+			public final static String DOI_TIPO = "DOI_TIPO";
+			public final static String NACIONALIDAD_TIPO = "NACIONALIDAD_TIPO";
+			public final static String ACCION = "ACCION";
+			public final static String USUARIO_ESTADO = "USUARIO_ESTADO";
+			public final static String RENIEC_SITUACION = "RENIEC_SITUACION";
 				
 		}
 	}
@@ -54,6 +62,8 @@ public abstract class Constante
 	public static abstract class OPCION
 	{
 		public final static String KEY_PADRE = "padre";
+		public final static String USUARIO = "USUARIO";
+		public final static String CERRAR_SESION = "CERRAR_SESION";
 		public final static String CON = "CON";
 		public final static String CON_CONS = "CON_CONS";
 		public final static String CON_CARG_MAS = "CON_CARG_MAS";

@@ -17,6 +17,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "QRTZ_CRON_TRIGGERS")
+@SuppressWarnings("serial")
 public class QrtzCronTriggers implements java.io.Serializable {
 
 	private QrtzCronTriggersId id;

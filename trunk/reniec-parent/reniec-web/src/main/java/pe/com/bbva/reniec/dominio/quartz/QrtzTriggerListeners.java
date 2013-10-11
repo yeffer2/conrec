@@ -18,6 +18,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "QRTZ_TRIGGER_LISTENERS")
+@SuppressWarnings("serial")
 public class QrtzTriggerListeners implements java.io.Serializable {
 
 	private QrtzTriggerListenersId id;

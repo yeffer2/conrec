@@ -9,6 +9,7 @@ import pe.com.bbva.reniec.dominio.Usuario;
 import pe.com.bbva.reniec.persistencia.LDAP2DAO;
 
 @Repository
+@SuppressWarnings("serial")
 public class LDAP2Hibernate implements LDAP2DAO{
 
 	@Override

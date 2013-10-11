@@ -10,6 +10,7 @@ import pe.com.bbva.reniec.negocio.UsuarioService;
 import pe.com.bbva.reniec.persistencia.UsuarioDAO;
 
 @Service
+@SuppressWarnings("serial")
 public class UsuarioServiceImpl	implements UsuarioService {
 	
 	@Autowired
