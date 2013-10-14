@@ -7,7 +7,7 @@ import pe.com.bbva.reniec.dominio.Consultante;
 
 public interface ConsultantesService extends ConfiguracionService,Serializable{
 
-	List<Consultante> obtenerConsultante();	
-	void crearConsultante(Consultante consultante);
+	List<Consultante> obtenerConsultante(Consultante consultante);	
+	void guardarConsultante(Consultante consultante);
 	
 }
