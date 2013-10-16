@@ -319,3 +319,21 @@ textarea.v-textarea-prompt {
 	height: 100%;
 	background-color: #F7F7F7;
 }
+
+
+/** Estilos personalizados para pantallas **/
+
+/* Estilo panelDetalle */
+
+.v-panel-caption-panelDetalle{
+	text-align: center;
+}
+
+.v-panel-content-panelDetalle{
+	border:none;
+}
+
+.v-panel-deco-panelDetalle{
+	border:none;
+	display:none;
+}

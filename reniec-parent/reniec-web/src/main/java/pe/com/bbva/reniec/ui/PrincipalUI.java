@@ -148,7 +148,14 @@ public class PrincipalUI extends CustomComponent implements Command{
 			window.addComponent(consultantesUI);
 			getApplication().getMainWindow().getWindow().addWindow(window);
 		}else if(selectedReniecItem.getCodigo().equals(Constante.OPCION.CON_CARG_MAS)){
-			//TODO Logica de Opcion
+			Window window=new Window();
+			window.setCaption("Carga Masiva de Consultantes");
+			window.setModal(false);
+			window.setResizable(false);
+			window.setWidth("1200px");
+			ConsultantesCargaMasivaUI consultantesMasivaUI=new ConsultantesCargaMasivaUI();
+			window.addComponent(consultantesMasivaUI);
+			getApplication().getMainWindow().getWindow().addWindow(window);
 		}else if(selectedReniecItem.getCodigo().equals(Constante.OPCION.CONF_PARAM)){
 			//TODO Logica de Opcion
 		}else if(selectedReniecItem.getCodigo().equals(Constante.OPCION.CONF_LISTAS)){
