@@ -18,6 +18,8 @@
 		<mapping class="pe.com.bbva.reniec.dominio.Secuencia" />
 		<mapping class="pe.com.bbva.reniec.dominio.Usuario" />
 		<mapping class="pe.com.bbva.reniec.dominio.Valor" />
+		<mapping class="pe.com.bbva.reniec.dominio.Carga" />
+		<mapping class="pe.com.bbva.reniec.dominio.Detalle" />
 		
 		<!-- QUARTZ -->
 		<mapping class="pe.com.bbva.reniec.dominio.quartz.QrtzJobDetails" />
