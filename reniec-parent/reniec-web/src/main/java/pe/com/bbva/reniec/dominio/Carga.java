@@ -5,10 +5,9 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import pe.com.bbva.reniec.dominio.util.IdBean;
-import pe.com.bbva.reniec.utileria.Constante;
 import pe.com.bbva.reniec.utileria.annotations.DefinicionVista;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 /***
@@ -20,16 +19,15 @@ import java.util.List;
  *
  */
 @Entity
-@Table(name="CTL_CARGA", schema=Constante.SCHEMA.CONREC)
+@Table(name="CTL_CARGA")
+@SuppressWarnings("serial")
 public class Carga extends IdBean implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
 
 	@Column
 	@DefinicionVista(nombreVista = "Fecha")
-	private Timestamp fecha;
-	public Timestamp getFecha() {return this.fecha;}
-	public void setFecha(Timestamp fecha) {this.fecha = fecha;}
+	private Date fecha;
+	public Date getFecha() {return this.fecha;}
+	public void setFecha(Date fecha) {this.fecha = fecha;}
 
 	@Column(length=250)
 	@DefinicionVista(nombreVista = "Fichero")
@@ -39,17 +37,17 @@ public class Carga extends IdBean implements Serializable {
 
 	@Column
 	@DefinicionVista(nombreVista = "Fecha/Hora Final", tipoFinal="java.lang.String")
-	private Timestamp fin;
+	private Date fin;
 	@DefinicionVista(convertToStringWithFormat = "dd/MM/yyyy HH:mm:ss")
-	public Timestamp getFin() {return this.fin;}
-	public void setFin(Timestamp fin) {this.fin = fin;}
+	public Date getFin() {return this.fin;}
+	public void setFin(Date fin) {this.fin = fin;}
 
 	@Column
 	@DefinicionVista(nombreVista = "Fecha/Hora Inicial", tipoFinal="java.lang.String")
-	private Timestamp inicio;
+	private Date inicio;
 	@DefinicionVista(convertToStringWithFormat = "dd/MM/yyyy HH:mm:ss")
-	public Timestamp getInicio() {return this.inicio;}
-	public void setInicio(Timestamp inicio) {this.inicio = inicio;}
+	public Date getInicio() {return this.inicio;}
+	public void setInicio(Date inicio) {this.inicio = inicio;}
 
 	@Column(length=250)
 	@DefinicionVista(nombreVista = "Mensaje")

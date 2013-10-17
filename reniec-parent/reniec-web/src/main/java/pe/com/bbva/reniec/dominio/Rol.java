@@ -5,10 +5,9 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import pe.com.bbva.reniec.dominio.util.IdBean;
-import pe.com.bbva.reniec.utileria.Constante;
 
 @Entity
-@Table(name="SEG_ROL", schema=Constante.SCHEMA.CONREC)
+@Table(name="SEG_ROL")
 @SuppressWarnings("serial")
 public class Rol extends IdBean implements Serializable {
 

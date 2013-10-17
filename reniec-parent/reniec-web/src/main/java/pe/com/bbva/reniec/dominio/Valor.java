@@ -8,10 +8,9 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import pe.com.bbva.reniec.dominio.util.IdBean;
-import pe.com.bbva.reniec.utileria.Constante;
 
 @Entity
-@Table(name="CFG_VALOR", schema=Constante.SCHEMA.CONREC)
+@Table(name="CFG_VALOR")
 @SuppressWarnings("serial")
 public class Valor extends IdBean implements Serializable {
 

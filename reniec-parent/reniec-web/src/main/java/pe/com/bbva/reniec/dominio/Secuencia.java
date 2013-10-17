@@ -3,10 +3,8 @@ package pe.com.bbva.reniec.dominio;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import pe.com.bbva.reniec.utileria.Constante;
-
 @Entity
-@Table(name="SEQ_ENTIDAD", schema=Constante.SCHEMA.CONREC)
+@Table(name="SEQ_ENTIDAD")
 @SuppressWarnings("serial")
 public class Secuencia implements Serializable {
 

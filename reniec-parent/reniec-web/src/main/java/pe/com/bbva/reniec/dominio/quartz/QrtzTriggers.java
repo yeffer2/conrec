@@ -2,6 +2,7 @@ package pe.com.bbva.reniec.dominio.quartz;
 
 // Generated 2/10/2013 03:54:44 PM by Hibernate Tools 3.4.0.CR1
 
+import java.io.Serializable;
 import java.sql.Blob;
 
 import javax.persistence.AttributeOverride;
@@ -21,7 +22,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "QRTZ_TRIGGERS")
-public class QrtzTriggers implements java.io.Serializable {
+public class QrtzTriggers implements Serializable {
 
 
 	private static final long serialVersionUID = 7979437657192650194L;

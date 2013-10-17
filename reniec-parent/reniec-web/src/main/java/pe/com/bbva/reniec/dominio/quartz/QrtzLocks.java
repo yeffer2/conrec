@@ -2,6 +2,8 @@ package pe.com.bbva.reniec.dominio.quartz;
 
 // Generated 2/10/2013 03:54:44 PM by Hibernate Tools 3.4.0.CR1
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -13,7 +15,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "QRTZ_LOCKS")
 @SuppressWarnings("serial")
-public class QrtzLocks implements java.io.Serializable {
+public class QrtzLocks implements Serializable {
 
 	private String lockName;
 

@@ -4,10 +4,9 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import pe.com.bbva.reniec.dominio.util.IdBean;
-import pe.com.bbva.reniec.utileria.Constante;
 
 @Entity
-@Table(name="SEG_PERMISO", schema=Constante.SCHEMA.CONREC)
+@Table(name="SEG_PERMISO")
 @SuppressWarnings("serial")
 public class Permiso extends IdBean implements Serializable {
 

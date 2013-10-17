@@ -5,10 +5,9 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import pe.com.bbva.reniec.dominio.util.AuditoriaBean;
-import pe.com.bbva.reniec.utileria.Constante;
 
 @Entity
-@Table(name="CFG_PARAMETRO", schema=Constante.SCHEMA.CONREC)
+@Table(name="CFG_PARAMETRO")
 @SuppressWarnings("serial")
 public class Parametro extends AuditoriaBean implements Serializable {
 
