@@ -7,10 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import pe.com.bbva.reniec.dominio.util.IdBean;
-import pe.com.bbva.reniec.utileria.Constante;
 
 @Entity
-@Table(name="SEG_USUARIO", schema=Constante.SCHEMA.CONREC)
+@Table(name="SEG_USUARIO")
 @SuppressWarnings("serial")
 public class Usuario extends IdBean implements Serializable {
 

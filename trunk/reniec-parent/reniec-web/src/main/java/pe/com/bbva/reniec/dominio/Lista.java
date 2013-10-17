@@ -5,10 +5,9 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import pe.com.bbva.reniec.dominio.util.IdBean;
-import pe.com.bbva.reniec.utileria.Constante;
 
 @Entity
-@Table(name="CFG_LISTA", schema=Constante.SCHEMA.CONREC)
+@Table(name="CFG_LISTA")
 @SuppressWarnings("serial")
 public class Lista extends IdBean implements Serializable {
 

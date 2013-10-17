@@ -2,6 +2,7 @@ package pe.com.bbva.reniec.dominio.quartz;
 
 // Generated 2/10/2013 03:54:44 PM by Hibernate Tools 3.4.0.CR1
 
+import java.io.Serializable;
 import java.sql.Blob;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -16,7 +17,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "QRTZ_JOB_DETAILS")
 @SuppressWarnings("serial")
-public class QrtzJobDetails implements java.io.Serializable {
+public class QrtzJobDetails implements Serializable {
 
 	private QrtzJobDetailsId id;
 	private String description;

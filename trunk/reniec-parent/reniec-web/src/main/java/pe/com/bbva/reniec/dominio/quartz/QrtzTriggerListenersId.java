@@ -2,6 +2,8 @@ package pe.com.bbva.reniec.dominio.quartz;
 
 // Generated 2/10/2013 03:54:44 PM by Hibernate Tools 3.4.0.CR1
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
@@ -10,7 +12,7 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 @SuppressWarnings("serial")
-public class QrtzTriggerListenersId implements java.io.Serializable {
+public class QrtzTriggerListenersId implements Serializable {
 
 	private String triggerName;
 	private String triggerGroup;

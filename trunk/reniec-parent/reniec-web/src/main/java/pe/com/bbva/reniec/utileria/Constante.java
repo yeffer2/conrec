@@ -1,6 +1,5 @@
 package pe.com.bbva.reniec.utileria;
 
-
 public abstract class Constante 
 {
 	
@@ -50,8 +49,9 @@ public abstract class Constante
 	
 	public static abstract class CODIGO_MENSAJE
 	{
-		//Ejemplo public final static String ERROR_GENERICO = "error.generico";
-		
+		public final static String ERROR_GENERICO = "error.generico";
+		public final static String VALIDAR_TEXTBOX = "validar.textbox";
+		public final static String VALIDAR_COMBOBOX = "validar.combobox";
 	}
 	
 	public static abstract class SESION
@@ -83,6 +83,57 @@ public abstract class Constante
 	public static abstract class ROL
 	{
 		//Ejemplo public static final String  ADMINISTRADOR = "ADM";
+		
+	}
+	
+	public static abstract class DOI_TIPO
+	{
+		public static abstract class CODIGO
+		{
+			public static final String CUSPP = "A";
+			public static final String DIPLOMATICO = "D";
+			public static final String EXTRANJERIA = "E";
+			public static final String AFPHO = "F";
+			public static final String MENOR_EDAD = "J";
+			public static final String DNI = "L";
+			public static final String DOC_EXTRANJERO = "X";
+			public static final String RUC_ANTIGUO = "N";
+			public static final String MILITAR = "M";
+			public static final String RUC = "R";
+			public static final String SIN_DOCUMENTO = "S";
+			public static final String FUERZAS_PO = "T";
+			public static final String RUS = "U";
+			public static final String PASAPORTE = "P";
+		}
+		
+		public static enum LONGITUD
+		{
+			A(11),
+			D(11),
+			E(11),
+			F(11),
+			J(11),
+			L(8),
+			X(11),
+			N(8),
+			M(11),
+			R(11),
+			S(11),
+			T(11),
+			U(11),
+			P(9);
+			
+			private int valor;
+
+			LONGITUD(int valor) {
+				this.valor = valor;
+			}
+
+			public int getValor() {
+				return valor;
+			}
+			
+		}
 		
 	}
 	

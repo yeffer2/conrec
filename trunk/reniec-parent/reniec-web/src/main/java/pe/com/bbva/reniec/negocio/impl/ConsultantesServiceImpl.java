@@ -59,7 +59,6 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 		}
 		filtro.addOrder(Order.asc("id"));
 		return consultanteDAO.buscar(filtro);
-		//return consultanteDAO.buscarHql("select c from Consultante c");
 	}
 
 	@Override

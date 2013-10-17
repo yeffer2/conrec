@@ -17,15 +17,12 @@
 						http://www.springframework.org/schema/jee 
 						http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
 	">
-
-	<import resource="applicationContext-persistencia.xml"/>
-	<import resource="applicationContext-negocio.xml"/>
-	<import resource="applicationContext-quartz.xml"/>
-	<import resource="applicationContext-messages.xml"/>
 	
-	<!-- FIXME  
-	<bean p:location="classpath:reniec.properties" class="org.springframework.beans.factory.config.PropertiesFactoryBean" id="deployProperties"/>
-	-->
-	<context:annotation-config />	
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename">
+			<value>reniec-messages</value>
+		</property>
+	</bean>
 
 </beans>

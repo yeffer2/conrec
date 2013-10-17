@@ -20,9 +20,16 @@
 	<jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/Reniec" lookup-on-startup="true" cache="true" proxy-interface="javax.sql.DataSource" />
 
 	<bean id="sessionFactory"
-		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="configLocation" value="classpath:hibernate.cfg.xml" />
+		<property name="hibernateProperties">
+        <props>
+        	<prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
+        	<prop key="hibernate.default_schema">CONREC</prop>
+        	<prop key="hibernate.show_sql">false</prop>
+		</props>
+		</property>
+		<property name="packagesToScan" value="pe.com.bbva.reniec.dominio"/>
 	</bean>
 
 	<bean id="transactionManager"

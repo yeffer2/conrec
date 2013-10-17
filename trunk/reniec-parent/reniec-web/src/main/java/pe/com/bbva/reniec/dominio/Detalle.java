@@ -5,7 +5,6 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import pe.com.bbva.reniec.dominio.util.IdBean;
-import pe.com.bbva.reniec.utileria.Constante;
 
 /***
  * Clase entidad de la tabla CTL_DETALLE.
@@ -15,10 +14,9 @@ import pe.com.bbva.reniec.utileria.Constante;
  *
  */
 @Entity
-@Table(name="CTL_DETALLE", schema=Constante.SCHEMA.CONREC)
+@Table(name="CTL_DETALLE")
+@SuppressWarnings("serial")
 public class Detalle extends IdBean implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
 
 	@Column
 	private String accion;

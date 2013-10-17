@@ -2,6 +2,8 @@ package pe.com.bbva.reniec.dominio.quartz;
 
 // Generated 2/10/2013 03:54:44 PM by Hibernate Tools 3.4.0.CR1
 
+import java.io.Serializable;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -19,7 +21,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "QRTZ_TRIGGER_LISTENERS")
 @SuppressWarnings("serial")
-public class QrtzTriggerListeners implements java.io.Serializable {
+public class QrtzTriggerListeners implements Serializable {
 
 	private QrtzTriggerListenersId id;
 	private QrtzTriggers qrtzTriggers;
