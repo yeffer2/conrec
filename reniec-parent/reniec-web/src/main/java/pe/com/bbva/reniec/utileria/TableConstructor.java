@@ -13,6 +13,7 @@ import javax.persistence.Transient;
 
 import pe.com.bbva.reniec.utileria.annotations.DefinicionVista;
 
+import com.vaadin.data.Container;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property.ConversionException;
 import com.vaadin.data.Property.ReadOnlyException;
@@ -32,10 +33,13 @@ public class TableConstructor {
 	 * Constante de prefijo de métodos.
 	 */
 	private final static String GETPREFIX = "get";
+	private final static String ORIGENPREFIX = "objBaseT";
 
 	/***
 	 * * Método que construye dinamicamente las tablas de vaadin en base a un
 	 * modelo y a una lista de valores del propio modelo.
+	 * 
+	 * @param <E>
 	 * 
 	 * @param tblContenido
 	 *            Tabla a construir
@@ -51,16 +55,19 @@ public class TableConstructor {
 	 * @see cda.analytics.com.utils.annotations.DefinicionVista
 	 */
 	@SuppressWarnings("all")
-	public static <T> void construirTablaSimple(Table tblContenido,
+	public static <T, E> void construirTablaSimple(E tblContenido,
 			Class<T> modelo, List<T> valores, ArrayList<Object> ordenCampos) {
 		IndexedContainer container = new IndexedContainer();
 
-		tblContenido.setContainerDataSource(container);
-		tblContenido.setImmediate(true);
-		tblContenido.setSelectable(true);
-		tblContenido.setSelectable(false);
-		ArrayList<Object> visibleColumns = new ArrayList<Object>();
 		try {
+			tblContenido
+					.getClass()
+					.getDeclaredMethod("setContainerDataSource",
+							new Class[] { Container.class })
+					.invoke(tblContenido, container);
+
+			ArrayList<Object> visibleColumns = new ArrayList<Object>();
+
 			List<Field> campos = new ArrayList<Field>();
 			campos = (new TableConstructor()).getAllElements(campos, modelo,
 					Field.class);
@@ -70,6 +77,9 @@ public class TableConstructor {
 				if (anotacionLocal != null) {
 					if (!anotacionLocal.nombreVista().equals("")) {
 						if (!anotacionLocal.tipoFinal().equals("")) {
+							container.addContainerProperty(
+									ORIGENPREFIX + campo.getName(),
+									campo.getType(), null);
 							container.addContainerProperty(campo.getName(),
 									Class.forName(anotacionLocal.tipoFinal()),
 									null);
@@ -77,22 +87,54 @@ public class TableConstructor {
 							container.addContainerProperty(campo.getName(),
 									campo.getType(), null);
 						}
-						tblContenido.setColumnWidth(campo.getName(), -1);
-						tblContenido.setColumnHeader(campo.getName(),
-								anotacionLocal.nombreVista());
+						tblContenido
+								.getClass()
+								.getDeclaredMethod("setColumnWidth",
+										new Class[] { Object.class, int.class })
+								.invoke(tblContenido, campo.getName(), -1);
+						tblContenido
+								.getClass()
+								.getDeclaredMethod(
+										"setColumnHeader",
+										new Class[] { Object.class,
+												String.class })
+								.invoke(tblContenido, campo.getName(),
+										anotacionLocal.nombreVista());
 						visibleColumns.add(campo.getName());
 
 					}
 				}
 			}
-		} catch (SecurityException e1) {
+
+			visibleColumns = (ordenCampos != null) ? ordenCampos
+					: visibleColumns;
+
+			System.out.println((new Object[] { new Object() }).getClass());
+			tblContenido
+					.getClass()
+					.getDeclaredMethod("setVisibleColumns",
+							new Class[] { (new Object[] {}).getClass() })
+					.invoke(tblContenido,
+							new Object[] { visibleColumns.toArray() });
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		visibleColumns = (ordenCampos != null) ? ordenCampos : visibleColumns;
-
-		tblContenido.setVisibleColumns(visibleColumns.toArray());
 
 		int con = 1;
 		for (T valor : valores) {
@@ -128,10 +170,10 @@ public class TableConstructor {
 	@SuppressWarnings("all")
 	private static <T> void propiedadesObjetoRecursivas(Item item,
 			Method metodo, T valor, String nombreColumna) {
-		
+
 		if (nombreColumna == null)
 			nombreColumna = metodo.getName().substring(3).toLowerCase();
-		
+
 		boolean seguir = false;
 		for (Object objeto : item.getItemPropertyIds()) {
 			if (nombreColumna.trim().equals(objeto.toString().trim()))
@@ -144,12 +186,12 @@ public class TableConstructor {
 			DefinicionVista anotacionLocal = metodo
 					.getAnnotation(DefinicionVista.class);
 			if (anotacionLocal == null) {
-				
+
 				item.getItemProperty(nombreColumna).setValue(
 						metodo.invoke(valor, null));
-			} else {				
+			} else {
 				if (anotacionLocal.nombrePropiedadRelacion().equals("")) {
-					
+
 					if (anotacionLocal.convertToStringWithFormat().equals("")) {
 						item.getItemProperty(nombreColumna).setValue(
 								metodo.invoke(valor, null));
@@ -166,10 +208,12 @@ public class TableConstructor {
 							.toUpperCase()
 							+ anotacionLocal.nombrePropiedadRelacion()
 									.substring(1);
-					T valorInterno = (T) metodo.invoke(valor, null);					
+					T valorInterno = (T) metodo.invoke(valor, null);
 					Method metodoInterno = valorInterno.getClass()
 							.getDeclaredMethod(
 									GETPREFIX + nombrePropiedadRelacion);
+					item.getItemProperty(ORIGENPREFIX + nombreColumna)
+							.setValue(metodo.invoke(valor, null));
 					propiedadesObjetoRecursivas(item, metodoInterno,
 							valorInterno, nombreColumna);
 
@@ -223,14 +267,15 @@ public class TableConstructor {
 	/***
 	 * Convierte un tipo de datos a string con un formato en especifico.
 	 * 
-	 * @param value Origen
-	 * @param format Formato
+	 * @param value
+	 *            Origen
+	 * @param format
+	 *            Formato
 	 * @return Se devuelve un objeto con la cadena formateada.
 	 */
 	private static <T> Object formatterToString(T value, String format) {
 		String cadenaFormateada = "";
 		if (value.getClass().equals(Timestamp.class)) {
-			System.out.println(value.getClass());
 			cadenaFormateada = (new SimpleDateFormat(format)).format(value);
 		}
 		return cadenaFormateada;
