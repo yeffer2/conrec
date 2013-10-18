@@ -1,10 +1,13 @@
 package pe.com.bbva.reniec.dominio;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.persistence.*;
 
 import pe.com.bbva.reniec.dominio.util.IdBean;
+import pe.com.bbva.reniec.utileria.Constante;
+import pe.com.bbva.reniec.utileria.annotations.DefinicionVista;
 
 /***
  * Clase entidad de la tabla CTL_DETALLE.
@@ -14,11 +17,13 @@ import pe.com.bbva.reniec.dominio.util.IdBean;
  *
  */
 @Entity
-@Table(name="CTL_DETALLE")
-@SuppressWarnings("serial")
+@Table(name="CTL_DETALLE", schema=Constante.SCHEMA.CONREC)
 public class Detalle extends IdBean implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 
 	@Column
+	@DefinicionVista(nombreVista = "ACCION")
 	private String accion;
 	public String getAccion() {return this.accion;}
 	public void setAccion(String accion) {this.accion = accion;}
@@ -45,6 +50,7 @@ public class Detalle extends IdBean implements Serializable {
 	public void setMaterno(String materno) {this.materno = materno;}
 
 	@Column
+	@DefinicionVista(nombreVista = "MENSAJE")
 	private String mensaje;
 	public String getMensaje() {return this.mensaje;}
 	public void setMensaje(String mensaje) {this.mensaje = mensaje;}
@@ -60,11 +66,13 @@ public class Detalle extends IdBean implements Serializable {
 	public void setNacionalidad(String nacionalidad) {this.nacionalidad = nacionalidad;}
 
 	@Column
+	@DefinicionVista(nombreVista = "NOMBRES")
 	private String nombres;
 	public String getNombres() {return this.nombres;}
 	public void setNombres(String nombres) {this.nombres = nombres;}
 
 	@Column(name="NUMERO_DOI")
+	@DefinicionVista(nombreVista = "CODIGO/DNI")
 	private String numeroDoi;
 	public String getNumeroDoi() {return this.numeroDoi;}
 	public void setNumeroDoi(String numeroDoi) {this.numeroDoi = numeroDoi;}
@@ -72,7 +80,6 @@ public class Detalle extends IdBean implements Serializable {
 	@Column
 	private String origen;
 	public String getOrigen() {return this.origen;}
-
 	public void setOrigen(String origen) {this.origen = origen;}
 
 	@Column
@@ -96,6 +103,14 @@ public class Detalle extends IdBean implements Serializable {
 	private Consultante consultante;
 	public Consultante getConsultante() {return consultante;}
 	public void setConsultante(Consultante consultante) {this.consultante = consultante;}
+	
+	@Column(name="NRO_FILA")
+	@DefinicionVista(nombreVista = "NRO. FILA")
+	private BigDecimal nroFila;
+	public BigDecimal getNroFila() {return this.nroFila;}
+	public void setNroFila(BigDecimal nroFila) {this.nroFila = nroFila;}
+	
+	
 	
 	public Detalle() {
 	}

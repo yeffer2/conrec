@@ -26,6 +26,7 @@ public abstract class Constante
 			public final static String ACCION = "ACCION";
 			public final static String USUARIO_ESTADO = "USUARIO_ESTADO";
 			public final static String RENIEC_SITUACION = "RENIEC_SITUACION";
+			public final static String CARGA_TIPO = "CARGA_TIPO";
 				
 		}
 	}

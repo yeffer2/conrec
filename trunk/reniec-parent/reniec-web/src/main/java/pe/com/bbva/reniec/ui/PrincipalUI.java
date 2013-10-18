@@ -153,6 +153,7 @@ public class PrincipalUI extends CustomComponent implements Command{
 			window.setModal(false);
 			window.setResizable(false);
 			window.setWidth("1200px");
+			window.setScrollable(false);
 			ConsultantesCargaMasivaUI consultantesMasivaUI=new ConsultantesCargaMasivaUI();
 			window.addComponent(consultantesMasivaUI);
 			getApplication().getMainWindow().getWindow().addWindow(window);
