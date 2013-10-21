@@ -5,7 +5,6 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import pe.com.bbva.reniec.dominio.util.IdBean;
-import pe.com.bbva.reniec.utileria.Constante;
 import pe.com.bbva.reniec.utileria.annotations.DefinicionVista;
 
 import java.util.Date;
@@ -20,7 +19,7 @@ import java.util.List;
  *
  */
 @Entity
-@Table(name="CTL_CARGA", schema=Constante.SCHEMA.CONREC)
+@Table(name="CTL_CARGA")
 public class Carga extends IdBean implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

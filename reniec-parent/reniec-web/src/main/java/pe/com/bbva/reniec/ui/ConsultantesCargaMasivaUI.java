@@ -162,6 +162,7 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements ClickL
 		cmbTipo.setImmediate(true);
 		cmbTipo.setNullSelectionAllowed(false);
 		cmbTipo.setTextInputAllowed(false);
+		//FIXME Corregir cuando no hay data CARGA_TIPO genera un error
 		cmbTipo.setValue(bicTipo.getItemIds().iterator().next());		
 	}
 

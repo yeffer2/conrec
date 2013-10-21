@@ -5,7 +5,7 @@ public abstract class Constante
 	
 	public static abstract class SCHEMA
 	{
-		public static final String CONREC = "CONREC";
+		public static final String RENIEC = "RENIEC";
 	}
 	
 	public static abstract class DESARROLLO
