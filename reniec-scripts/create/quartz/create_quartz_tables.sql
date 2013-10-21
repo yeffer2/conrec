@@ -1,4 +1,4 @@
-CREATE TABLE CONREC.qrtz_job_details
+CREATE TABLE RENIEC.qrtz_job_details
   (
     JOB_NAME  VARCHAR2(200) NOT NULL,
     JOB_GROUP VARCHAR2(200) NOT NULL,
@@ -12,21 +12,21 @@ CREATE TABLE CONREC.qrtz_job_details
     PRIMARY KEY (JOB_NAME,JOB_GROUP)
 );
 
-grant DELETE,UPDATE,SELECT,INSERT on CONREC.qrtz_job_details to APP_RENIEC;
+grant DELETE,UPDATE,SELECT,INSERT on RENIEC.qrtz_job_details to APP_RENIEC;
 
-CREATE TABLE CONREC.qrtz_job_listeners
+CREATE TABLE RENIEC.qrtz_job_listeners
   (
     JOB_NAME  VARCHAR2(200) NOT NULL, 
     JOB_GROUP VARCHAR2(200) NOT NULL,
     JOB_LISTENER VARCHAR2(200) NOT NULL,
     PRIMARY KEY (JOB_NAME,JOB_GROUP,JOB_LISTENER),
     FOREIGN KEY (JOB_NAME,JOB_GROUP) 
-	REFERENCES CONREC.QRTZ_JOB_DETAILS(JOB_NAME,JOB_GROUP)
+	REFERENCES RENIEC.QRTZ_JOB_DETAILS(JOB_NAME,JOB_GROUP)
 );
 
-grant DELETE,UPDATE,SELECT,INSERT on CONREC.qrtz_job_listeners to APP_RENIEC;
+grant DELETE,UPDATE,SELECT,INSERT on RENIEC.qrtz_job_listeners to APP_RENIEC;
 
-CREATE TABLE CONREC.qrtz_triggers
+CREATE TABLE RENIEC.qrtz_triggers
   (
     TRIGGER_NAME VARCHAR2(200) NOT NULL,
     TRIGGER_GROUP VARCHAR2(200) NOT NULL,
@@ -46,12 +46,12 @@ CREATE TABLE CONREC.qrtz_triggers
     JOB_DATA BLOB NULL,
     PRIMARY KEY (TRIGGER_NAME,TRIGGER_GROUP),
     FOREIGN KEY (JOB_NAME,JOB_GROUP) 
-	REFERENCES CONREC.QRTZ_JOB_DETAILS(JOB_NAME,JOB_GROUP) 
+	REFERENCES RENIEC.QRTZ_JOB_DETAILS(JOB_NAME,JOB_GROUP) 
 );
 
-grant DELETE,UPDATE,SELECT,INSERT on CONREC.qrtz_triggers to APP_RENIEC;
+grant DELETE,UPDATE,SELECT,INSERT on RENIEC.qrtz_triggers to APP_RENIEC;
 
-CREATE TABLE CONREC.qrtz_simple_triggers
+CREATE TABLE RENIEC.qrtz_simple_triggers
   (
     TRIGGER_NAME VARCHAR2(200) NOT NULL,
     TRIGGER_GROUP VARCHAR2(200) NOT NULL,
@@ -60,12 +60,12 @@ CREATE TABLE CONREC.qrtz_simple_triggers
     TIMES_TRIGGERED NUMBER(10) NOT NULL,
     PRIMARY KEY (TRIGGER_NAME,TRIGGER_GROUP),
     FOREIGN KEY (TRIGGER_NAME,TRIGGER_GROUP) 
-	REFERENCES CONREC.QRTZ_TRIGGERS(TRIGGER_NAME,TRIGGER_GROUP)
+	REFERENCES RENIEC.QRTZ_TRIGGERS(TRIGGER_NAME,TRIGGER_GROUP)
 );
 
-grant DELETE,UPDATE,SELECT,INSERT on CONREC.qrtz_simple_triggers to APP_RENIEC;
+grant DELETE,UPDATE,SELECT,INSERT on RENIEC.qrtz_simple_triggers to APP_RENIEC;
 
-CREATE TABLE CONREC.qrtz_cron_triggers
+CREATE TABLE RENIEC.qrtz_cron_triggers
   (
     TRIGGER_NAME VARCHAR2(200) NOT NULL,
     TRIGGER_GROUP VARCHAR2(200) NOT NULL,
@@ -73,53 +73,53 @@ CREATE TABLE CONREC.qrtz_cron_triggers
     TIME_ZONE_ID VARCHAR2(80),
     PRIMARY KEY (TRIGGER_NAME,TRIGGER_GROUP),
     FOREIGN KEY (TRIGGER_NAME,TRIGGER_GROUP) 
-	REFERENCES CONREC.QRTZ_TRIGGERS(TRIGGER_NAME,TRIGGER_GROUP)
+	REFERENCES RENIEC.QRTZ_TRIGGERS(TRIGGER_NAME,TRIGGER_GROUP)
 );
 
-grant DELETE,UPDATE,SELECT,INSERT on CONREC.qrtz_cron_triggers to APP_RENIEC;
+grant DELETE,UPDATE,SELECT,INSERT on RENIEC.qrtz_cron_triggers to APP_RENIEC;
 
-CREATE TABLE CONREC.qrtz_blob_triggers
+CREATE TABLE RENIEC.qrtz_blob_triggers
   (
     TRIGGER_NAME VARCHAR2(200) NOT NULL,
     TRIGGER_GROUP VARCHAR2(200) NOT NULL,
     BLOB_DATA BLOB NULL,
     PRIMARY KEY (TRIGGER_NAME,TRIGGER_GROUP),
     FOREIGN KEY (TRIGGER_NAME,TRIGGER_GROUP) 
-        REFERENCES CONREC.QRTZ_TRIGGERS(TRIGGER_NAME,TRIGGER_GROUP)
+        REFERENCES RENIEC.QRTZ_TRIGGERS(TRIGGER_NAME,TRIGGER_GROUP)
 );
 
-grant DELETE,UPDATE,SELECT,INSERT on CONREC.qrtz_blob_triggers to APP_RENIEC;
+grant DELETE,UPDATE,SELECT,INSERT on RENIEC.qrtz_blob_triggers to APP_RENIEC;
 
-CREATE TABLE CONREC.qrtz_trigger_listeners
+CREATE TABLE RENIEC.qrtz_trigger_listeners
   (
     TRIGGER_NAME  VARCHAR2(200) NOT NULL, 
     TRIGGER_GROUP VARCHAR2(200) NOT NULL,
     TRIGGER_LISTENER VARCHAR2(200) NOT NULL,
     PRIMARY KEY (TRIGGER_NAME,TRIGGER_GROUP,TRIGGER_LISTENER),
     FOREIGN KEY (TRIGGER_NAME,TRIGGER_GROUP) 
-	REFERENCES CONREC.QRTZ_TRIGGERS(TRIGGER_NAME,TRIGGER_GROUP)
+	REFERENCES RENIEC.QRTZ_TRIGGERS(TRIGGER_NAME,TRIGGER_GROUP)
 );
 
-grant DELETE,UPDATE,SELECT,INSERT on CONREC.qrtz_trigger_listeners to APP_RENIEC;
+grant DELETE,UPDATE,SELECT,INSERT on RENIEC.qrtz_trigger_listeners to APP_RENIEC;
 
-CREATE TABLE CONREC.qrtz_calendars
+CREATE TABLE RENIEC.qrtz_calendars
   (
     CALENDAR_NAME  VARCHAR2(200) NOT NULL, 
     CALENDAR BLOB NOT NULL,
     PRIMARY KEY (CALENDAR_NAME)
 );
 
-grant DELETE,UPDATE,SELECT,INSERT on CONREC.qrtz_calendars to APP_RENIEC;
+grant DELETE,UPDATE,SELECT,INSERT on RENIEC.qrtz_calendars to APP_RENIEC;
 
-CREATE TABLE CONREC.qrtz_paused_trigger_grps
+CREATE TABLE RENIEC.qrtz_paused_trigger_grps
   (
     TRIGGER_GROUP  VARCHAR2(200) NOT NULL, 
     PRIMARY KEY (TRIGGER_GROUP)
 );
 
-grant DELETE,UPDATE,SELECT,INSERT on CONREC.qrtz_paused_trigger_grps to APP_RENIEC;
+grant DELETE,UPDATE,SELECT,INSERT on RENIEC.qrtz_paused_trigger_grps to APP_RENIEC;
 
-CREATE TABLE CONREC.qrtz_fired_triggers 
+CREATE TABLE RENIEC.qrtz_fired_triggers 
   (
     ENTRY_ID VARCHAR2(95) NOT NULL,
     TRIGGER_NAME VARCHAR2(200) NOT NULL,
@@ -136,9 +136,9 @@ CREATE TABLE CONREC.qrtz_fired_triggers
     PRIMARY KEY (ENTRY_ID)
 );
 
-grant DELETE,UPDATE,SELECT,INSERT on CONREC.qrtz_fired_triggers to APP_RENIEC;
+grant DELETE,UPDATE,SELECT,INSERT on RENIEC.qrtz_fired_triggers to APP_RENIEC;
 
-CREATE TABLE CONREC.qrtz_scheduler_state 
+CREATE TABLE RENIEC.qrtz_scheduler_state 
   (
     INSTANCE_NAME VARCHAR2(200) NOT NULL,
     LAST_CHECKIN_TIME NUMBER(13) NOT NULL,
@@ -146,29 +146,29 @@ CREATE TABLE CONREC.qrtz_scheduler_state
     PRIMARY KEY (INSTANCE_NAME)
 );
 
-grant DELETE,UPDATE,SELECT,INSERT on CONREC.qrtz_scheduler_state to APP_RENIEC;
+grant DELETE,UPDATE,SELECT,INSERT on RENIEC.qrtz_scheduler_state to APP_RENIEC;
 
-CREATE TABLE CONREC.qrtz_locks
+CREATE TABLE RENIEC.qrtz_locks
   (
     LOCK_NAME  VARCHAR2(40) NOT NULL, 
     PRIMARY KEY (LOCK_NAME)
 );
 
-grant DELETE,UPDATE,SELECT,INSERT on CONREC.qrtz_locks to APP_RENIEC;
+grant DELETE,UPDATE,SELECT,INSERT on RENIEC.qrtz_locks to APP_RENIEC;
 
 
-create index CONREC.idx_qrtz_j_req_recovery on CONREC.qrtz_job_details(REQUESTS_RECOVERY);
-create index CONREC.idx_qrtz_t_next_fire_time on CONREC.qrtz_triggers(NEXT_FIRE_TIME);
-create index CONREC.idx_qrtz_t_state on CONREC.qrtz_triggers(TRIGGER_STATE);
-create index CONREC.idx_qrtz_t_nft_st on CONREC.qrtz_triggers(NEXT_FIRE_TIME,TRIGGER_STATE);
-create index CONREC.idx_qrtz_t_volatile on CONREC.qrtz_triggers(IS_VOLATILE);
-create index CONREC.idx_qrtz_ft_trig_name on CONREC.qrtz_fired_triggers(TRIGGER_NAME);
-create index CONREC.idx_qrtz_ft_trig_group on CONREC.qrtz_fired_triggers(TRIGGER_GROUP);
-create index CONREC.idx_qrtz_ft_trig_nm_gp on CONREC.qrtz_fired_triggers(TRIGGER_NAME,TRIGGER_GROUP);
-create index CONREC.idx_qrtz_ft_trig_volatile on CONREC.qrtz_fired_triggers(IS_VOLATILE);
-create index CONREC.idx_qrtz_ft_trig_inst_name on CONREC.qrtz_fired_triggers(INSTANCE_NAME);
-create index CONREC.idx_qrtz_ft_job_name on CONREC.qrtz_fired_triggers(JOB_NAME);
-create index CONREC.idx_qrtz_ft_job_group on CONREC.qrtz_fired_triggers(JOB_GROUP);
-create index CONREC.idx_qrtz_ft_job_stateful on CONREC.qrtz_fired_triggers(IS_STATEFUL);
-create index CONREC.idx_qrtz_ft_job_req_recovery on CONREC.qrtz_fired_triggers(REQUESTS_RECOVERY);
+create index RENIEC.idx_qrtz_j_req_recovery on RENIEC.qrtz_job_details(REQUESTS_RECOVERY);
+create index RENIEC.idx_qrtz_t_next_fire_time on RENIEC.qrtz_triggers(NEXT_FIRE_TIME);
+create index RENIEC.idx_qrtz_t_state on RENIEC.qrtz_triggers(TRIGGER_STATE);
+create index RENIEC.idx_qrtz_t_nft_st on RENIEC.qrtz_triggers(NEXT_FIRE_TIME,TRIGGER_STATE);
+create index RENIEC.idx_qrtz_t_volatile on RENIEC.qrtz_triggers(IS_VOLATILE);
+create index RENIEC.idx_qrtz_ft_trig_name on RENIEC.qrtz_fired_triggers(TRIGGER_NAME);
+create index RENIEC.idx_qrtz_ft_trig_group on RENIEC.qrtz_fired_triggers(TRIGGER_GROUP);
+create index RENIEC.idx_qrtz_ft_trig_nm_gp on RENIEC.qrtz_fired_triggers(TRIGGER_NAME,TRIGGER_GROUP);
+create index RENIEC.idx_qrtz_ft_trig_volatile on RENIEC.qrtz_fired_triggers(IS_VOLATILE);
+create index RENIEC.idx_qrtz_ft_trig_inst_name on RENIEC.qrtz_fired_triggers(INSTANCE_NAME);
+create index RENIEC.idx_qrtz_ft_job_name on RENIEC.qrtz_fired_triggers(JOB_NAME);
+create index RENIEC.idx_qrtz_ft_job_group on RENIEC.qrtz_fired_triggers(JOB_GROUP);
+create index RENIEC.idx_qrtz_ft_job_stateful on RENIEC.qrtz_fired_triggers(IS_STATEFUL);
+create index RENIEC.idx_qrtz_ft_job_req_recovery on RENIEC.qrtz_fired_triggers(REQUESTS_RECOVERY);
 
