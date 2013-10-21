@@ -7,6 +7,7 @@ import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.NotBlank;
 
 import pe.com.bbva.reniec.dominio.util.IdBean;
@@ -92,7 +93,6 @@ public class Consultante extends IdBean implements Serializable {
 	public Valor getEstado() { return estado;}
 	public void setEstado(Valor estado) { this.estado = estado;}
 
-	@NotNull(message=Constante.CODIGO_MENSAJE.VALIDAR_COMBOBOX)
 	@ManyToOne
 	@JoinColumn(name="SITUACION", nullable=false)
 	private Valor situacion;
@@ -100,7 +100,9 @@ public class Consultante extends IdBean implements Serializable {
 	public void setSituacion(Valor situacion) { this.situacion = situacion;}
 
 	public String getNombreCompleto(){
-		return paterno+" "+materno+" "+nombres;
+		return (StringUtils.isNotBlank(paterno)?paterno:"")+" "+
+				(StringUtils.isNotBlank(materno)?materno:"")+" "+
+				(StringUtils.isNotBlank(nombres)?nombres:"");
 	}
 	
 }

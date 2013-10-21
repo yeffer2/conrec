@@ -33,12 +33,82 @@ public abstract class Constante
 	
 	public static abstract class VALOR
 	{
-		public static abstract class CODIGO
+		public static abstract class OPCION_TIPO
 		{
-			//Ejemplo public final static String ACTIVO = "A";
-			public final static String MENU = "MEN";
-			public final static String SUBMENU = "VEN";
-			public final static String ACCION = "ACC";
+			public static abstract class CODIGO
+			{
+				public final static String MENU = "MEN";
+				public final static String SUBMENU = "VEN";
+				public final static String ACCION = "ACC";
+			}
+		}
+		public static abstract class USUARIO_ESTADO
+		{
+			public static abstract class CODIGO
+			{
+				public final static String ACTIVO = "ACTIVO";
+				public final static String BAJA_TEMPORAL = "BAJA_TEMPORAL";
+				public final static String BAJA_DEFINITIVA = "BAJA_DEFINITIVA";
+				public final static String ERROR_RENIEC = "ERROR_RENIEC";
+			}
+		}
+		public static abstract class RENIEC_SITUACION
+		{
+			public static abstract class CODIGO
+			{
+				public final static String ACTIVO = "ACTIVO";
+				public final static String BAJA_TEMPORAL = "BAJA_TEMPORAL";
+				public final static String BAJA_DEFINITIVA = "BAJA_DEFINITIVA";
+			}
+		}
+		public static abstract class DOI_TIPO
+		{
+			public static abstract class CODIGO
+			{
+				public static final String CUSPP = "A";
+				public static final String DIPLOMATICO = "D";
+				public static final String EXTRANJERIA = "E";
+				public static final String AFPHO = "F";
+				public static final String MENOR_EDAD = "J";
+				public static final String DNI = "L";
+				public static final String DOC_EXTRANJERO = "X";
+				public static final String RUC_ANTIGUO = "N";
+				public static final String MILITAR = "M";
+				public static final String RUC = "R";
+				public static final String SIN_DOCUMENTO = "S";
+				public static final String FUERZAS_PO = "T";
+				public static final String RUS = "U";
+				public static final String PASAPORTE = "P";
+			}
+			
+			public static enum LONGITUD
+			{
+				A(11),
+				D(11),
+				E(11),
+				F(11),
+				J(11),
+				L(8),
+				X(11),
+				N(8),
+				M(11),
+				R(11),
+				S(11),
+				T(11),
+				U(11),
+				P(9);
+				
+				private int valor;
+
+				LONGITUD(int valor) {
+					this.valor = valor;
+				}
+
+				public int getValor() {
+					return valor;
+				}
+				
+			}
 		}
 		
 	}
@@ -87,55 +157,32 @@ public abstract class Constante
 		
 	}
 	
-	public static abstract class DOI_TIPO
+	public static abstract class WS_RENIEC
 	{
-		public static abstract class CODIGO
+		public static abstract class ENTRADA
 		{
-			public static final String CUSPP = "A";
-			public static final String DIPLOMATICO = "D";
-			public static final String EXTRANJERIA = "E";
-			public static final String AFPHO = "F";
-			public static final String MENOR_EDAD = "J";
-			public static final String DNI = "L";
-			public static final String DOC_EXTRANJERO = "X";
-			public static final String RUC_ANTIGUO = "N";
-			public static final String MILITAR = "M";
-			public static final String RUC = "R";
-			public static final String SIN_DOCUMENTO = "S";
-			public static final String FUERZAS_PO = "T";
-			public static final String RUS = "U";
-			public static final String PASAPORTE = "P";
+			public static abstract class PROCESO
+			{
+				public static final String ACTIVAR_USUARIO = "AC";
+				public static final String BAJA_TEMPORAL = "BT";
+				public static final String BAJA_DEFINITIVA = "BD";
+				public static final String REACTIVAR_USUARIO = "RA";
+				public static final String CONSULTA = "CO";
+			}
 		}
-		
-		public static enum LONGITUD
+		public static abstract class SALIDA
 		{
-			A(11),
-			D(11),
-			E(11),
-			F(11),
-			J(11),
-			L(8),
-			X(11),
-			N(8),
-			M(11),
-			R(11),
-			S(11),
-			T(11),
-			U(11),
-			P(9);
-			
-			private int valor;
-
-			LONGITUD(int valor) {
-				this.valor = valor;
+			public static abstract class ERROR
+			{
+				public static final String NINGUN_ERROR = "0000";
 			}
-
-			public int getValor() {
-				return valor;
+			public static abstract class MENSAJE
+			{
+				public static final String ACTIVAR_USUARIO = "ACTIVO";
+				public static final String BAJA_TEMPORAL = "BAJA TEMPORAL";
+				public static final String BAJA_DEFINITIVA = "BAJA DEFINITIVA";
 			}
-			
 		}
-		
 	}
 	
 }

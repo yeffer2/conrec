@@ -1,12 +1,20 @@
 package pe.com.bbva.reniec.ui;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import pe.com.bbva.reniec.dominio.Usuario;
 import pe.com.bbva.reniec.exception.AlertaException;
+import pe.com.bbva.reniec.negocio.SeguridadService;
 import pe.com.bbva.reniec.utileria.Constante;
 import pe.com.bbva.reniec.utileria.Inject;
 
+import com.grupobbva.bc.per.tele.seguridad.ServiciosSeguridadBbva;
 import com.vaadin.Application;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.Window.Notification;
@@ -17,18 +25,39 @@ public class ReniecApplication extends Application{
 
 	@Autowired
 	private MessageSource messageSource;
+	@Autowired
+	private SeguridadService seguridadService;
 	
 	Window windowReniec;
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public void init() {
 		Inject.inject(this);
 		
 		setTheme("reniec");
 		
+//		ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder
+//				.currentRequestAttributes();
+//		HttpServletRequest request = requestAttributes.getRequest();
+//		ServiciosSeguridadBbva ssBbva = new ServiciosSeguridadBbva(request);
+//		ssBbva.obtener_ID();
+//		String login=ssBbva.getUsuario();
 		windowReniec=new Window();
-		windowReniec.setCaption("Login");
-		windowReniec.addComponent(new LoginUI());
+//		if(login==null){
+			windowReniec.setCaption("Login");
+			windowReniec.addComponent(new LoginUI());
+//		}else{
+//			Usuario usuario = seguridadService.login(login);
+//	        if(usuario != null)
+//	        {
+//	    		HttpSession session = request.getSession(true);
+//	    		session.setAttribute(Constante.SESION.USUARIO, usuario);
+//	    		windowReniec.addComponent(new PrincipalUI());
+//	    		windowReniec.getContent().setHeight("100%");
+//	    		windowReniec.getLayout().setMargin(false);
+//	        }
+//		}
 		
 		setMainWindow(windowReniec);
 		
