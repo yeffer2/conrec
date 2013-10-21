@@ -30,16 +30,14 @@
     <Valve className="org.apache.catalina.valves.CometConnectionManagerValve" />
     -->
     
-   	<!--
-    <Resource name="jdbc/Harec" auth="Container" type="javax.sql.DataSource"
+   	<Resource name="jdbc/APP_RENIEC" auth="Container" type="javax.sql.DataSource"
                maxActive="100" maxIdle="30" maxWait="10000"
-               username="APP_HARECL" password="harec" driverClassName="oracle.jdbc.driver.OracleDriver"
-               url="jdbc:oracle:thin:@10.51.0.10:1521:xe"/>
-	-->
+               username="APP_RENIEC" password="reniec" driverClassName="oracle.jdbc.driver.OracleDriver"
+               url="jdbc:oracle:thin:@user-fb06108e47:1521:xe"/>
 
 	<Resource name="jdbc/ORA_Biiwx001" auth="Container" type="javax.sql.DataSource"
                maxActive="100" maxIdle="30" maxWait="10000"
-               username="IIWX" password="ldapbbva" driverClassName="oracle.jdbc.driver.OracleDriver"
+               username="ldap2" password="ldap2" driverClassName="oracle.jdbc.driver.OracleDriver"
                url="jdbc:oracle:thin:@user-fb06108e47:1521:xe"/>
 
 
