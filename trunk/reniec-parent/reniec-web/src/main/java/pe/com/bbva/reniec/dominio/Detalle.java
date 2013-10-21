@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import javax.persistence.*;
 
 import pe.com.bbva.reniec.dominio.util.IdBean;
-import pe.com.bbva.reniec.utileria.Constante;
 import pe.com.bbva.reniec.utileria.annotations.DefinicionVista;
 
 /***
@@ -17,7 +16,7 @@ import pe.com.bbva.reniec.utileria.annotations.DefinicionVista;
  *
  */
 @Entity
-@Table(name="CTL_DETALLE", schema=Constante.SCHEMA.CONREC)
+@Table(name="CTL_DETALLE")
 public class Detalle extends IdBean implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
