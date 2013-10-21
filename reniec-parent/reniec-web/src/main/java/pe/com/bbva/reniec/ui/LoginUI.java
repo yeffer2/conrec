@@ -3,11 +3,13 @@ package pe.com.bbva.reniec.ui;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import pe.com.bbva.reniec.dominio.Usuario;
+import pe.com.bbva.reniec.exception.ValidacionException;
 import pe.com.bbva.reniec.negocio.SeguridadService;
 import pe.com.bbva.reniec.utileria.Constante;
 import pe.com.bbva.reniec.utileria.Inject;
@@ -137,7 +139,7 @@ public class LoginUI extends CustomComponent implements ClickListener {
 		String username = txtUsuario.getValue().toString();
 		String password = txtClave.getValue().toString();
         
-        /*if(StringUtils.isBlank(username))
+        if(StringUtils.isBlank(username))
         {
         	throw new ValidacionException(Constante.CODIGO_MENSAJE.VALIDAR_TEXTBOX, new Object[]{"Usuario"});
         }
@@ -145,7 +147,7 @@ public class LoginUI extends CustomComponent implements ClickListener {
         if(StringUtils.isBlank(password))
         {
         	throw new ValidacionException(Constante.CODIGO_MENSAJE.VALIDAR_TEXTBOX, new Object[]{"Password"});
-        }*/
+        }
         
         username = username.toUpperCase();
         

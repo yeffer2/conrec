@@ -10,6 +10,7 @@ import pe.com.bbva.reniec.dominio.Usuario;
 public interface SeguridadService extends Serializable{
 
 	Usuario login(String loginUsuario, String password);
+	Usuario login(String loginUsuario);
 	Map<String, List<Opcion>> obtenerOpciones();
 	
 }

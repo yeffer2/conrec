@@ -14,6 +14,7 @@ import pe.com.bbva.reniec.negocio.SeguridadService;
 import pe.com.bbva.reniec.persistencia.LDAP2DAO;
 import pe.com.bbva.reniec.persistencia.MembresiaDAO;
 import pe.com.bbva.reniec.persistencia.OpcionDAO;
+import pe.com.bbva.reniec.persistencia.RolDAO;
 import pe.com.bbva.reniec.persistencia.UsuarioDAO;
 import pe.com.bbva.reniec.utileria.ReniecUtil;
 
@@ -29,6 +30,8 @@ public class SeguridadServiceImpl implements SeguridadService{
 	private MembresiaDAO membresiaDAO;
 	@Autowired
 	private OpcionDAO opcionDAO;
+	@Autowired
+	private RolDAO rolDAO;
 	
 	@Override
 	public Usuario login(String loginUsuario, String password) {
@@ -39,7 +42,7 @@ public class SeguridadServiceImpl implements SeguridadService{
 					usuarioDAO.obtenerHql("select u from Usuario u where u.registro=?", usuarioLDAP.getRegistro());
 			if(usuario==null){
 				usuarioDAO.crear(usuarioLDAP);
-				return usuarioLDAP;
+				usuario=usuarioLDAP;
 			}else{
 				usuario.setNombres(usuarioLDAP.getNombres());
 				usuario.setPaterno(usuarioLDAP.getPaterno());
@@ -51,12 +54,40 @@ public class SeguridadServiceImpl implements SeguridadService{
 				usuario.setCentro(usuarioLDAP.getCentro());
 				usuario.setCentroNombre(usuarioLDAP.getCentroNombre());
 				usuarioDAO.actualizar(usuario);
-				return usuario;
 			}
+			usuario.setRol(rolDAO.obtenerHql("select m.rol from Membresia m where m.valor=?", usuario.getRegistro()));
+			return usuario;
 		}
 		return null;
 	}
 
+	@Override
+	public Usuario login(String loginUsuario) {
+		Usuario usuarioLDAP=ldap2DAO.login(loginUsuario);
+		if(usuarioLDAP!=null){
+			Usuario usuario=
+					usuarioDAO.obtenerHql("select u from Usuario u where u.registro=?", usuarioLDAP.getRegistro());
+			if(usuario==null){
+				usuarioDAO.crear(usuarioLDAP);
+				usuario=usuarioLDAP;
+			}else{
+				usuario.setNombres(usuarioLDAP.getNombres());
+				usuario.setPaterno(usuarioLDAP.getPaterno());
+				usuario.setMaterno(usuarioLDAP.getMaterno());
+				usuario.setRegistro(loginUsuario);
+				usuario.setCargo(usuarioLDAP.getCargo());
+				usuario.setCargoNombre(usuarioLDAP.getCargoNombre());
+				usuario.setCorreo(usuarioLDAP.getCorreo());
+				usuario.setCentro(usuarioLDAP.getCentro());
+				usuario.setCentroNombre(usuarioLDAP.getCentroNombre());
+				usuarioDAO.actualizar(usuario);
+			}
+			usuario.setRol(rolDAO.obtenerHql("select m.rol from Membresia m where m.valor=?", usuario.getRegistro()));
+			return usuario;
+		}
+		return null;
+	}
+	
 	@Override
 	public Map<String, List<Opcion>> obtenerOpciones() {
 		Usuario usuario=ReniecUtil.obtenerUsuarioSesion();

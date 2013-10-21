@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import pe.com.bbva.reniec.dominio.util.IdBean;
 
@@ -58,5 +59,14 @@ public class Usuario extends IdBean implements Serializable {
 	private String centroNombre;	
 	public String getCentroNombre() { return centroNombre;}
 	public void setCentroNombre(String centroNombre) { this.centroNombre = centroNombre; }
+	
+	@Transient
+	private Rol rol;
+	public Rol getRol() { return rol; }
+	public void setRol(Rol rol) { this.rol = rol; }
+	
+	public String getNombreCompleto(){
+		return nombres+" "+paterno+" "+materno;
+	}
 	
 }

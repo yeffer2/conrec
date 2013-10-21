@@ -21,5 +21,11 @@ public class ConfiguracionServiceImpl implements ConfiguracionService{
 		return valorDAO.buscarHql("select v from Valor v where v.lista.codigo=?", codigo);
 	}
 
+	@Override
+	public Valor obtenerValorxCodigo(String codigoLista, String codigoValor) {
+		// TODO Auto-generated method stub
+		return valorDAO.obtenerHql("select v from Valor v where v.lista.codigo=? and codigo=?", codigoLista, codigoValor);
+	}
+
 
 }

@@ -8,5 +8,6 @@ import pe.com.bbva.reniec.dominio.Valor;
 public interface ConfiguracionService extends Serializable{
 
 	List<Valor> obtenerValoresxLista(String codigo);
+	Valor obtenerValorxCodigo(String codigo, String codigoValor);
 	
 }
