@@ -31,38 +31,49 @@ public class ReniecApplication extends Application{
 	Window windowReniec;
 	
 	@Override
-	@SuppressWarnings("deprecation")
 	public void init() {
 		Inject.inject(this);
 		
 		setTheme("reniec");
 		
-//		ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder
-//				.currentRequestAttributes();
-//		HttpServletRequest request = requestAttributes.getRequest();
-//		ServiciosSeguridadBbva ssBbva = new ServiciosSeguridadBbva(request);
-//		ssBbva.obtener_ID();
-//		String login=ssBbva.getUsuario();
-		windowReniec=new Window();
-//		if(login==null){
-			windowReniec.setCaption("Login");
-			windowReniec.addComponent(new LoginUI());
-//		}else{
-//			Usuario usuario = seguridadService.login(login);
-//	        if(usuario != null)
-//	        {
-//	    		HttpSession session = request.getSession(true);
-//	    		session.setAttribute(Constante.SESION.USUARIO, usuario);
-//	    		windowReniec.addComponent(new PrincipalUI());
-//	    		windowReniec.getContent().setHeight("100%");
-//	    		windowReniec.getLayout().setMargin(false);
-//	        }
-//		}
+		//iniciarWebseal();
+		iniciar();
 		
 		setMainWindow(windowReniec);
 		
 	}
 
+	@SuppressWarnings({ "deprecation" })
+	private void iniciarWebseal(){
+		ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder
+				.currentRequestAttributes();
+		HttpServletRequest request = requestAttributes.getRequest();
+		ServiciosSeguridadBbva ssBbva = new ServiciosSeguridadBbva(request);
+		ssBbva.obtener_ID();
+		String login=ssBbva.getUsuario();
+		windowReniec=new Window();
+		if(login==null){
+			windowReniec.setCaption("Login");
+			windowReniec.addComponent(new LoginUI());
+		}else{
+			Usuario usuario = seguridadService.login(login);
+	        if(usuario != null)
+	        {
+	    		HttpSession session = request.getSession(true);
+	    		session.setAttribute(Constante.SESION.USUARIO, usuario);
+	    		windowReniec.addComponent(new PrincipalUI());
+	    		windowReniec.getContent().setHeight("100%");
+	    		windowReniec.getLayout().setMargin(false);
+	        }
+		}
+	}
+
+	private void iniciar(){
+		windowReniec=new Window();
+		windowReniec.setCaption("Login");
+		windowReniec.addComponent(new LoginUI());
+	}
+	
 	@Override
 	public void terminalError(Terminal.ErrorEvent event) {
 		String defaultMessage = "Mensaje no especificado";

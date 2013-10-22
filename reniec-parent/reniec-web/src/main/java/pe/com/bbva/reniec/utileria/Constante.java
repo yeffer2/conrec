@@ -115,7 +115,7 @@ public abstract class Constante
 	
 	public static abstract class PARAMETRO
 	{
-		//Ejemplo public final static String ESTADO_LOV = "LOV_ESTADO";
+		public final static String ESTADO_LOV = "LOV_ESTADO";
 	}
 	
 	public static abstract class CODIGO_MENSAJE

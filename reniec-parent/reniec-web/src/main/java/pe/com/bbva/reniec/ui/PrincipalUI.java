@@ -122,6 +122,7 @@ public class PrincipalUI extends CustomComponent implements Command{
 			window.setModal(false);
 			window.setResizable(false);
 			window.setWidth("1200px");
+			window.setScrollable(false);
 			ConsultantesUI consultantesUI=new ConsultantesUI();
 			window.addComponent(consultantesUI);
 			getApplication().getMainWindow().getWindow().addWindow(window);
@@ -138,7 +139,16 @@ public class PrincipalUI extends CustomComponent implements Command{
 		}else if(selectedReniecItem.getCodigo().equals(Constante.OPCION.CONF_PARAM)){
 			//TODO Logica de Opcion
 		}else if(selectedReniecItem.getCodigo().equals(Constante.OPCION.CONF_LISTAS)){
-			//TODO Logica de Opcion
+			Window window=new Window();
+			window.setCaption("Listas y Valores");
+			window.setModal(false);
+			window.setResizable(false);
+			window.setWidth("950px");
+			window.setHeight("500px");
+			window.setScrollable(false);
+			ListasYValoresUI listasYValoresUI=new ListasYValoresUI();
+			window.addComponent(listasYValoresUI);
+			getApplication().getMainWindow().getWindow().addWindow(window);
 		}else if(selectedReniecItem.getCodigo().equals(Constante.OPCION.CONF_JOB)){
 			//TODO Logica de Opcion
 		}else if(selectedReniecItem.getCodigo().equals(Constante.OPCION.CONF_DIAG)){
