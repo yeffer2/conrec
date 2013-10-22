@@ -16,7 +16,7 @@ import pe.com.bbva.reniec.persistencia.ParametroDAO;
  */
 @Repository
 @SuppressWarnings("serial")
-public class ParametroHibernate extends BaseHibernate<Parametro, Long> implements
+public class ParametroHibernate extends BaseHibernate<Parametro, String> implements
 		ParametroDAO {
 	
 	@Autowired
