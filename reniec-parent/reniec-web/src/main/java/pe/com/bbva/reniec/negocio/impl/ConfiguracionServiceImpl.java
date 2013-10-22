@@ -2,6 +2,7 @@ package pe.com.bbva.reniec.negocio.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -16,6 +17,7 @@ import pe.com.bbva.reniec.persistencia.ListaDAO;
 import pe.com.bbva.reniec.persistencia.ParametroDAO;
 import pe.com.bbva.reniec.persistencia.ValorDAO;
 import pe.com.bbva.reniec.utileria.Busqueda;
+import pe.com.bbva.reniec.utileria.Constante;
 
 @Service
 @SuppressWarnings("serial")
@@ -125,6 +127,45 @@ public class ConfiguracionServiceImpl implements ConfiguracionService{
 	@Override
 	public Parametro obtenerParametroxCodigo(String codigo) {
 		return parametroDAO.obtenerHql("select p from Parametro p where p.codigo=?", codigo);
+	}
+
+	@Override
+	public List<Parametro> buscarParametros(Parametro parametro) {
+		Busqueda filtro = Busqueda.forClass(Parametro.class);
+		if (parametro != null) {
+			if (parametro.getCodigo() != null) {
+				filtro.add(Restrictions.ilike("codigo", parametro.getCodigo(), MatchMode.ANYWHERE));
+			}
+			if (parametro.getNombre() != null) {
+				filtro.add(Restrictions.ilike("nombre", parametro.getNombre(), MatchMode.ANYWHERE));
+			}
+			if (parametro.getValor() != null) {
+				filtro.add(Restrictions.ilike("valor", parametro.getValor(), MatchMode.ANYWHERE));
+			}
+			if (parametro.getEstado() != null && parametro.getEstado().getNombre() != null) {
+				filtro.createAlias("estado", "e");
+				filtro.createAlias("e.lista", "l");
+				filtro.add(Restrictions.eq("l.codigo", Constante.LISTA.CODIGO.REGISTRO_ESTADO));
+				filtro.add(Restrictions.ilike("e.nombre", parametro.getEstado().getNombre(), MatchMode.ANYWHERE));
+			}
+
+		}
+		filtro.addOrder(Order.asc("codigo"));
+		return parametroDAO.buscar(filtro);
+	}
+
+	@Override
+	public void guardarParametro(Parametro parametro) {
+		if(StringUtils.isBlank(parametro.getCodigoAnterior())){
+			parametroDAO.crear(parametro);
+		}else{
+			parametroDAO.actualizar(parametro);
+		}
+	}
+
+	@Override
+	public void eliminarParametro(String codigo) {
+		parametroDAO.eliminarXId(codigo);
 	}
 
 }

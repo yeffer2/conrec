@@ -137,7 +137,15 @@ public class PrincipalUI extends CustomComponent implements Command{
 			window.addComponent(consultantesMasivaUI);
 			getApplication().getMainWindow().getWindow().addWindow(window);
 		}else if(selectedReniecItem.getCodigo().equals(Constante.OPCION.CONF_PARAM)){
-			//TODO Logica de Opcion
+			Window window=new Window();
+			window.setCaption("Parámetros");
+			window.setModal(false);
+			window.setResizable(false);
+			window.setWidth("950px");
+			window.setScrollable(false);
+			ParametrosUI parametrosUI=new ParametrosUI();
+			window.addComponent(parametrosUI);
+			getApplication().getMainWindow().getWindow().addWindow(window);
 		}else if(selectedReniecItem.getCodigo().equals(Constante.OPCION.CONF_LISTAS)){
 			Window window=new Window();
 			window.setCaption("Listas y Valores");
@@ -154,13 +162,37 @@ public class PrincipalUI extends CustomComponent implements Command{
 		}else if(selectedReniecItem.getCodigo().equals(Constante.OPCION.CONF_DIAG)){
 			//TODO Logica de Opcion
 		}else if(selectedReniecItem.getCodigo().equals(Constante.OPCION.CONF_FICHER)){
-			//TODO Logica de Opcion
+			Window window=new Window();
+			window.setCaption("Visor de Ficheros");
+			window.setModal(false);
+			window.setResizable(false);
+			window.setWidth("950px");
+			window.setScrollable(false);
+			VisorUI visorUI=new VisorUI();
+			window.addComponent(visorUI);
+			getApplication().getMainWindow().getWindow().addWindow(window);
 		}else if(selectedReniecItem.getCodigo().equals(Constante.OPCION.SEG_ROL_MEMB)){
-			//TODO Logica de Opcion
+			Window window=new Window();
+			window.setCaption("Roles y membresías");
+			window.setModal(false);
+			window.setResizable(false);
+			window.setWidth("950px");
+			window.setScrollable(false);
+			RolesYMembresiasUI rolesYMembresiasUI=new RolesYMembresiasUI();
+			window.addComponent(rolesYMembresiasUI);
+			getApplication().getMainWindow().getWindow().addWindow(window);
 		}else if(selectedReniecItem.getCodigo().equals(Constante.OPCION.SEG_OPCION)){
 			//TODO Logica de Opcion
 		}else if(selectedReniecItem.getCodigo().equals(Constante.OPCION.SEG_PERM)){
-			//TODO Logica de Opcion
+			Window window=new Window();
+			window.setCaption("Roles y membresías");
+			window.setModal(false);
+			window.setResizable(false);
+			window.setWidth("950px");
+			window.setScrollable(false);
+			PermisosUI permisosUI=new PermisosUI();
+			window.addComponent(permisosUI);
+			getApplication().getMainWindow().getWindow().addWindow(window);
 		}
 	}
 	

@@ -18,5 +18,8 @@ public interface ConfiguracionService extends Serializable{
 	void guardarValor(Valor valor);
 	void eliminarValor(Long id);
 	Parametro obtenerParametroxCodigo(String codigo);
+	List<Parametro> buscarParametros(Parametro parametro);
+	void guardarParametro(Parametro parametro);
+	void eliminarParametro(String codigo);
 	
 }

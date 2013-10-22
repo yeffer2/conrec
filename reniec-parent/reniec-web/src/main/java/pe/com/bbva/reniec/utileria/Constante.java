@@ -27,12 +27,22 @@ public abstract class Constante
 			public final static String USUARIO_ESTADO = "USUARIO_ESTADO";
 			public final static String RENIEC_SITUACION = "RENIEC_SITUACION";
 			public final static String CARGA_TIPO = "CARGA_TIPO";
+			public final static String RUTAS_ARCHIVOS = "RUTAS_ARCHIVOS";
 				
 		}
 	}
 	
 	public static abstract class VALOR
 	{
+		public static abstract class REGISTRO_ESTADO
+		{
+			public static abstract class CODIGO
+			{
+				public final static String ACTIVO = "A";
+				public final static String INACTIVO = "I";
+			}
+		}
+		
 		public static abstract class OPCION_TIPO
 		{
 			public static abstract class CODIGO
