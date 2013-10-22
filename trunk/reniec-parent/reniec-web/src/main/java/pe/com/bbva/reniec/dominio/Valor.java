@@ -3,28 +3,34 @@ package pe.com.bbva.reniec.dominio;
 import java.io.Serializable;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.hibernate.validator.constraints.NotBlank;
 
 import pe.com.bbva.reniec.dominio.util.IdBean;
+import pe.com.bbva.reniec.utileria.Constante;
 
 @Entity
 @Table(name="CFG_VALOR")
 @SuppressWarnings("serial")
 public class Valor extends IdBean implements Serializable {
 
+	@NotNull(message=Constante.CODIGO_MENSAJE.VALIDAR_COMBOBOX)
 	@ManyToOne
 	@JoinColumn(name="LISTA", nullable=false)
 	private Lista lista;
 	public Lista getLista() { return lista;}
 	public void setLista(Lista lista) { this.lista = lista;}
 	
+	@NotBlank(message=Constante.CODIGO_MENSAJE.VALIDAR_TEXTBOX)
 	@Column(nullable=false, length=30)
 	private String codigo;
 	public String getCodigo() { return codigo;}
 	public void setCodigo(String codigo) { this.codigo = codigo;}
 
+	@NotBlank(message=Constante.CODIGO_MENSAJE.VALIDAR_TEXTBOX)
 	@Column(nullable=false, length=200)
 	private String nombre;
 	public String getNombre() { return nombre;}
@@ -40,6 +46,7 @@ public class Valor extends IdBean implements Serializable {
 	public String getDescripcion() { return descripcion;}
 	public void setDescripcion(String descripcion) { this.descripcion = descripcion;}
 
+	@NotBlank(message=Constante.CODIGO_MENSAJE.VALIDAR_COMBOBOX)
 	@Column(nullable=false, length=2)
 	private String estado;
 	public String getEstado() { return estado;}

@@ -19,5 +19,6 @@
 	">
 
 	<context:component-scan base-package="pe.com.bbva.reniec.negocio.impl" />
+	<bean id="configuracionService" class="pe.com.bbva.reniec.negocio.impl.ConfiguracionServiceImpl" />
 
 </beans>
