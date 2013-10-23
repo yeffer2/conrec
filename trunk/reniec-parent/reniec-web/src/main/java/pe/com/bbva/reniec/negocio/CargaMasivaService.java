@@ -9,4 +9,8 @@ public interface CargaMasivaService  extends ConfiguracionService, Serializable 
 
 	List<Carga> obtenerCargasDesc();
 
+	List<Carga> obtenerCargasDescByCriteria(Carga carga);
+	
+	Long obtenerUltimoId();
+
 }

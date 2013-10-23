@@ -42,12 +42,13 @@ public class ExcelExport {
 		fila = hoja.createRow(iFila++);
 		celda = fila.createCell(0);
 		celda.setCellValue(new HSSFRichTextString(nombreReporteCargaMasiva));
-		CellRangeAddress region = new CellRangeAddress(0, 0, 0, columnasDetalle.length-1);
+		CellRangeAddress region = new CellRangeAddress(0, 0, 0,
+				columnasDetalle.length - 1);
 		hoja.addMergedRegion(region);
 		celda.setCellStyle(getStyleHeader(libro));
-		for(int i= 1; i<region.getNumberOfCells(); i++){		
-		celda = fila.createCell(i);
-		celda.setCellStyle(getStyleHeader(libro));
+		for (int i = 1; i < region.getNumberOfCells(); i++) {
+			celda = fila.createCell(i);
+			celda.setCellStyle(getStyleHeader(libro));
 		}
 
 		iFila++;
@@ -60,12 +61,13 @@ public class ExcelExport {
 
 			celda = fila.createCell(3);
 			celda.setCellValue(valores.getItemProperty(columna).toString());
-			region = new CellRangeAddress(iFila, iFila, 3, 6);
+			region = new CellRangeAddress(iFila, iFila, 3,
+					columnasDetalle.length - 1);
 			hoja.addMergedRegion(region);
 			iFila++;
 		}
 		iFila++;
-		
+
 		fila = hoja.createRow(iFila++);
 		int iColumna = 0;
 		for (Object columnaDetalle : columnasDetalle) {
@@ -87,13 +89,8 @@ public class ExcelExport {
 			}
 		}
 
-		hoja.autoSizeColumn(0);
-		hoja.autoSizeColumn(1);
-		hoja.autoSizeColumn(2);
-		hoja.autoSizeColumn(3);
-		hoja.autoSizeColumn(4);
-		hoja.autoSizeColumn(5);
-		hoja.autoSizeColumn(6);
+		for (int i = 0; i < columnasDetalle.length; i++)
+			hoja.autoSizeColumn(i);
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		libro.write(baos);
@@ -101,8 +98,8 @@ public class ExcelExport {
 
 	}
 
-	private static CellStyle getStyleHeader(HSSFWorkbook workbook){	
-		HSSFCellStyle style = workbook.createCellStyle();        
+	private static CellStyle getStyleHeader(HSSFWorkbook workbook) {
+		HSSFCellStyle style = workbook.createCellStyle();
 		style.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
 		style.setFillPattern(CellStyle.SOLID_FOREGROUND);
 		style.setBorderBottom(CellStyle.BORDER_THIN);
@@ -110,16 +107,16 @@ public class ExcelExport {
 		style.setBorderRight(CellStyle.BORDER_THIN);
 		style.setBorderTop(CellStyle.BORDER_THIN);
 		style.setAlignment(CellStyle.ALIGN_CENTER);
-		
-		HSSFFont defaultFont= workbook.createFont();
-	    defaultFont.setFontHeightInPoints((short)10);
-	    defaultFont.setFontName("Arial");
-	    defaultFont.setColor(IndexedColors.BLACK.getIndex());
-	    defaultFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-	    defaultFont.setItalic(false);
+
+		HSSFFont defaultFont = workbook.createFont();
+		defaultFont.setFontHeightInPoints((short) 10);
+		defaultFont.setFontName("Arial");
+		defaultFont.setColor(IndexedColors.BLACK.getIndex());
+		defaultFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+		defaultFont.setItalic(false);
 		style.setFont(defaultFont);
 		return style;
-	
+
 	}
 
 }

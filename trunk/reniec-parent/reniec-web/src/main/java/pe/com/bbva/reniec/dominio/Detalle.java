@@ -105,9 +105,9 @@ public class Detalle extends IdBean implements Serializable {
 	
 	@Column(name="NRO_FILA")
 	@DefinicionVista(nombreVista = "NRO. FILA")
-	private BigDecimal nroFila;
-	public BigDecimal getNroFila() {return this.nroFila;}
-	public void setNroFila(BigDecimal nroFila) {this.nroFila = nroFila;}
+	private Long nroFila;
+	public Long getNroFila() {return this.nroFila;}
+	public void setNroFila(Long nroFila) {this.nroFila = nroFila;}
 	
 	
 	
