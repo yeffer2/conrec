@@ -3,6 +3,8 @@ package pe.com.bbva.reniec.negocio;
 import java.io.Serializable;
 import java.util.List;
 
+import com.grupobbva.pe.simr.service.message.UsuarioResponse;
+
 import pe.com.bbva.reniec.dominio.Consultante;
 import pe.com.bbva.reniec.dominio.Valor;
 
@@ -12,4 +14,5 @@ public interface ConsultantesService extends ConfiguracionService,Serializable{
 	void guardarConsultante(Consultante consultante);
 	Consultante obtenerConsultantePorIdentificador(String identificador);
 	Valor obtenerEstadoReniec(Consultante consultante);
+	UsuarioResponse guardarConsultanteWS(Consultante consultante, String proceso);
 }

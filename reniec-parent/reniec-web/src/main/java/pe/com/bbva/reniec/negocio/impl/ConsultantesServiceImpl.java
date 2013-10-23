@@ -3,6 +3,7 @@ package pe.com.bbva.reniec.negocio.impl;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Random;
 
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -14,6 +15,7 @@ import com.grupobbva.pe.simr.ents.body.mantenimientousuario.UsuarioRequest;
 import com.grupobbva.pe.simr.ents.header.RequestHeader;
 import com.grupobbva.pe.simr.ents.header.ResponseHeader;
 import com.grupobbva.pe.simr.service.message.UsuarioResponse;
+
 
 
 import pe.com.bbva.adminUsuReniec.ProcesarUsuarioRENIEC;
@@ -125,6 +127,51 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 			consultanteDAO.actualizar(consultante);
 		}
 	}
+	
+	
+	@Override
+	public UsuarioResponse guardarConsultanteWS(Consultante consultante, String proceso) {
+		//FIXME llamar al método correcto.
+		UsuarioResponse usuarioResponse=obtenerMockRENIECWS(consultante, proceso);
+		if(usuarioResponse.getRefResponseHeader().getCodigoRespuesta().equals(Constante.WS_RENIEC.SALIDA.ERROR.NINGUN_ERROR)){
+			if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.ACTIVAR_USUARIO)){
+				Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+						Constante.VALOR.RENIEC_SITUACION.CODIGO.ACTIVO);
+				Valor usuarioEstado=obtenerValorxCodigo(Constante.LISTA.CODIGO.USUARIO_ESTADO, 
+						Constante.VALOR.USUARIO_ESTADO.CODIGO.ACTIVO);
+				consultante.setEstado(usuarioEstado);
+				consultante.setSituacion(reniecSituacion);
+			}
+			if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.BAJA_TEMPORAL)){
+				Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+						Constante.VALOR.RENIEC_SITUACION.CODIGO.BAJA_TEMPORAL);
+				Valor usuarioEstado=obtenerValorxCodigo(Constante.LISTA.CODIGO.USUARIO_ESTADO, 
+						Constante.VALOR.USUARIO_ESTADO.CODIGO.BAJA_TEMPORAL);
+				consultante.setEstado(usuarioEstado);
+				consultante.setSituacion(reniecSituacion);
+			}
+			if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.BAJA_DEFINITIVA)){
+				Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+						Constante.VALOR.RENIEC_SITUACION.CODIGO.BAJA_DEFINITIVA);
+				Valor usuarioEstado=obtenerValorxCodigo(Constante.LISTA.CODIGO.USUARIO_ESTADO, 
+						Constante.VALOR.USUARIO_ESTADO.CODIGO.BAJA_DEFINITIVA);
+				consultante.setEstado(usuarioEstado);
+				consultante.setSituacion(reniecSituacion);
+			}
+		}else{
+			Valor usuarioEstado=obtenerValorxCodigo(Constante.LISTA.CODIGO.USUARIO_ESTADO, 
+					Constante.VALOR.USUARIO_ESTADO.CODIGO.ERROR_RENIEC);
+			consultante.setEstado(usuarioEstado);
+			Valor reniecSituacion=obtenerEstadoReniec(consultante);
+			consultante.setSituacion(reniecSituacion);
+		}
+		if(consultante.getId()==null){
+			consultanteDAO.crear(consultante);
+		}else{
+			consultanteDAO.actualizar(consultante);
+		}
+		return usuarioResponse;
+	}
 
 	@Override
 	public Valor obtenerEstadoReniec(Consultante consultante) {
@@ -179,7 +226,15 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 		if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.CONSULTA)){
 			usuarioResponse.getRefUsuarioResponse().setMensaje(Constante.WS_RENIEC.SALIDA.MENSAJE.ACTIVAR_USUARIO);
 		}else{
-			usuarioResponse.getRefResponseHeader().setCodigoRespuesta(Constante.WS_RENIEC.SALIDA.ERROR.NINGUN_ERROR);
+			
+			
+			if(new Random().nextBoolean()){				
+				usuarioResponse.getRefResponseHeader().setCodigoRespuesta("1111");
+				usuarioResponse.getRefResponseHeader().setMensajeRespuesta("ERROR");
+			}else{
+				usuarioResponse.getRefResponseHeader().setCodigoRespuesta(Constante.WS_RENIEC.SALIDA.ERROR.NINGUN_ERROR);
+				usuarioResponse.getRefResponseHeader().setMensajeRespuesta("OK");
+			}
 		}
 		return usuarioResponse;
 	}
