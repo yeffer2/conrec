@@ -10,6 +10,6 @@ public interface ConsultantesService extends ConfiguracionService,Serializable{
 
 	List<Consultante> obtenerConsultante(Consultante consultante);	
 	void guardarConsultante(Consultante consultante);
+	Consultante obtenerConsultantePorIdentificador(String identificador);
 	Valor obtenerEstadoReniec(Consultante consultante);
-	
 }

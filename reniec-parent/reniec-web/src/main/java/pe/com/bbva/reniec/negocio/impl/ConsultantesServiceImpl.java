@@ -33,6 +33,12 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 	@Autowired
 	ConsultanteDAO consultanteDAO;
 	
+	
+	public Consultante obtenerConsultantePorIdentificador(String identificador){
+		Consultante consultante = consultanteDAO.obtenerHql("select cons from Consultante cons where identificador = ?", identificador);
+		return consultante;
+	}
+	
 	@Override
 	public List<Consultante> obtenerConsultante(Consultante consultante) {
 		Busqueda filtro = Busqueda.forClass(Consultante.class);

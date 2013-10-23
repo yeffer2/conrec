@@ -8,5 +8,7 @@ import pe.com.bbva.reniec.dominio.Detalle;
 public interface DetalleService extends ConfiguracionService, Serializable  {
 	
 	List<Detalle> cargaDetallesPorCarga(Long idCarga);
+	
+	List<Detalle> cargaDetallesPorDetalle(Detalle detalle);
 
 }

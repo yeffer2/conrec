@@ -337,3 +337,11 @@ textarea.v-textarea-prompt {
 	border:none;
 	display:none;
 }
+
+.div-overflowx > div > div  {
+overflow-x:scroll !important;
+}
+
+.div-overflowx > div > div > div{
+ overflow:visible;
+}

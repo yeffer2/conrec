@@ -37,14 +37,14 @@ public class Carga extends IdBean implements Serializable {
 	public void setFichero(String fichero) {this.fichero = fichero;}
 
 	@Column
-	@DefinicionVista(nombreVista = "FECHA INICIO", tipoFinal="java.lang.String")
+	@DefinicionVista(nombreVista = "FECHA FINAL", tipoFinal="java.lang.String")
 	private Date fin;
 	@DefinicionVista(convertToStringWithFormat = "dd/MM/yyyy HH:mm:ss")
 	public Date getFin() {return this.fin;}
 	public void setFin(Date fin) {this.fin = fin;}
 
 	@Column
-	@DefinicionVista(nombreVista = "FECHA FINAL", tipoFinal="java.lang.String")
+	@DefinicionVista(nombreVista = "FECHA INICIO", tipoFinal="java.lang.String")
 	private Date inicio;
 	@DefinicionVista(convertToStringWithFormat = "dd/MM/yyyy HH:mm:ss")
 	public Date getInicio() {return this.inicio;}

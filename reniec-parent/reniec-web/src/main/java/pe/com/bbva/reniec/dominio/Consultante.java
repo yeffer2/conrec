@@ -1,7 +1,6 @@
 package pe.com.bbva.reniec.dominio;
 
 import java.io.Serializable;
-
 import java.util.Date;
 
 import javax.persistence.*;
@@ -12,6 +11,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import pe.com.bbva.reniec.dominio.util.IdBean;
 import pe.com.bbva.reniec.utileria.Constante;
+import pe.com.bbva.reniec.utileria.annotations.DefinicionVista;
 
 @Entity
 @Table(name="CTL_CONSULTANTE")
@@ -89,7 +89,9 @@ public class Consultante extends IdBean implements Serializable {
 	@NotNull(message=Constante.CODIGO_MENSAJE.VALIDAR_COMBOBOX)
 	@ManyToOne
 	@JoinColumn(name="ESTADO", nullable=false)
+	@DefinicionVista(nombreVista = "ESTADO", tipoFinal="java.lang.String")
 	private Valor estado;
+	@DefinicionVista(nombrePropiedadRelacion="nombre")
 	public Valor getEstado() { return estado;}
 	public void setEstado(Valor estado) { this.estado = estado;}
 

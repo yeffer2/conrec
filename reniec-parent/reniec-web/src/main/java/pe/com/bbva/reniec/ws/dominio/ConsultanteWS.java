@@ -1,7 +1,7 @@
 package pe.com.bbva.reniec.ws.dominio;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * Clase serializada para las respuestas del WS y de entrada para el autorizador.
@@ -49,8 +49,8 @@ public class ConsultanteWS implements Serializable {
 	public String getDOI() {
 		return DOI;
 	}
-	public void setDOI(String dOI) {
-		DOI = dOI;
+	public void setDOI(String DOI) {
+		this.DOI = DOI;
 	}
 	public String getNombres() {
 		return nombres;
