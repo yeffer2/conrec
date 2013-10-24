@@ -116,7 +116,16 @@
 		</repository>
 	</repositories>
 	<build>
-		<finalName>reniec-web</finalName>
-
+		<finalName>Reniec</finalName>
+		<plugins>	
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.1.1</version>
+				<configuration>
+					<attachClasses>true</attachClasses>
+					<classesClassifier>classes</classesClassifier>
+				</configuration>
+			</plugin>
+			</plugins>
 	</build>
 </project>

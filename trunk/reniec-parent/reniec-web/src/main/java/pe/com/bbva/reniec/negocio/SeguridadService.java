@@ -25,6 +25,9 @@ public interface SeguridadService extends ConfiguracionService,Serializable{
 	void guardarMembresia(Membresia membresia);
 	void eliminarMembresia(Long id);
 	void guardarPermisos(Long idRol, List<Long> idsOpciones);
-	Map<String, List<Opcion>> listarOpciones();	
+	Map<String, List<Opcion>> listarOpciones();
+	List<Opcion> buscarOpciones(Opcion opcion);
+	void guardarOpcion(Opcion opcion);
+	void eliminarOpcion(Long id);
 	
 }

@@ -33,11 +33,11 @@ public class CollapsibleFileSystemContainer implements Collapsible, Indexed {
 
 	public static String PROPERTY_NAME = "Nombre Archivo";
 
-    public static String PROPERTY_SIZE = "TamaÃ±o";
+    public static String PROPERTY_SIZE = "Tamaño";
 
     public static String PROPERTY_ICON = "Icon";
 
-    public static String PROPERTY_LASTMODIFIED = "Fecha de ModificaciÃ³n";
+    public static String PROPERTY_LASTMODIFIED = "Fecha de Modificación";
     
     public static Collection<String> FILE_PROPERTIES;
 
