@@ -88,6 +88,10 @@ public abstract class BaseHibernate
 	@Transactional
 	public void grabarTodos(List<Entidad> list)
 	{
+		for (Entidad entidad : list) {
+			validarId(entidad);
+			validarAuditoria(entidad);
+		}
 		getHibernateTemplate().saveOrUpdateAll(list);  
 	}
 
@@ -156,21 +160,23 @@ public abstract class BaseHibernate
 	@SuppressWarnings("unchecked")
 	private void validarId(Entidad t){
 		if(t instanceof IdBean){
-			Secuencia secuencia=null;
-			getHibernateTemplate().setMaxResults(1);
-			List<Secuencia> list=getHibernateTemplate().find("select s from Secuencia s where s.entidad=?",t.getClass().getName());
-			if(list==null || list.isEmpty()){
-				secuencia=new Secuencia();
-				secuencia.setEntidad(t.getClass().getName());
-				secuencia.setUltimoId(1L);
-				getHibernateTemplate().persist(secuencia);
-			}else{
-				secuencia=list.get(0);
-				secuencia.setUltimoId(secuencia.getUltimoId()+1L);
-				getHibernateTemplate().update(secuencia);
-			}
 			IdBean idBean=(IdBean)t;
-			idBean.setId(secuencia.getUltimoId());
+			if(idBean.getId()==null){
+				Secuencia secuencia=null;
+				getHibernateTemplate().setMaxResults(1);
+				List<Secuencia> list=getHibernateTemplate().find("select s from Secuencia s where s.entidad=?",t.getClass().getName());
+				if(list==null || list.isEmpty()){
+					secuencia=new Secuencia();
+					secuencia.setEntidad(t.getClass().getName());
+					secuencia.setUltimoId(1L);
+					getHibernateTemplate().persist(secuencia);
+				}else{
+					secuencia=list.get(0);
+					secuencia.setUltimoId(secuencia.getUltimoId()+1L);
+					getHibernateTemplate().update(secuencia);
+				}
+				idBean.setId(secuencia.getUltimoId());
+			}
 		}
 	}
 	

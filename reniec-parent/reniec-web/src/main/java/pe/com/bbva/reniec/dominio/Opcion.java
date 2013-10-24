@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import pe.com.bbva.reniec.dominio.util.IdBean;
 
 @Entity
@@ -49,4 +52,23 @@ public class Opcion extends IdBean implements Serializable {
 	public Valor getEstado() { return estado;}
 	public void setEstado(Valor estado) { this.estado = estado;}
 
+	@Override
+	public int hashCode() {
+		HashCodeBuilder hashCodeBuilder = new HashCodeBuilder(3, 7);
+		hashCodeBuilder.append(codigo);
+		return hashCodeBuilder.toHashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		boolean equals = false;
+		if (obj instanceof Opcion) {
+			Opcion bean = (Opcion) obj;
+			EqualsBuilder equalsBuilder = new EqualsBuilder();
+			equalsBuilder.append(codigo, bean.codigo);
+			equals = equalsBuilder.isEquals();
+		}
+		return equals;
+	}
+	
 }

@@ -158,9 +158,26 @@ public class PrincipalUI extends CustomComponent implements Command{
 			window.addComponent(listasYValoresUI);
 			getApplication().getMainWindow().getWindow().addWindow(window);
 		}else if(selectedReniecItem.getCodigo().equals(Constante.OPCION.CONF_JOB)){
-			//TODO Logica de Opcion
+			Window window=new Window();
+			window.setCaption("Programador de Tareas");
+			window.setModal(false);
+			window.setResizable(false);
+			window.setWidth("1300px");
+			window.setHeight("950px");
+			window.setScrollable(false);
+			ProgramadorTareasUI programadorTareasUI=new ProgramadorTareasUI();
+			window.addComponent(programadorTareasUI);
+			getApplication().getMainWindow().getWindow().addWindow(window);
 		}else if(selectedReniecItem.getCodigo().equals(Constante.OPCION.CONF_DIAG)){
-			//TODO Logica de Opcion
+			Window window=new Window();
+			window.setCaption("Diagnosticador");
+			window.setModal(false);
+			window.setResizable(false);
+			window.setWidth("950px");
+			window.setScrollable(false);
+			DiagnosticadorUI diagnosticadorUI=new DiagnosticadorUI();
+			window.addComponent(diagnosticadorUI);
+			getApplication().getMainWindow().getWindow().addWindow(window);
 		}else if(selectedReniecItem.getCodigo().equals(Constante.OPCION.CONF_FICHER)){
 			Window window=new Window();
 			window.setCaption("Visor de Ficheros");
@@ -176,19 +193,28 @@ public class PrincipalUI extends CustomComponent implements Command{
 			window.setCaption("Roles y membresías");
 			window.setModal(false);
 			window.setResizable(false);
-			window.setWidth("950px");
+			window.setWidth("1000px");
+			window.setHeight("700px");
 			window.setScrollable(false);
 			RolesYMembresiasUI rolesYMembresiasUI=new RolesYMembresiasUI();
 			window.addComponent(rolesYMembresiasUI);
 			getApplication().getMainWindow().getWindow().addWindow(window);
 		}else if(selectedReniecItem.getCodigo().equals(Constante.OPCION.SEG_OPCION)){
-			//TODO Logica de Opcion
-		}else if(selectedReniecItem.getCodigo().equals(Constante.OPCION.SEG_PERM)){
 			Window window=new Window();
-			window.setCaption("Roles y membresías");
+			window.setCaption("Opciones");
 			window.setModal(false);
 			window.setResizable(false);
 			window.setWidth("950px");
+			window.setScrollable(false);
+			OpcionesUI opcionesUI=new OpcionesUI();
+			window.addComponent(opcionesUI);
+			getApplication().getMainWindow().getWindow().addWindow(window);
+		}else if(selectedReniecItem.getCodigo().equals(Constante.OPCION.SEG_PERM)){
+			Window window=new Window();
+			window.setCaption("Permisos");
+			window.setModal(false);
+			window.setResizable(false);
+			window.setWidth("1000px");
 			window.setScrollable(false);
 			PermisosUI permisosUI=new PermisosUI();
 			window.addComponent(permisosUI);

@@ -298,5 +298,31 @@ public class SeguridadServiceImpl extends ConfiguracionServiceImpl implements Se
 		
 		return ReniecUtil.ordenarOpciones(opciones);
 	}
+
+	@Override
+	public List<Opcion> buscarOpciones(Opcion opcion) {
+		Busqueda filtro = Busqueda.forClass(Opcion.class);
+		if (opcion != null) {
+			if (opcion.getId() != null) {
+				filtro.add(Restrictions.ilike("id", opcion.getId().toString(), MatchMode.ANYWHERE));
+			}
+		}
+		filtro.addOrder(Order.asc("codigo"));
+		return opcionDAO.buscar(filtro);
+	}
+
+	@Override
+	public void guardarOpcion(Opcion opcion) {
+		if(opcion.getId()==null){
+			opcionDAO.crear(opcion);
+		}else{
+			opcionDAO.actualizar(opcion);
+		}
+	}
+
+	@Override
+	public void eliminarOpcion(Long id) {
+		opcionDAO.eliminarXId(id);
+	}
 	
 }

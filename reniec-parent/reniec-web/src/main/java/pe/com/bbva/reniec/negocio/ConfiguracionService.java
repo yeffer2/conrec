@@ -7,6 +7,9 @@ import pe.com.bbva.reniec.dominio.Carga;
 import pe.com.bbva.reniec.dominio.Lista;
 import pe.com.bbva.reniec.dominio.Parametro;
 import pe.com.bbva.reniec.dominio.Valor;
+import pe.com.bbva.reniec.dominio.quartz.QrtzCronTriggers;
+import pe.com.bbva.reniec.dominio.quartz.QrtzJobDetails;
+import pe.com.bbva.reniec.dominio.quartz.QrtzTriggers;
 
 public interface ConfiguracionService extends Serializable{
 
@@ -23,5 +26,12 @@ public interface ConfiguracionService extends Serializable{
 	List<Parametro> buscarParametros(Parametro parametro);
 	void guardarParametro(Parametro parametro);
 	void eliminarParametro(String codigo);
+	
+	//Quartz
+	List<QrtzCronTriggers> buscarCronTriggers(QrtzCronTriggers qrtzCronTriggers);
+	
+	List<QrtzJobDetails> buscarJobDetails(QrtzJobDetails qrtzJobDetails);
+	
+	List<QrtzTriggers> buscarTriggers(QrtzTriggers qrtzTriggers);
 	
 }

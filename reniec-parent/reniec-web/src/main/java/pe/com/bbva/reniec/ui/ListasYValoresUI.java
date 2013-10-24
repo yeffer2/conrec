@@ -430,8 +430,10 @@ public class ListasYValoresUI extends CustomComponent implements TextChangeListe
 		txtFiltroOrdenValor.addListener((TextChangeListener)this);
 		
 		btnGrabarLista.addListener((ClickListener)this);
+		btnGrabarLista.setCaption("Crear");
 		btnEliminarLista.addListener((ClickListener)this);
 		btnGrabarValor.addListener((ClickListener)this);
+		btnGrabarValor.setCaption("Crear");
 		btnEliminarValor.addListener((ClickListener)this);
 		
 	}
