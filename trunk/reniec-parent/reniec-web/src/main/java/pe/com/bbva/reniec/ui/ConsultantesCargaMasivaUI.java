@@ -394,8 +394,7 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 			if (((Valor) cmbAplicacionOrigen.getValue()).getCodigo().equals(
 					Constante.VALOR.ORIGEN.CODIGO.LDAP)) {
 				ProcesarCargaLDAP procesoLDAP = new ProcesarCargaLDAP();
-				procesoLDAP.procesarCarga((Valor) cmbTipo.getValue(),
-						new Date(), "");
+				procesoLDAP.procesarCarga(new Date(), "");
 				reconstruirTablaCargas();
 			} else {
 				if (datFecha.getValue() == null) {
