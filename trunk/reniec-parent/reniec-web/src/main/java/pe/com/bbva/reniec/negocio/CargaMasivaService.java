@@ -13,4 +13,6 @@ public interface CargaMasivaService  extends ConfiguracionService, Serializable 
 	
 	Long obtenerUltimoId();
 
+	void guardarCarga(Carga carga);
+
 }

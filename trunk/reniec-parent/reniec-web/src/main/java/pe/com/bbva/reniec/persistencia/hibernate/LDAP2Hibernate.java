@@ -1,16 +1,33 @@
 package pe.com.bbva.reniec.persistencia.hibernate;
 
+import java.sql.SQLException;
+import java.util.List;
+
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate3.HibernateCallback;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
 import com.grupobbva.bc.per.tele.ldap.comunes.IILDPeExcepcion;
 import com.grupobbva.bc.per.tele.ldap.directorio.IILDPeUsuario;
 
+import pe.com.bbva.reniec.dominio.Ldapperu2;
 import pe.com.bbva.reniec.dominio.Usuario;
 import pe.com.bbva.reniec.persistencia.LDAP2DAO;
+import pe.com.bbva.reniec.utileria.Busqueda;
 
 @Repository
 @SuppressWarnings("serial")
-public class LDAP2Hibernate implements LDAP2DAO{
+public class LDAP2Hibernate extends HibernateDaoSupport implements LDAP2DAO{
+	
+	@Autowired
+	public LDAP2Hibernate(SessionFactory sessionFactory){
+		setSessionFactory(sessionFactory);
+	}
 
 	@Override
 	public void autenticacionLDAP(String loginUsuario, String password) {
@@ -94,5 +111,24 @@ public class LDAP2Hibernate implements LDAP2DAO{
 		
 		return usuario;
 	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public List<Ldapperu2> buscar(final Busqueda filtro) {
+		return (List<Ldapperu2>)this.getHibernateTemplate().execute(new HibernateCallback() {
+	        public Object doInHibernate(Session session) throws HibernateException, SQLException {
+	            Criteria busqueda = filtro.getExecutableCriteria(session);
+	            busqueda.setFirstResult(((Busqueda)filtro).getFirstResult());
+	            if (filtro.getMaxResults() > 0)
+	            {
+	                busqueda.setMaxResults(((Busqueda)filtro).getMaxResults());
+	            }
+	            return (List<Ldapperu2>)busqueda.list(); 
+	        }
+	    });
+	}
+
+
+	
 
 }

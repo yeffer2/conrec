@@ -185,7 +185,7 @@ public class TableConstructor<F, M, SC> {
 				}
 			}
 
-			tblContenido.setWidth(Integer.toString(anchoTotal + 2));
+			tblContenido.setWidth(Integer.toString(anchoTotal + 20));
 			visibleColumns = (definicionCampos != null) ? createVisibleColumns(definicionCampos)
 					: visibleColumns;
 
@@ -283,17 +283,6 @@ public class TableConstructor<F, M, SC> {
 			}
 		});
 
-//		table.addListener(new ColumnReorderListener() {
-//			private static final long serialVersionUID = 1L;
-//
-//			@Override
-//			public void columnReorder(ColumnReorderEvent event) {
-//
-//				reorderTable();
-//
-//			}
-//
-//		});
 
 	}
 
@@ -364,7 +353,7 @@ public class TableConstructor<F, M, SC> {
 			totalTamanho += tamanho;
 
 		}
-		tblTablaLocal.setWidth(Integer.toString(totalTamanho + 2));
+		tblTablaLocal.setWidth(Integer.toString(totalTamanho + 20));
 
 	}
 
@@ -491,7 +480,7 @@ public class TableConstructor<F, M, SC> {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void construirTablaSimpleInterna(List<M> nuevaLista) {
+	public void construirTablaSimpleInterna(List<M> nuevaLista) {
 		container.removeAllItems();
 		int con = 1;
 		for (M valor : nuevaLista) {
@@ -770,6 +759,36 @@ public class TableConstructor<F, M, SC> {
 	public void setNuevaInstancia(M nuevaInstancia) {
 		this.nuevaInstancia = nuevaInstancia;
 	}
+	
+	
+	
+
+	public IndexedContainer getContainer() {
+		return container;
+	}
+
+	public void setContainer(IndexedContainer container) {
+		this.container = container;
+	}
+
+	public Class<M> getModelo() {
+		return modelo;
+	}
+
+	public void setModelo(Class<M> modelo) {
+		this.modelo = modelo;
+	}
+
+	public Table getTblTablaLocal() {
+		return tblTablaLocal;
+	}
+
+	public void setTblTablaLocal(Table tblTablaLocal) {
+		this.tblTablaLocal = tblTablaLocal;
+	}
+
+
+
 
 	/***
 	 * Clase para la relación de las columnas con su tipo. Necesario en el

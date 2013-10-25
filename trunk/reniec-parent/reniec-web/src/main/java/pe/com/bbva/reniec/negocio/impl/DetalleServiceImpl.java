@@ -44,5 +44,13 @@ public class DetalleServiceImpl extends ConfiguracionServiceImpl implements
 		}
 		return detalleDAO.buscar(filtro);
 	}
+	
+	@Override
+	public void guardaDetalle(Detalle detalle) {		
+		if (detalle.getId() == null)
+			detalleDAO.crear(detalle);
+		else
+			detalleDAO.actualizar(detalle);
+	}
 
 }

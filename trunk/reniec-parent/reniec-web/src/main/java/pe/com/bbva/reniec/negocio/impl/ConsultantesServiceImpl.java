@@ -41,6 +41,7 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 		return consultante;
 	}
 	
+	
 	@Override
 	public List<Consultante> obtenerConsultante(Consultante consultante) {
 		Busqueda filtro = Busqueda.forClass(Consultante.class);
@@ -74,6 +75,12 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 				filtro.createAlias("s.lista", "ls");
 				filtro.add(Restrictions.eq("ls.codigo", Constante.LISTA.CODIGO.RENIEC_SITUACION));
 				filtro.add(Restrictions.ilike("s.nombre", consultante.getSituacion().getNombre(), MatchMode.ANYWHERE));
+			}
+			if (consultante.getOrigen() != null) {
+				filtro.createAlias("origen", "o");
+				filtro.createAlias("o.lista", "lo");
+				filtro.add(Restrictions.eq("lo.codigo", Constante.LISTA.CODIGO.ORIGEN));
+				filtro.add(Restrictions.ilike("o.nombre", consultante.getOrigen().getNombre(), MatchMode.ANYWHERE));
 			}
 		}
 		filtro.addOrder(Order.asc("id"));
@@ -119,7 +126,7 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 					Constante.VALOR.USUARIO_ESTADO.CODIGO.ERROR_RENIEC);
 			consultante.setEstado(usuarioEstado);
 			Valor reniecSituacion=obtenerEstadoReniec(consultante);
-			consultante.setSituacion(reniecSituacion);
+			consultante.setSituacion(reniecSituacion);		
 		}
 		if(consultante.getId()==null){
 			consultanteDAO.crear(consultante);

@@ -6,6 +6,7 @@ public abstract class Constante
 	public static abstract class SCHEMA
 	{
 		public static final String RENIEC = "RENIEC";
+		public static final String IIWX = "IIWX";
 	}
 	
 	public static abstract class DESARROLLO
@@ -40,6 +41,44 @@ public abstract class Constante
 			{
 				public final static String ACTIVO = "A";
 				public final static String INACTIVO = "I";
+			}
+		}
+		
+		public static abstract class CARGA_TIPO
+		{
+			public static abstract class CODIGO
+			{
+				public final static String AUTOMATICA = "CARGA_AUTO";
+				public final static String MANUAL = "CARGA_MANUAL";
+			}
+		}
+		
+		public static abstract class NACIONALIDAD_TIPO
+		{
+			public static abstract class CODIGO
+			{
+				public final static String PERUANA = "P";
+				public final static String EXTRANJERO = "E";
+			}
+		}
+		
+		
+		public static abstract class ACCION
+		{
+			public static abstract class CODIGO
+			{
+				public final static String ACTIVACION = "AC";
+				public final static String BAJA_TEMPORAL = "BT";
+				public final static String BAJA_DEFINITIVA = "BD";
+				public final static String REACTIVACION = "RA";
+			}
+		}
+		
+		public static abstract class ORIGEN
+		{
+			public static abstract class CODIGO
+			{
+				public final static String LDAP = "LDAP2";				
 			}
 		}
 		

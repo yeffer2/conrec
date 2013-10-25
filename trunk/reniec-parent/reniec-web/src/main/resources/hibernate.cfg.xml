@@ -25,6 +25,9 @@
 		<mapping class="pe.com.bbva.reniec.dominio.quartz.QrtzJobDetails" />
 		<mapping class="pe.com.bbva.reniec.dominio.quartz.QrtzTriggers" />
 		<mapping class="pe.com.bbva.reniec.dominio.quartz.QrtzCronTriggers" />
+		
+		<!-- LDAP2 -->
+		<mapping class="pe.com.bbva.reniec.dominio.Ldapperu2" />
 
 	</session-factory>
 </hibernate-configuration>
