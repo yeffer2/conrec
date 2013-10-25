@@ -18,8 +18,7 @@
 	<bean id="quartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="jobFactory">
           <bean class="org.springframework.scheduling.quartz.SpringBeanJobFactory"/>
-        </property>
-        <property name="triggers" ref="cargarConstultantesTrigger"  />
+        </property>       
 		<property name="dataSource" ref="dataSource"  />
 		<property name="transactionManager" ref="transactionManager" />
 	    <property name="overwriteExistingJobs" value="true" /> 
