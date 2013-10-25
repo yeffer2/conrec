@@ -11,4 +11,6 @@ public interface DetalleService extends ConfiguracionService, Serializable  {
 	
 	List<Detalle> cargaDetallesPorDetalle(Detalle detalle);
 
+	void guardaDetalle(Detalle detalle);
+
 }

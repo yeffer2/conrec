@@ -10,7 +10,6 @@ import pe.com.bbva.reniec.dominio.Consultante;
 import pe.com.bbva.reniec.dominio.Valor;
 import pe.com.bbva.reniec.negocio.ConfiguracionService;
 import pe.com.bbva.reniec.negocio.ConsultantesService;
-import pe.com.bbva.reniec.persistencia.hibernate.BaseHibernate;
 import pe.com.bbva.reniec.utileria.Constante;
 import pe.com.bbva.reniec.utileria.Inject;
 import pe.com.bbva.reniec.ws.AutorizacionesWS;

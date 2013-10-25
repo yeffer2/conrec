@@ -33,7 +33,7 @@ public class CargaMasivaServiceImpl extends ConfiguracionServiceImpl implements
 
 	@Override
 	public List<Carga> obtenerCargasDesc() {		
-		return cargaDao.buscarHql("select c from Carga c order by c.fecha desc");
+		return cargaDao.buscarHql("select c from Carga c order by c.id desc");
 	}
 	
 	@Override
@@ -70,6 +70,14 @@ public class CargaMasivaServiceImpl extends ConfiguracionServiceImpl implements
 	public Long obtenerUltimoId() {
 		Carga cargaIdMax = cargaDao.obtenerHql("select c from Carga c where c.id = (select max(cc.id) from Carga cc)");		
 		return (cargaIdMax.getId() != null) ? cargaIdMax.getId() : 0L;
+	}
+	
+	@Override
+	public void guardarCarga(Carga carga) {
+		if(carga.getId() == null)
+			cargaDao.crear(carga);
+		else
+			cargaDao.actualizar(carga);
 	}
 	
 
