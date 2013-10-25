@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://impl.ws.reniec.bbva.com.pe" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://impl.ws.reniec.bbva.com.pe" xmlns:intf="http://impl.ws.reniec.bbva.com.pe" xmlns:tns1="http://dominio.ws.reniec.bbva.com.pe" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://impl.ws.reniec.bbva.com.pe" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://dominio.ws.reniec.bbva.com.pe"/>
+   <element name="consultarAutorizacion">
+    <complexType>
+     <sequence>
+      <element name="identificador" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="consultarAutorizacionResponse">
+    <complexType>
+     <sequence>
+      <element name="consultarAutorizacionReturn" type="tns1:ConsultanteWS"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="registrarAutorizacion">
+    <complexType>
+     <sequence>
+      <element name="consultanteLocal" type="tns1:ConsultanteWS"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="registrarAutorizacionResponse">
+    <complexType>
+     <sequence>
+      <element name="registrarAutorizacionReturn" type="tns1:RespuestaAutorizacion"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+  <schema elementFormDefault="qualified" targetNamespace="http://dominio.ws.reniec.bbva.com.pe" xmlns="http://www.w3.org/2001/XMLSchema">
+   <complexType name="ConsultanteWS">
+    <sequence>
+     <element name="DOI" nillable="true" type="xsd:string"/>
+     <element name="accion" nillable="true" type="xsd:string"/>
+     <element name="centro" nillable="true" type="xsd:string"/>
+     <element name="codigo" nillable="true" type="xsd:string"/>
+     <element name="estado" nillable="true" type="xsd:string"/>
+     <element name="identificador" nillable="true" type="xsd:string"/>
+     <element name="materno" nillable="true" type="xsd:string"/>
+     <element name="nacimiento" nillable="true" type="xsd:dateTime"/>
+     <element name="nacionalidad" nillable="true" type="xsd:string"/>
+     <element name="nombres" nillable="true" type="xsd:string"/>
+     <element name="origen" nillable="true" type="xsd:string"/>
+     <element name="paterno" nillable="true" type="xsd:string"/>
+     <element name="tipoDOI" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="RespuestaAutorizacion">
+    <sequence>
+     <element name="error" nillable="true" type="xsd:string"/>
+     <element name="mensaje" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="registrarAutorizacionResponse">
+
+      <wsdl:part element="impl:registrarAutorizacionResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="registrarAutorizacionRequest">
+
+      <wsdl:part element="impl:registrarAutorizacion" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="consultarAutorizacionRequest">
+
+      <wsdl:part element="impl:consultarAutorizacion" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="consultarAutorizacionResponse">
+
+      <wsdl:part element="impl:consultarAutorizacionResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:portType name="AutorizacionesWSImpl">
+
+      <wsdl:operation name="consultarAutorizacion">
+
+         <wsdl:input message="impl:consultarAutorizacionRequest" name="consultarAutorizacionRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:consultarAutorizacionResponse" name="consultarAutorizacionResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="registrarAutorizacion">
+
+         <wsdl:input message="impl:registrarAutorizacionRequest" name="registrarAutorizacionRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:registrarAutorizacionResponse" name="registrarAutorizacionResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="AutorizacionesWSImplSoapBinding" type="impl:AutorizacionesWSImpl">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="consultarAutorizacion">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="consultarAutorizacionRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="consultarAutorizacionResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="registrarAutorizacion">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="registrarAutorizacionRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="registrarAutorizacionResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="AutorizacionesWSImplService">
+
+      <wsdl:port binding="impl:AutorizacionesWSImplSoapBinding" name="AutorizacionesWSImpl">
+
+         <wsdlsoap:address location="http://localhost:8080/Reniec/services/AutorizacionesWSImpl"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>
