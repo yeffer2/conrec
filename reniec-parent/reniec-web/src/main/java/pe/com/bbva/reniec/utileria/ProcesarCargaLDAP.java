@@ -42,9 +42,9 @@ public class ProcesarCargaLDAP {
 		Inject.inject(this);
 	}
 
-	public void procesarCarga(Valor tipoCarga, Date fecha, String mensaje) {
+	public void procesarCarga(Date fecha, String mensaje) {
 		carga = new Carga();
-		carga.setTipo(tipoCarga);
+		
 		Valor origen = configuracionService.obtenerValorxCodigo(
 				Constante.LISTA.CODIGO.ORIGEN,
 				Constante.VALOR.ORIGEN.CODIGO.LDAP);
@@ -54,7 +54,10 @@ public class ProcesarCargaLDAP {
 		Valor tipoDoi = configuracionService.obtenerValorxCodigo(
 				Constante.LISTA.CODIGO.DOI_TIPO,
 				Constante.VALOR.DOI_TIPO.CODIGO.DNI);
-
+		Valor tipoCarga = configuracionService.obtenerValorxCodigo(
+				Constante.LISTA.CODIGO.CARGA_TIPO,
+				Constante.VALOR.CARGA_TIPO.CODIGO.AUTOMATICA);
+		carga.setTipo(tipoCarga);
 		carga.setOrigen(origen);
 		carga.setFecha(fecha);
 		carga.setEstado(estado);
