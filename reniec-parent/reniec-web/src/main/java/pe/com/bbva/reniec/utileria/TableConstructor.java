@@ -100,7 +100,7 @@ public class TableConstructor<F, M, SC> {
 
 	ArrayList<Object[]> definicionCampos;
 	HorizontalLayout panelFiltro;
-	
+
 	List<Object> componentesFiltro = new ArrayList<Object>();
 
 	/**
@@ -283,7 +283,6 @@ public class TableConstructor<F, M, SC> {
 			}
 		});
 
-
 	}
 
 	protected void reorderTable() {
@@ -319,23 +318,24 @@ public class TableConstructor<F, M, SC> {
 			componentes.add(c);
 		}
 		System.out.println(componentesFiltro.size());
-		for(Object comp : componentesFiltro){
-		    TextField text = (TextField)comp;
+		for (Object comp : componentesFiltro) {
+			TextField text = (TextField) comp;
 			System.out.println(text.getValue());
 			panelFiltro.addComponent(text, 0);
 		}
-		
-//		System.out.println(componentes.size());
-//		for(Component compoloc : componentes){
-//			System.out.println(compoloc);
-//			panelFiltro.addComponent(compoloc, 0);
-//		}
-//		
-//		 for(Integer indexFiltroNuevoOrden : nuevoOrdenIndices){
-//		     System.out.println((Component) componentes.get(indexFiltroNuevoOrden));
-//		
-//		 }
-		//panelFiltro = nuevaOrdenFiltros;
+
+		// System.out.println(componentes.size());
+		// for(Component compoloc : componentes){
+		// System.out.println(compoloc);
+		// panelFiltro.addComponent(compoloc, 0);
+		// }
+		//
+		// for(Integer indexFiltroNuevoOrden : nuevoOrdenIndices){
+		// System.out.println((Component)
+		// componentes.get(indexFiltroNuevoOrden));
+		//
+		// }
+		// panelFiltro = nuevaOrdenFiltros;
 		// construirFiltros(tblTablaLocal, panelFiltro, nuevaDefinicion);
 
 	}
@@ -688,8 +688,10 @@ public class TableConstructor<F, M, SC> {
 	 */
 	private <T> Object formatterToString(T value, String format) {
 		String cadenaFormateada = "";
-		if (value.getClass().equals(Timestamp.class)) {
-			cadenaFormateada = (new SimpleDateFormat(format)).format(value);
+		if (value != null) {
+			if (value.getClass().equals(Timestamp.class)) {
+				cadenaFormateada = (new SimpleDateFormat(format)).format(value);
+			}
 		}
 		return cadenaFormateada;
 
@@ -759,9 +761,6 @@ public class TableConstructor<F, M, SC> {
 	public void setNuevaInstancia(M nuevaInstancia) {
 		this.nuevaInstancia = nuevaInstancia;
 	}
-	
-	
-	
 
 	public IndexedContainer getContainer() {
 		return container;
@@ -786,9 +785,6 @@ public class TableConstructor<F, M, SC> {
 	public void setTblTablaLocal(Table tblTablaLocal) {
 		this.tblTablaLocal = tblTablaLocal;
 	}
-
-
-
 
 	/***
 	 * Clase para la relación de las columnas con su tipo. Necesario en el
