@@ -69,7 +69,7 @@ public class CargaMasivaServiceImpl extends ConfiguracionServiceImpl implements
 	@Override
 	public Long obtenerUltimoId() {
 		Carga cargaIdMax = cargaDao.obtenerHql("select c from Carga c where c.id = (select max(cc.id) from Carga cc)");		
-		return (cargaIdMax.getId() != null) ? cargaIdMax.getId() : 0L;
+		return (cargaIdMax != null) ? cargaIdMax.getId() : 0L;
 	}
 	
 	@Override
