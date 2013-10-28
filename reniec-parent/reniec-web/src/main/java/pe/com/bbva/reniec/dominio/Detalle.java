@@ -129,11 +129,12 @@ public class Detalle extends IdBean implements Serializable {
 	@DefinicionVista(nombreVista = "ESTADO", tipoFinal="java.lang.String")
 	private Valor estado;
 	@DefinicionVista(nombrePropiedadRelacion = "nombre")
+	public Valor getEstado() {return this.getConsultante().getEstado();}
 	public void setEstado(Valor estadoRen) { 		
 		if(this.getConsultante() == null){
 			this.setConsultante(new Consultante());
 		}
 		this.getConsultante().setEstado(estadoRen);
 	}
-	public Valor getEstado() {return this.getConsultante().getEstado();}
+	
 }

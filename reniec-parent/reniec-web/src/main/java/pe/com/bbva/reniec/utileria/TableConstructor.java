@@ -203,9 +203,7 @@ public class TableConstructor<F, M, SC> {
 					Method.class);
 			for (Method metodo : metodos) {
 				if (metodo.getName().startsWith(GETPREFIX)) {
-					if (!metodo.isAnnotationPresent(Transient.class)) {
-						propiedadesObjetoRecursivas(item, metodo, valor, null);
-					}
+					propiedadesObjetoRecursivas(item, metodo, valor, null);
 				}
 			}
 
@@ -491,7 +489,6 @@ public class TableConstructor<F, M, SC> {
 							new Class<?>[] { nuevaInstancia.getClass() })
 					.invoke(servicioOrigenListaObjetos,
 							new Object[] { nuevaInstancia });
-			
 
 			construirTablaSimpleInterna(nuevaLista);
 
@@ -502,7 +499,7 @@ public class TableConstructor<F, M, SC> {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void construirTablaSimpleInterna(List<M> nuevaLista) {		
+	public void construirTablaSimpleInterna(List<M> nuevaLista) {
 		container.removeAllItems();
 		int con = 1;
 		for (M valor : nuevaLista) {
@@ -639,6 +636,7 @@ public class TableConstructor<F, M, SC> {
 					}
 
 				} else {
+
 					String nombrePropiedadRelacion = anotacionLocal
 							.nombrePropiedadRelacion().substring(0, 1)
 							.toUpperCase()
@@ -648,6 +646,7 @@ public class TableConstructor<F, M, SC> {
 					Method metodoInterno = valorInterno.getClass()
 							.getDeclaredMethod(
 									GETPREFIX + nombrePropiedadRelacion);
+
 					item.getItemProperty(ORIGENPREFIX + nombreColumna)
 							.setValue(metodo.invoke(valor, null));
 					propiedadesObjetoRecursivas(item, metodoInterno,
@@ -655,19 +654,7 @@ public class TableConstructor<F, M, SC> {
 
 				}
 			}
-		} catch (ReadOnlyException e) {
-			e.printStackTrace();
-		} catch (ConversionException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 

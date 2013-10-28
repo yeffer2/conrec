@@ -31,7 +31,7 @@ public class DetalleServiceImpl extends ConfiguracionServiceImpl implements
 	
 	@Override
 	public List<Detalle> cargaDetallesPorCarga(Long idCarga) {		
-		return detalleDAO.buscarHql("select d from Detalle where d.carga = ?", idCarga);
+		return detalleDAO.buscarHql("select d from Detalle d where d.carga.id = ?", idCarga);
 	}
 
 	@Override
