@@ -62,6 +62,7 @@ public class CargaMasivaServiceImpl extends ConfiguracionServiceImpl implements
 				filtro.add(Restrictions.eq("o.codigo", carga.getOrigen().getCodigo()));
 			}
 		}
+
 		filtro.addOrder(Order.desc("id"));
 		return cargaDao.buscar(filtro);
 	}

@@ -254,6 +254,28 @@ public class TableConstructor<F, M, SC> {
 		construirFiltros(tblContenido, panelFiltro, definicionCampos);
 	}
 
+	public void limpiarFiltros(HorizontalLayout panelFiltro) {
+		for (int i = 0; i < panelFiltro.getComponentCount(); i++) {
+			Object objComponente = panelFiltro.getComponent(i);
+			try {
+				Object nullOrBlack = null;
+
+				if (objComponente.getClass().equals(TextField.class))
+					nullOrBlack = "";
+				objComponente
+						.getClass()
+						.getSuperclass()
+						.getSuperclass()
+						.getDeclaredMethod("setValue",
+								new Class<?>[] { Object.class })
+						.invoke(objComponente, new Object[] { nullOrBlack });
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	private void construirFiltros(final Table table,
 			HorizontalLayout panelFiltros,
 			final ArrayList<Object[]> definicionCampos) {
@@ -454,7 +476,6 @@ public class TableConstructor<F, M, SC> {
 				e.printStackTrace();
 			}
 		}
-
 		setValueForObject(nuevaInstancia, nuevaInstancia,
 				getNameForMetod(SETPREFIX, nombreColumna), tipoColumna,
 				nuevoValor);
@@ -467,9 +488,10 @@ public class TableConstructor<F, M, SC> {
 			List<M> nuevaLista = (List<M>) servicioOrigenListaObjetos
 					.getClass()
 					.getDeclaredMethod(nombreMetodoOrigenDatos,
-							new Class<?>[] { modelo })
+							new Class<?>[] { nuevaInstancia.getClass() })
 					.invoke(servicioOrigenListaObjetos,
 							new Object[] { nuevaInstancia });
+			
 
 			construirTablaSimpleInterna(nuevaLista);
 
@@ -480,7 +502,7 @@ public class TableConstructor<F, M, SC> {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void construirTablaSimpleInterna(List<M> nuevaLista) {
+	public void construirTablaSimpleInterna(List<M> nuevaLista) {		
 		container.removeAllItems();
 		int con = 1;
 		for (M valor : nuevaLista) {
@@ -490,9 +512,7 @@ public class TableConstructor<F, M, SC> {
 					Method.class);
 			for (Method metodo : metodos) {
 				if (metodo.getName().startsWith(GETPREFIX)) {
-					if (!metodo.isAnnotationPresent(Transient.class)) {
-						propiedadesObjetoRecursivas(item, metodo, valor, null);
-					}
+					propiedadesObjetoRecursivas(item, metodo, valor, null);
 				}
 			}
 
@@ -512,13 +532,10 @@ public class TableConstructor<F, M, SC> {
 							new Object[] { getConvertedType(tipoColumna,
 									nuevoValor) });
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoSuchMethodException e) {
 			/***
@@ -540,7 +557,6 @@ public class TableConstructor<F, M, SC> {
 				e.printStackTrace();
 			}
 		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -584,8 +600,8 @@ public class TableConstructor<F, M, SC> {
 			T valor, String nombreColumna) {
 
 		if (nombreColumna == null)
-			nombreColumna = metodo.getName().substring(3).toLowerCase();
-
+			nombreColumna = metodo.getName().substring(3, 4).toLowerCase()
+					+ metodo.getName().substring(4);
 		boolean seguir = false;
 
 		for (Object objeto : item.getItemPropertyIds()) {
@@ -596,23 +612,30 @@ public class TableConstructor<F, M, SC> {
 			return;
 
 		try {
+
 			DefinicionVista anotacionLocal = metodo
 					.getAnnotation(DefinicionVista.class);
 			if (anotacionLocal == null) {
+				if (item.getItemProperty(nombreColumna) != null)
 
-				item.getItemProperty(nombreColumna).setValue(
-						metodo.invoke(valor, null));
+					item.getItemProperty(nombreColumna).setValue(
+							metodo.invoke(valor, null));
 			} else {
 				if (anotacionLocal.nombrePropiedadRelacion().equals("")) {
+					if (item.getItemProperty(nombreColumna) != null) {
 
-					if (anotacionLocal.convertToStringWithFormat().equals("")) {
-						item.getItemProperty(nombreColumna).setValue(
-								metodo.invoke(valor, null));
-					} else {
-						item.getItemProperty(nombreColumna).setValue(
-								formatterToString(metodo.invoke(valor, null),
-										anotacionLocal
-												.convertToStringWithFormat()));
+						if (anotacionLocal.convertToStringWithFormat().equals(
+								"")) {
+							item.getItemProperty(nombreColumna).setValue(
+									metodo.invoke(valor, null));
+						} else {
+							item.getItemProperty(nombreColumna)
+									.setValue(
+											formatterToString(
+													metodo.invoke(valor, null),
+													anotacionLocal
+															.convertToStringWithFormat()));
+						}
 					}
 
 				} else {
