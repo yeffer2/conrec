@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 
 import pe.com.bbva.reniec.dominio.Carga;
 import pe.com.bbva.reniec.dominio.Consultante;
@@ -46,12 +47,18 @@ public class ProcesarArchivo {
 
 	public ProcesarArchivo(ByteArrayOutputStream outputStream) {
 		this.outputStream = outputStream;
-		this.inputStream = null;
+		this.inputStream = null;		
 		Inject.inject(this);
 		nroFilaInterno = 2L;
 	}
 	
-	public ProcesarArchivo(InputStream inputStream) {
+	public ProcesarArchivo(InputStream inputStream, ApplicationContext schedulerContext) {		
+		this.inputStream = inputStream;
+		this.outputStream = null;
+		Inject.injectScheduler(this, schedulerContext);
+		nroFilaInterno = 2L;
+	}
+	public ProcesarArchivo(InputStream inputStream) {		
 		this.inputStream = inputStream;
 		this.outputStream = null;
 		Inject.inject(this);

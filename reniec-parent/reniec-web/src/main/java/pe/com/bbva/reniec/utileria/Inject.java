@@ -28,4 +28,11 @@ public class Inject {
 		beanFactory.autowireBeanProperties(object, AutowireCapableBeanFactory.AUTOWIRE_BY_NAME, false);
 	}
 	
+	public static void injectScheduler(Object object, ApplicationContext schedulerContext){
+		if(applicationContext==null){
+			applicationContext = schedulerContext;
+		}
+		AutowireCapableBeanFactory beanFactory=applicationContext.getAutowireCapableBeanFactory();
+		beanFactory.autowireBeanProperties(object, AutowireCapableBeanFactory.AUTOWIRE_BY_NAME, false);
+	}
 }

@@ -155,7 +155,6 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 
 			@Override
 			public void uploadStarted(StartedEvent event) {
-				// uplArchivo.interruptUpload();
 			}
 
 		});
@@ -178,6 +177,7 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 			
 			@Override
 			public void uploadFinished(FinishedEvent event) {
+				System.out.println("entra finished");
 				SimpleDateFormat formatoDate = new SimpleDateFormat(
 						formatoDateArchivo);
 				String nombreValidar = ((Valor) cmbAplicacionOrigen.getValue())
@@ -402,8 +402,7 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 							"validar.elegir", new Object[] { "Fecha" });
 				} else {
 					if (((Valor) cmbTipo.getValue()).getCodigo().equals(
-							Constante.VALOR.CARGA_TIPO.CODIGO.MANUAL)) {
-
+							Constante.VALOR.CARGA_TIPO.CODIGO.MANUAL)) {						
 						uplArchivo.submitUpload();
 
 					} else {
@@ -449,6 +448,7 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 									estado, "");
 							reconstruirTablaCargas();
 							archivo.delete();
+							cargaReglasPanelCarga();
 						} catch (FileNotFoundException e) {
 							throw new ValidacionException(
 									"Error archivo<br><br>",
@@ -460,7 +460,7 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 				}
 
 			}
-			cargaReglasPanelCarga();
+			
 
 		}
 

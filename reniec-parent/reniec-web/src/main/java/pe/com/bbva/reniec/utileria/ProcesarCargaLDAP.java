@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 
 import pe.com.bbva.reniec.dominio.Carga;
 import pe.com.bbva.reniec.dominio.Consultante;
@@ -40,6 +41,9 @@ public class ProcesarCargaLDAP {
 
 	public ProcesarCargaLDAP() {
 		Inject.inject(this);
+	}
+	public ProcesarCargaLDAP(ApplicationContext schedulerContext) {
+		Inject.injectScheduler(this, schedulerContext);
 	}
 
 	public void procesarCarga(Date fecha, String mensaje) {
