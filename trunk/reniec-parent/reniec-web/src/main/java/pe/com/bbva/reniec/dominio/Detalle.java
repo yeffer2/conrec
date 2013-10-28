@@ -5,6 +5,9 @@ import java.math.BigDecimal;
 
 import javax.persistence.*;
 
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.annotations.Formula;
+
 import pe.com.bbva.reniec.dominio.util.IdBean;
 import pe.com.bbva.reniec.utileria.annotations.DefinicionVista;
 
@@ -64,8 +67,7 @@ public class Detalle extends IdBean implements Serializable {
 	public String getNacionalidad() {return this.nacionalidad;}
 	public void setNacionalidad(String nacionalidad) {this.nacionalidad = nacionalidad;}
 
-	@Column
-	@DefinicionVista(nombreVista = "NOMBRES")
+	@Column	
 	private String nombres;
 	public String getNombres() {return this.nombres;}
 	public void setNombres(String nombres) {this.nombres = nombres;}
@@ -108,9 +110,30 @@ public class Detalle extends IdBean implements Serializable {
 	private Long nroFila;
 	public Long getNroFila() {return this.nroFila;}
 	public void setNroFila(Long nroFila) {this.nroFila = nroFila;}
-	
-	
-	
+		
 	public Detalle() {
 	}
+	
+	@Transient 
+	@DefinicionVista(nombreVista = "NOMBRES")
+	@Formula(value="paterno || ' ' || paterno || ' ' || nombres")
+	private String nombreCompleto;
+	public void setNombreCompleto(String nombreCompleto){ this.nombreCompleto = nombreCompleto; }
+	public String getNombreCompleto(){		
+		return (StringUtils.isNotBlank(paterno)?paterno:"")+" "+
+				(StringUtils.isNotBlank(materno)?materno:"")+" "+
+				(StringUtils.isNotBlank(nombres)?nombres:"");
+	}
+	
+	@Transient 
+	@DefinicionVista(nombreVista = "ESTADO", tipoFinal="java.lang.String")
+	private Valor estado;
+	@DefinicionVista(nombrePropiedadRelacion = "nombre")
+	public void setEstado(Valor estadoRen) { 		
+		if(this.getConsultante() == null){
+			this.setConsultante(new Consultante());
+		}
+		this.getConsultante().setEstado(estadoRen);
+	}
+	public Valor getEstado() {return this.getConsultante().getEstado();}
 }

@@ -59,7 +59,7 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 				filtro.createAlias("nacionalidad", "n");
 				filtro.createAlias("n.lista", "ln");
 				filtro.add(Restrictions.eq("ln.codigo", Constante.LISTA.CODIGO.NACIONALIDAD_TIPO));
-				filtro.add(Restrictions.ilike("e.nombre", consultante.getNacionalidad().getNombre(), MatchMode.ANYWHERE));
+				filtro.add(Restrictions.ilike("n.nombre", consultante.getNacionalidad().getNombre(), MatchMode.ANYWHERE));
 			}
 			if (consultante.getCentro() != null) {
 				filtro.add(Restrictions.ilike("centro", consultante.getCentro(), MatchMode.ANYWHERE));

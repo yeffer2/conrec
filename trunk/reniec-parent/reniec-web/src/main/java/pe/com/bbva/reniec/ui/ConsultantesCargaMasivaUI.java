@@ -112,6 +112,7 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 	private BeanItemContainer<Valor> bicOrigen;
 	private BeanItemContainer<Valor> bicTipo;
 	private BeanItemContainer<Valor> bicEstado;
+	private BeanItemContainer<Valor> bicEstadoReniec;
 	AdjuntarReceiver fileReceiver = new AdjuntarReceiver();
 	Upload uplArchivo = new Upload(null, fileReceiver);
 	protected ByteArrayOutputStream outputStream;
@@ -174,10 +175,8 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 
 			private static final long serialVersionUID = 1L;
 
-			
 			@Override
 			public void uploadFinished(FinishedEvent event) {
-				System.out.println("entra finished");
 				SimpleDateFormat formatoDate = new SimpleDateFormat(
 						formatoDateArchivo);
 				String nombreValidar = ((Valor) cmbAplicacionOrigen.getValue())
@@ -198,8 +197,9 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 							"");
 					reconstruirTablaCargas();
 					cargaReglasPanelCarga();
-					
+
 				} else {
+					uplArchivo.interruptUpload();
 					throw new ValidacionException(
 							"Error Nombre del Archivo<br><br>",
 							"validar.nombre.archivo",
@@ -220,6 +220,10 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 				.getContainerDataSource());
 		List<Carga> cargas = cargaMasivaService.obtenerCargasDesc();
 		tblConst.construirTablaSimpleInterna(cargas);
+		tableDetalle.setVisible(false);
+		mainLayout.setHeight("290");
+		setHeight("290");
+		tblConst.limpiarFiltros(pnlFiltro);
 	}
 
 	private void cargaReglasPanelCarga() {
@@ -234,7 +238,7 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 		Valor tipoCarga = configuracionService.obtenerValorxCodigo(
 				Constante.LISTA.CODIGO.CARGA_TIPO,
 				Constante.VALOR.CARGA_TIPO.CODIGO.AUTOMATICA);
-		cmbTipo.setValue(tipoCarga);		
+		cmbTipo.setValue(tipoCarga);
 		datFecha.setDateFormat("dd-MM-yyyy");
 		datFecha.setEnabled(false);
 		datFecha.setValue(null);
@@ -258,10 +262,18 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 				Integer eleccion = (Integer) tblListaCargas.getValue();
 				if (eleccion != null) {
 					Item item = tblListaCargas.getItem(eleccion);
-					tableDetalle.setVisible(true);
-					crearTablaDetalle(item);
-					mainLayout.setHeight("645");
-					setHeight("620");
+					if (!((Valor) item.getItemProperty("objBaseTorigen")
+							.getValue()).getCodigo().equals(
+							Constante.VALOR.ORIGEN.CODIGO.LDAP)) {
+						tableDetalle.setVisible(true);
+						crearTablaDetalle(item);
+						mainLayout.setHeight("645");
+						setHeight("620");
+					} else {
+						tableDetalle.setVisible(false);
+						mainLayout.setHeight("290");
+						setHeight("290");
+					}
 				} else {
 					tableDetalle.setVisible(false);
 					mainLayout.setHeight("290");
@@ -318,26 +330,29 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void crearTablaDetalle(Item item) {
-		List<Detalle> detalles = (List<Detalle>) item.getItemProperty(
-				"detalles").getValue();
-		Long idCarga = (Long) item.getItemProperty("id").getValue();
-		Detalle detalle = new Detalle();
-		Carga carga = new Carga();
-		carga.setId(idCarga);
-		detalle.setCarga(carga);
+		List<Detalle> detalles = (item != null) ? (List<Detalle>) item
+				.getItemProperty("detalles").getValue()
+				: new ArrayList<Detalle>();
 		ArrayList<Object[]> orden = new ArrayList<Object[]>();
 		orden.add(new Object[] { "id", 20, Long.class });
 		orden.add(new Object[] { "nroFila", 80, Long.class });
 		orden.add(new Object[] { "numeroDoi", 80, String.class });
-		orden.add(new Object[] { "nombres", 130, String.class });
+		orden.add(new Object[] { "nombreCompleto", 148, String.class });
 		orden.add(new Object[] { "accion", 130, String.class });
-		// orden.add(new Object[]{"consultante", 100, String.class});
+		orden.add(new Object[] { "estado", 100, Valor.class, bicEstadoReniec });
 		orden.add(new Object[] { "mensaje", 130, String.class });
 		TableConstructor tablaConstruct = new TableConstructor();
 		tablaConstruct.construirTablaSimple(tableDetalle, Detalle.class,
 				detalles, orden, pnlFiltrosDetalles, detalleService,
-				"cargaDetallesPorObjetoCarga");
-		tablaConstruct.setNuevaInstancia(carga);
+				"cargaDetallesCriteria");
+		if (item != null) {
+			Detalle detalle = new Detalle();
+			Carga carga = new Carga();
+			Long idCarga = (Long) item.getItemProperty("id").getValue();
+			carga.setId(idCarga);
+			detalle.setCarga(carga);
+			tablaConstruct.setNuevaInstancia(detalle);
+		}
 
 	}
 
@@ -363,7 +378,12 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 		List<Valor> listaEstado = cargaMasivaService
 				.obtenerValoresxLista(Constante.LISTA.CODIGO.REGISTRO_ESTADO);
 		bicEstado = new BeanItemContainer<Valor>(Valor.class, listaEstado);
+		
+		List<Valor> listaEstadoReniec = cargaMasivaService
+				.obtenerValoresxLista(Constante.LISTA.CODIGO.USUARIO_ESTADO);
+		bicEstadoReniec = new BeanItemContainer<Valor>(Valor.class, listaEstadoReniec);
 		crearTablaCargas();
+		crearTablaDetalle(null);
 
 	}
 
@@ -377,7 +397,7 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 				.add(new Object[] { "origen", 130, Valor.class, bicOrigen });
 		cargaHeaders.add(new Object[] { "inicio", 130, Date.class });
 		cargaHeaders.add(new Object[] { "fin", 130, Date.class });
-		cargaHeaders.add(new Object[] { "mensaje", 137, String.class });
+		cargaHeaders.add(new Object[] { "mensaje", 119, String.class });
 		(new TableConstructor()).construirTablaSimple(tblListaCargas,
 				Carga.class, cargas, cargaHeaders, pnlFiltro,
 				cargaMasivaService, "obtenerCargasDescByCriteria");
@@ -387,7 +407,7 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 	@Override
 	public void buttonClick(ClickEvent event) {
 		if (event.getButton() == btnExportar) {
-			buttonClickExportarExcel();
+			buttonClickExportarExcel();			
 		}
 
 		if (event.getButton() == btnProcesar) {
@@ -402,7 +422,9 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 							"validar.elegir", new Object[] { "Fecha" });
 				} else {
 					if (((Valor) cmbTipo.getValue()).getCodigo().equals(
-							Constante.VALOR.CARGA_TIPO.CODIGO.MANUAL)) {						
+							Constante.VALOR.CARGA_TIPO.CODIGO.MANUAL)) {
+						fileReceiver = new AdjuntarReceiver();
+						uplArchivo.setReceiver(fileReceiver);
 						uplArchivo.submitUpload();
 
 					} else {
@@ -460,7 +482,6 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 				}
 
 			}
-			
 
 		}
 
