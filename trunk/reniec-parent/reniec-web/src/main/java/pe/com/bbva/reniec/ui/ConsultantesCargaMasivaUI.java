@@ -330,8 +330,15 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void crearTablaDetalle(Item item) {
-		List<Detalle> detalles = (item != null) ? (List<Detalle>) item
-				.getItemProperty("detalles").getValue()
+		Detalle detalle = new Detalle();
+		Carga carga = new Carga();
+		Long idCarga = null;
+		if (item != null) {			
+			idCarga = (Long) item.getItemProperty("id").getValue();
+			carga.setId(idCarga);
+			detalle.setCarga(carga);			
+		}
+		List<Detalle> detalles = (item != null) ? detalleService.cargaDetallesPorCarga(idCarga)
 				: new ArrayList<Detalle>();
 		ArrayList<Object[]> orden = new ArrayList<Object[]>();
 		orden.add(new Object[] { "id", 20, Long.class });
@@ -345,14 +352,8 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 		tablaConstruct.construirTablaSimple(tableDetalle, Detalle.class,
 				detalles, orden, pnlFiltrosDetalles, detalleService,
 				"cargaDetallesCriteria");
-		if (item != null) {
-			Detalle detalle = new Detalle();
-			Carga carga = new Carga();
-			Long idCarga = (Long) item.getItemProperty("id").getValue();
-			carga.setId(idCarga);
-			detalle.setCarga(carga);
-			tablaConstruct.setNuevaInstancia(detalle);
-		}
+		tablaConstruct.setNuevaInstancia(detalle);
+	
 
 	}
 

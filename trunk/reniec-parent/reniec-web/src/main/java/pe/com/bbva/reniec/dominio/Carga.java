@@ -81,26 +81,7 @@ public class Carga extends IdBean implements Serializable {
 	public Valor getEstado() {return estado;}
 	public void setEstado(Valor estado) {this.estado = estado;}
 
-	
-	@OneToMany(mappedBy="carga", fetch = FetchType.EAGER)
-	@DefinicionVista(nombreVista = "detalles")
-	private List<Detalle> detalles;	
-	public List<Detalle> getDetalles() {return detalles;}
-	public void setDetalles(List<Detalle> detalles) {this.detalles = detalles;}
-
 	public Carga() {
-	}
-
-	public Detalle addDetalle(Detalle detalle) {
-		getDetalles().add(detalle);
-		detalle.setCarga(this);
-		return detalle;
-	}
-
-	public Detalle removeDetalle(Detalle detalle) {
-		getDetalles().remove(detalle);
-		detalle.setCarga(null);
-		return detalle;
 	}
 
 }
