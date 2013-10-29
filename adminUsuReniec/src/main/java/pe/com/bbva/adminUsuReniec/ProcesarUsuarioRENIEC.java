@@ -14,18 +14,27 @@ import com.grupobbva.pe.simr.service.message.WS_AdminUsuReniecStub;
 public class ProcesarUsuarioRENIEC 
 {
 	
-	String url="";
+	private String url="";
+	private Long timeOut=null;
 	
     public void setUrl(String url) {
 		this.url = url;
 	}
+    
+	public void setTimeOut(Long timeOut) {
+		this.timeOut = timeOut;
+	}
 
 	public UsuarioResponse respuestaTransaccion(RequestHeader refRequestHeader, UsuarioRequest refUsuarioRequest) throws RemoteException{
     	
-		WS_AdminUsuReniec adminUsuReniec=null;
+		WS_AdminUsuReniecStub adminUsuReniec=null;
     	
 		adminUsuReniec=new WS_AdminUsuReniecStub(url);
     	
+		if(timeOut!=null){
+			adminUsuReniec._getServiceClient().getOptions().setTimeOutInMilliSeconds(timeOut);
+		}
+		
     	if(adminUsuReniec!=null){
     		com.grupobbva.pe.simr.service.message.UsuarioRequest usuarioRequest=
     				com.grupobbva.pe.simr.service.message.UsuarioRequest.Factory.newInstance();
