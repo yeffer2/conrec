@@ -1,4 +1,4 @@
-package pe.com.bbva.reniec.dominio;
+package pe.com.bbva.reniec.dominioLDAP;
 
 import java.io.Serializable;
 

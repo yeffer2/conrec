@@ -3,7 +3,6 @@ package pe.com.bbva.reniec.negocio.impl;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Random;
 
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -13,13 +12,13 @@ import org.springframework.stereotype.Service;
 
 import com.grupobbva.pe.simr.ents.body.mantenimientousuario.UsuarioRequest;
 import com.grupobbva.pe.simr.ents.header.RequestHeader;
-import com.grupobbva.pe.simr.ents.header.ResponseHeader;
 import com.grupobbva.pe.simr.service.message.UsuarioResponse;
 
 
 
 import pe.com.bbva.adminUsuReniec.ProcesarUsuarioRENIEC;
 import pe.com.bbva.reniec.dominio.Consultante;
+import pe.com.bbva.reniec.dominio.Parametro;
 import pe.com.bbva.reniec.dominio.Valor;
 import pe.com.bbva.reniec.exception.ValidacionException;
 import pe.com.bbva.reniec.negocio.ConsultantesService;
@@ -103,7 +102,7 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 			Valor reniecSituacion=obtenerEstadoReniec(consultante);
 			consultante.setSituacion(reniecSituacion);
 		}
-		UsuarioResponse usuarioResponse=obtenerMockRENIECWS(consultante, proceso);
+		UsuarioResponse usuarioResponse=obtenerRENIECWS(consultante, proceso);
 		//FIXME Definir Variable de ERROR
 		if(usuarioResponse.getRefResponseHeader().getCodigoRespuesta().equals(Constante.WS_RENIEC.SALIDA.ERROR.NINGUN_ERROR)){
 			if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.ACTIVAR_USUARIO)){
@@ -138,8 +137,7 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 	
 	@Override
 	public UsuarioResponse guardarConsultanteWS(Consultante consultante, String proceso) {
-		//FIXME llamar al método correcto.
-		UsuarioResponse usuarioResponse=obtenerMockRENIECWS(consultante, proceso);
+		UsuarioResponse usuarioResponse=obtenerRENIECWS(consultante, proceso);
 		if(usuarioResponse.getRefResponseHeader().getCodigoRespuesta().equals(Constante.WS_RENIEC.SALIDA.ERROR.NINGUN_ERROR)){
 			if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.ACTIVAR_USUARIO)){
 				Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
@@ -182,7 +180,7 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 
 	@Override
 	public Valor obtenerEstadoReniec(Consultante consultante) {
-		UsuarioResponse usuarioResponse=obtenerMockRENIECWS(consultante, Constante.WS_RENIEC.ENTRADA.PROCESO.CONSULTA);
+		UsuarioResponse usuarioResponse=obtenerRENIECWS(consultante, Constante.WS_RENIEC.ENTRADA.PROCESO.CONSULTA);
 		if(usuarioResponse.getRefUsuarioResponse().getMensaje().
 				equals(Constante.WS_RENIEC.SALIDA.MENSAJE.ACTIVAR_USUARIO)){
 			return obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
@@ -199,20 +197,27 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 		return null;
 	}
 	
-	@SuppressWarnings("unused")
 	private UsuarioResponse obtenerRENIECWS(Consultante consultante,String proceso) {
-		//FIXME probar el funcionamiento del WS consumido
+		Parametro wsURL=obtenerParametroxCodigo(Constante.PARAMETRO.WS_URL);
+		Parametro wsTimeOut=obtenerParametroxCodigo(Constante.PARAMETRO.WS_TIMEOUT);
+		Parametro empresaCodigo=obtenerParametroxCodigo(Constante.PARAMETRO.EMPRESA_CODIGO);
 		DateFormat fmt = new SimpleDateFormat("yyyyMMdd");
 		ProcesarUsuarioRENIEC procesarUsuarioRENIEC=new ProcesarUsuarioRENIEC();
+		procesarUsuarioRENIEC.setUrl(wsURL.getValor());
+		procesarUsuarioRENIEC.setTimeOut(Long.parseLong(wsTimeOut.getValor()));
 		RequestHeader refRequestHeader=RequestHeader.Factory.newInstance();
 		UsuarioRequest refUsuarioRequest=UsuarioRequest.Factory.newInstance();
-		refUsuarioRequest.setEmpresa(null);//Definir Dato Empresa
+		refUsuarioRequest.setEmpresa(empresaCodigo.getValor());
 		refUsuarioRequest.setCodigo(consultante.getCodigoReniec());
 		refUsuarioRequest.setNombres(consultante.getNombres());
 		refUsuarioRequest.setApellidoPaterno(consultante.getPaterno());
 		refUsuarioRequest.setApellidoMaterno(consultante.getMaterno());
-		refUsuarioRequest.setFechaNacimiento(fmt.format(consultante.getNacimiento()));
-		refUsuarioRequest.setTipo(consultante.getTipoDOI().getCodigo());//Definir Tipo DNI
+		if(consultante.getNacimiento()!=null){
+			refUsuarioRequest.setFechaNacimiento(fmt.format(consultante.getNacimiento()));
+		}
+		if(consultante.getTipoDOI()!=null){
+			refUsuarioRequest.setTipo(consultante.getTipoDOI().getCodigo());//Definir Tipo DNI
+		}
 		refUsuarioRequest.setProceso(proceso);
 		
 		UsuarioResponse usuarioResponse=null;
@@ -220,29 +225,9 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 		try {
 			usuarioResponse=procesarUsuarioRENIEC.respuestaTransaccion(refRequestHeader, refUsuarioRequest);
 		} catch (Exception e) {
-			throw new ValidacionException("Prueba", null, e.getCause());
+			throw new ValidacionException("ws.error", null, e.getCause());
 		}
 		
-		return usuarioResponse;
-	}
-	
-	private UsuarioResponse obtenerMockRENIECWS(Consultante consultante,String proceso) {
-		UsuarioResponse usuarioResponse=UsuarioResponse.Factory.newInstance();
-		usuarioResponse.setRefResponseHeader(ResponseHeader.Factory.newInstance());
-		usuarioResponse.setRefUsuarioResponse(com.grupobbva.pe.simr.ents.body.mantenimientousuario.UsuarioResponse.Factory.newInstance());
-		if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.CONSULTA)){
-			usuarioResponse.getRefUsuarioResponse().setMensaje(Constante.WS_RENIEC.SALIDA.MENSAJE.ACTIVAR_USUARIO);
-		}else{
-			
-			
-			if(new Random().nextBoolean()){				
-				usuarioResponse.getRefResponseHeader().setCodigoRespuesta("1111");
-				usuarioResponse.getRefResponseHeader().setMensajeRespuesta("ERROR");
-			}else{
-				usuarioResponse.getRefResponseHeader().setCodigoRespuesta(Constante.WS_RENIEC.SALIDA.ERROR.NINGUN_ERROR);
-				usuarioResponse.getRefResponseHeader().setMensajeRespuesta("OK");
-			}
-		}
 		return usuarioResponse;
 	}
 

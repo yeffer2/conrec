@@ -290,6 +290,7 @@ public class ConsultantesUI extends CustomComponent implements TextChangeListene
 		txtCentroFiltro.addListener((TextChangeListener)this);
 		txtEstadoFiltro.setTextChangeEventMode(TextChangeEventMode.EAGER);
 		txtEstadoFiltro.addListener((TextChangeListener)this);
+		pdfFechaFiltro.setInputPrompt("Fecha");
 		txtAplicativoFiltro.setTextChangeEventMode(TextChangeEventMode.EAGER);
 		txtAplicativoFiltro.addListener((TextChangeListener)this);
 		
@@ -519,6 +520,14 @@ public class ConsultantesUI extends CustomComponent implements TextChangeListene
 				new BeanValidar("estado", new Object[]{"ESTADO"}, cmbEstado)});
 			consultantesService.guardarConsultante(consultante);
 			limpiar();
+			txtRegistroFiltro.setValue(StringUtils.EMPTY);
+			txtNombresFiltro.setValue(StringUtils.EMPTY);
+			txtCodigoFiltro.setValue(StringUtils.EMPTY);
+			txtNacionalidadFiltro.setValue(StringUtils.EMPTY);
+			txtCentroFiltro.setValue(StringUtils.EMPTY);
+			txtEstadoFiltro.setValue(StringUtils.EMPTY);
+			pdfFechaFiltro.setValue(null);
+			txtAplicativoFiltro.setValue(StringUtils.EMPTY);
 			cargarConsultante(null);
 		}
 		if(event.getButton().equals(btnEstadoReniec)){

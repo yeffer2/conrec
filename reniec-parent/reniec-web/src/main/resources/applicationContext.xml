@@ -23,9 +23,11 @@
 	<import resource="applicationContext-quartz.xml"/>
 	<import resource="applicationContext-messages.xml"/>
 	
-	<!-- FIXME  
 	<bean p:location="classpath:reniec.properties" class="org.springframework.beans.factory.config.PropertiesFactoryBean" id="deployProperties"/>
-	-->
+	
+	
+	<context:property-placeholder properties-ref="deployProperties"/> 
+	
 	<context:annotation-config />	
 
 </beans>

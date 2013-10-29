@@ -1,7 +1,6 @@
 package pe.com.bbva.reniec.dominio;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 import javax.persistence.*;
 
@@ -113,7 +112,7 @@ public class Detalle extends IdBean implements Serializable {
 		
 	public Detalle() {
 	}
-	
+
 	@Transient 
 	@DefinicionVista(nombreVista = "NOMBRES")
 	@Formula(value="paterno || ' ' || paterno || ' ' || nombres")
