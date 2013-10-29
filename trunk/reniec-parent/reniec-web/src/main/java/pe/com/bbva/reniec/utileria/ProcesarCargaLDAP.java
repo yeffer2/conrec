@@ -6,13 +6,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
 import pe.com.bbva.reniec.dominio.Carga;
 import pe.com.bbva.reniec.dominio.Consultante;
-import pe.com.bbva.reniec.dominio.Ldapperu2;
+import pe.com.bbva.reniec.dominioLDAP.Ldapperu2;
 import pe.com.bbva.reniec.dominio.Valor;
 import pe.com.bbva.reniec.negocio.CargaMasivaService;
 import pe.com.bbva.reniec.negocio.ConfiguracionService;

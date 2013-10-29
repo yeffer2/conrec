@@ -4,7 +4,7 @@ package pe.com.bbva.reniec.persistencia;
 import java.io.Serializable;
 import java.util.List;
 
-import pe.com.bbva.reniec.dominio.Ldapperu2;
+import pe.com.bbva.reniec.dominioLDAP.Ldapperu2;
 import pe.com.bbva.reniec.dominio.Usuario;
 import pe.com.bbva.reniec.utileria.Busqueda;
 

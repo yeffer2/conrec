@@ -2,12 +2,20 @@ package pe.com.bbva.reniec.persistencia.hibernate;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Properties;
+
+import javax.naming.AuthenticationException;
+import javax.naming.Context;
+import javax.naming.NamingException;
+import javax.naming.directory.InitialDirContext;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
@@ -15,23 +23,38 @@ import org.springframework.stereotype.Repository;
 import com.grupobbva.bc.per.tele.ldap.comunes.IILDPeExcepcion;
 import com.grupobbva.bc.per.tele.ldap.directorio.IILDPeUsuario;
 
-import pe.com.bbva.reniec.dominio.Ldapperu2;
+import pe.com.bbva.reniec.dominioLDAP.Ldapperu2;
 import pe.com.bbva.reniec.dominio.Usuario;
+import pe.com.bbva.reniec.exception.BBVAServiceExcepcion;
+import pe.com.bbva.reniec.exception.ValidacionException;
 import pe.com.bbva.reniec.persistencia.LDAP2DAO;
 import pe.com.bbva.reniec.utileria.Busqueda;
+import pe.com.bbva.reniec.utileria.Constante;
 
 @Repository
 @SuppressWarnings("serial")
 public class LDAP2Hibernate extends HibernateDaoSupport implements LDAP2DAO{
 	
+	private static final String KEY_VALIDATOR = "ldap.validator";
+	private static final String KEY_URL = "ldap.url";
+	private static final String KEY_EMPLEADOS = "ldap.empleados";
+	@Value("${"+KEY_VALIDATOR+"}")
+	private String validator;
+	
+	@Value("${"+KEY_URL+"}")
+	private String url;
+	
+	@Value("${"+KEY_EMPLEADOS+"}")
+	private String empleados;
+	
 	@Autowired
-	public LDAP2Hibernate(SessionFactory sessionFactory){
+	public LDAP2Hibernate(@Qualifier("sessionFactory2")SessionFactory sessionFactory){
 		setSessionFactory(sessionFactory);
 	}
 
 	@Override
 	public void autenticacionLDAP(String loginUsuario, String password) {
-		/*StringBuilder mensaje = new StringBuilder();		
+		StringBuilder mensaje = new StringBuilder();		
 		mensaje.append("Parametros de Conexión LDAP: \n");
 		mensaje.append(KEY_VALIDATOR).append("=").append(validator).append("\n");
 		mensaje.append(KEY_URL).append("=").append(url).append("\n");
@@ -50,7 +73,7 @@ public class LDAP2Hibernate extends HibernateDaoSupport implements LDAP2DAO{
 		envLDAP.put(Context.INITIAL_CONTEXT_FACTORY,
 				"com.sun.jndi.ldap.LdapCtxFactory");
 		envLDAP.put(Context.PROVIDER_URL, url);
-		envLDAP.put(Context.SECURITY_PRINCIPAL, "cn=" + usuario + ","
+		envLDAP.put(Context.SECURITY_PRINCIPAL, "cn=" + loginUsuario + ","
 				+ empleados);
 		envLDAP.put(Context.SECURITY_CREDENTIALS, password);
 		try {
@@ -76,7 +99,7 @@ public class LDAP2Hibernate extends HibernateDaoSupport implements LDAP2DAO{
 				logger.info(mensaje.toString(), e);
 				throw new BBVAServiceExcepcion("login.ldap.error", null, e);
 			}
-		}*/
+		}
 	}
 	
 	@Override
@@ -86,8 +109,12 @@ public class LDAP2Hibernate extends HibernateDaoSupport implements LDAP2DAO{
 		try {
 			usuarioLDAP = IILDPeUsuario.recuperarUsuario(loginUsuario);
 		} catch (IILDPeExcepcion e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new BBVAServiceExcepcion("login.ldap.obtener.usuario", new Object[]{loginUsuario}, e);
+		}
+		
+		if(usuarioLDAP == null)
+		{
+			throw new BBVAServiceExcepcion("login.ldap.obtener.usuario", new Object[]{loginUsuario});
 		}
 		
 		Usuario usuario = null;
@@ -127,8 +154,5 @@ public class LDAP2Hibernate extends HibernateDaoSupport implements LDAP2DAO{
 	        }
 	    });
 	}
-
-
-	
 
 }

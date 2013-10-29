@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import pe.com.bbva.reniec.dominio.Ldapperu2;
+import pe.com.bbva.reniec.dominioLDAP.Ldapperu2;
 
 import pe.com.bbva.reniec.negocio.LDAPService;
 import pe.com.bbva.reniec.persistencia.LDAP2DAO;

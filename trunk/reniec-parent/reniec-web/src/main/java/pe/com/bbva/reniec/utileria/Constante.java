@@ -165,6 +165,9 @@ public abstract class Constante
 	public static abstract class PARAMETRO
 	{
 		public final static String ESTADO_LOV = "LOV_ESTADO";
+		public final static String WS_URL = "WS_URL";
+		public final static String EMPRESA_CODIGO = "EMPRESA_CODIGO";
+		public final static String WS_TIMEOUT = "WS_TIMEOUT";
 	}
 	
 	public static abstract class CODIGO_MENSAJE

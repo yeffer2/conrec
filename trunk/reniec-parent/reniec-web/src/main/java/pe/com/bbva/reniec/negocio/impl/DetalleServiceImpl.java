@@ -23,6 +23,7 @@ import pe.com.bbva.reniec.utileria.Constante;
  * 
  */
 @Service
+@SuppressWarnings("serial")
 public class DetalleServiceImpl extends ConfiguracionServiceImpl implements
 		DetalleService {
 

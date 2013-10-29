@@ -25,22 +25,22 @@
 			<artifactId>vaadin</artifactId>
 			<version>6.8.3</version>
 		</dependency>
-		<!-- <dependency>
+		<dependency>
 			<groupId>com.grupobbva.bc.per.tele</groupId>
 			<artifactId>ldap2db</artifactId>
 			<version>1.0</version>
-		</dependency> -->
+		</dependency>
 		
 		 <!-- <dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin</artifactId>
 			<version>6.8.3-webseal</version>
-		</dependency>-->
+		</dependency>
 		<dependency> 
 			<groupId>com.grupobbva.bc.per.tele</groupId>
 			<artifactId>ldap2db</artifactId>
 			<version>bbva</version>
-		</dependency>
+		</dependency> -->
 		
 		<dependency>
 			<groupId>com.oracle</groupId>

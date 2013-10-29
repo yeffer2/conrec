@@ -9,11 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pe.com.bbva.reniec.dominio.Carga;
-import pe.com.bbva.reniec.dominio.Consultante;
 import pe.com.bbva.reniec.negocio.CargaMasivaService;
 import pe.com.bbva.reniec.persistencia.CargaDAO;
 import pe.com.bbva.reniec.utileria.Busqueda;
-import pe.com.bbva.reniec.utileria.Constante;
 import pe.com.bbva.reniec.utileria.Utilidades;
 
 /***
