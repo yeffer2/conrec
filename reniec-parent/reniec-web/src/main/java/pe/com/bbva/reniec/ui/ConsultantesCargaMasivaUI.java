@@ -183,7 +183,7 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 						.getCodigo()
 						+ "."
 						+ formatoDate.format(datFecha.getValue()) + ".txt";
-				if (nombreValidar.equals(nombreArchivo)) {
+				if (nombreValidar.equalsIgnoreCase(nombreArchivo)) {
 
 					Valor estado = configuracionService.obtenerValorxCodigo(
 							Constante.LISTA.CODIGO.REGISTRO_ESTADO,

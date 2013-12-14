@@ -40,7 +40,7 @@
 		<property name="hibernateProperties">
         <props>
         	<prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
-        	<prop key="hibernate.default_schema">LDAP2</prop>
+        	<prop key="hibernate.default_schema">IIWX</prop>
         	<prop key="hibernate.show_sql">false</prop>
 		</props>
 		</property>

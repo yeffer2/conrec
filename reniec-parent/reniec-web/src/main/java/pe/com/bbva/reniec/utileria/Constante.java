@@ -108,6 +108,7 @@ public abstract class Constante
 				public final static String ACTIVO = "ACTIVO";
 				public final static String BAJA_TEMPORAL = "BAJA_TEMPORAL";
 				public final static String BAJA_DEFINITIVA = "BAJA_DEFINITIVA";
+				public final static String ERROR_RENIEC = "ERROR_RENIEC";
 			}
 		}
 		public static abstract class DOI_TIPO
@@ -168,6 +169,12 @@ public abstract class Constante
 		public final static String WS_URL = "WS_URL";
 		public final static String EMPRESA_CODIGO = "EMPRESA_CODIGO";
 		public final static String WS_TIMEOUT = "WS_TIMEOUT";
+		public final static String CANAL = "CANAL";
+		public final static String COD_APP = "COD_APP";
+		public final static String COD_INT = "COD_INT";
+		public final static String ID_EMPRESA = "ID_EMPRESA";
+		public final static String URL_LOGOUT = "URL_LOGOUT";
+		
 	}
 	
 	public static abstract class CODIGO_MENSAJE
@@ -175,6 +182,9 @@ public abstract class Constante
 		public final static String ERROR_GENERICO = "error.generico";
 		public final static String VALIDAR_TEXTBOX = "validar.textbox";
 		public final static String VALIDAR_COMBOBOX = "validar.combobox";
+		public final static String WS_ERROR = "ws.error";
+		public final static String VALIDAR_EXISTE_VALOR = "validar.existe.valor";
+		public final static String VALIDAR_DEPENDENCIA_OPCION = "validar.dependencia.opcion";
 	}
 	
 	public static abstract class SESION
@@ -213,6 +223,7 @@ public abstract class Constante
 	{
 		public static abstract class ENTRADA
 		{
+			
 			public static abstract class PROCESO
 			{
 				public static final String ACTIVAR_USUARIO = "AC";

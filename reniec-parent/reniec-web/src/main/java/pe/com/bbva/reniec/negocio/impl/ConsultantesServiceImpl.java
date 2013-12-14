@@ -2,6 +2,7 @@ package pe.com.bbva.reniec.negocio.impl;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.criterion.MatchMode;
@@ -10,21 +11,23 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.grupobbva.pe.simr.ents.body.mantenimientousuario.UsuarioRequest;
-import com.grupobbva.pe.simr.ents.header.RequestHeader;
-import com.grupobbva.pe.simr.service.message.UsuarioResponse;
+import com.pe.bbva.reniec.ws.ProcesarUsuarioRENIECRequest;
+import com.pe.bbva.reniec.ws.RefRequestHeader;
+import com.pe.bbva.reniec.ws.UsuarioResponse;
 
-
-
-import pe.com.bbva.adminUsuReniec.ProcesarUsuarioRENIEC;
+import pe.com.bbva.procesarUsuarioRENIEC.ProcesarUsuarioRENIEC;
 import pe.com.bbva.reniec.dominio.Consultante;
 import pe.com.bbva.reniec.dominio.Parametro;
+import pe.com.bbva.reniec.dominio.Usuario;
 import pe.com.bbva.reniec.dominio.Valor;
 import pe.com.bbva.reniec.exception.ValidacionException;
 import pe.com.bbva.reniec.negocio.ConsultantesService;
 import pe.com.bbva.reniec.persistencia.ConsultanteDAO;
 import pe.com.bbva.reniec.utileria.Busqueda;
 import pe.com.bbva.reniec.utileria.Constante;
+import pe.com.bbva.reniec.utileria.ReniecUtil;
+import pe.gob.reniec.www.ProcesoType;
+import pe.gob.reniec.www.TipoType;
 
 @Service
 @SuppressWarnings("serial")
@@ -103,6 +106,7 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 			consultante.setSituacion(reniecSituacion);
 		}
 		UsuarioResponse usuarioResponse=obtenerRENIECWS(consultante, proceso);
+		//System.out.println(usuarioResponse);
 		//FIXME Definir Variable de ERROR
 		if(usuarioResponse.getRefResponseHeader().getCodigoRespuesta().equals(Constante.WS_RENIEC.SALIDA.ERROR.NINGUN_ERROR)){
 			if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.ACTIVAR_USUARIO)){
@@ -125,7 +129,12 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 					Constante.VALOR.USUARIO_ESTADO.CODIGO.ERROR_RENIEC);
 			consultante.setEstado(usuarioEstado);
 			Valor reniecSituacion=obtenerEstadoReniec(consultante);
-			consultante.setSituacion(reniecSituacion);		
+			consultante.setSituacion(reniecSituacion);
+			if(consultante.getSituacion()==null){
+				reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+						Constante.VALOR.RENIEC_SITUACION.CODIGO.ERROR_RENIEC);
+				consultante.setSituacion(reniecSituacion);
+			}
 		}
 		if(consultante.getId()==null){
 			consultanteDAO.crear(consultante);
@@ -181,51 +190,80 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 	@Override
 	public Valor obtenerEstadoReniec(Consultante consultante) {
 		UsuarioResponse usuarioResponse=obtenerRENIECWS(consultante, Constante.WS_RENIEC.ENTRADA.PROCESO.CONSULTA);
-		if(usuarioResponse.getRefUsuarioResponse().getMensaje().
-				equals(Constante.WS_RENIEC.SALIDA.MENSAJE.ACTIVAR_USUARIO)){
-			return obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
-					Constante.VALOR.RENIEC_SITUACION.CODIGO.ACTIVO);
-		}else if(usuarioResponse.getRefUsuarioResponse().getMensaje().
-				equals(Constante.WS_RENIEC.SALIDA.MENSAJE.BAJA_TEMPORAL)){
-			return obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
-					Constante.VALOR.RENIEC_SITUACION.CODIGO.BAJA_TEMPORAL);
-		}else if(usuarioResponse.getRefUsuarioResponse().getMensaje().
-				equals(Constante.WS_RENIEC.SALIDA.MENSAJE.BAJA_DEFINITIVA)){
-			return obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
-					Constante.VALOR.RENIEC_SITUACION.CODIGO.BAJA_DEFINITIVA);
+		if(usuarioResponse!=null && usuarioResponse.getRefUsuarioWSResponse()!=null &&
+				usuarioResponse.getRefUsuarioWSResponse().getMensaje()!=null){
+			if(usuarioResponse.getRefUsuarioWSResponse().getMensaje().
+					equals(Constante.WS_RENIEC.SALIDA.MENSAJE.ACTIVAR_USUARIO)){
+				return obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+						Constante.VALOR.RENIEC_SITUACION.CODIGO.ACTIVO);
+			}else if(usuarioResponse.getRefUsuarioWSResponse().getMensaje().
+					equals(Constante.WS_RENIEC.SALIDA.MENSAJE.BAJA_TEMPORAL)){
+				return obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+						Constante.VALOR.RENIEC_SITUACION.CODIGO.BAJA_TEMPORAL);
+			}else if(usuarioResponse.getRefUsuarioWSResponse().getMensaje().
+					equals(Constante.WS_RENIEC.SALIDA.MENSAJE.BAJA_DEFINITIVA)){
+				return obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+						Constante.VALOR.RENIEC_SITUACION.CODIGO.BAJA_DEFINITIVA);
+			}
 		}
 		return null;
 	}
 	
 	private UsuarioResponse obtenerRENIECWS(Consultante consultante,String proceso) {
+		Usuario usuario=ReniecUtil.obtenerUsuarioSesion();
 		Parametro wsURL=obtenerParametroxCodigo(Constante.PARAMETRO.WS_URL);
 		Parametro wsTimeOut=obtenerParametroxCodigo(Constante.PARAMETRO.WS_TIMEOUT);
 		Parametro empresaCodigo=obtenerParametroxCodigo(Constante.PARAMETRO.EMPRESA_CODIGO);
+		Parametro canal=obtenerParametroxCodigo(Constante.PARAMETRO.CANAL);
+		Parametro codigoAplicacion=obtenerParametroxCodigo(Constante.PARAMETRO.COD_APP);
+		Parametro idEmpresa=obtenerParametroxCodigo(Constante.PARAMETRO.ID_EMPRESA);
+		Parametro codigoInterfaz=obtenerParametroxCodigo(Constante.PARAMETRO.COD_INT);
 		DateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+		DateFormat fmtH = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS");
+		DateFormat fmtH2 = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 		ProcesarUsuarioRENIEC procesarUsuarioRENIEC=new ProcesarUsuarioRENIEC();
 		procesarUsuarioRENIEC.setUrl(wsURL.getValor());
 		procesarUsuarioRENIEC.setTimeOut(Long.parseLong(wsTimeOut.getValor()));
-		RequestHeader refRequestHeader=RequestHeader.Factory.newInstance();
-		UsuarioRequest refUsuarioRequest=UsuarioRequest.Factory.newInstance();
-		refUsuarioRequest.setEmpresa(empresaCodigo.getValor());
-		refUsuarioRequest.setCodigo(consultante.getCodigoReniec());
-		refUsuarioRequest.setNombres(consultante.getNombres());
-		refUsuarioRequest.setApellidoPaterno(consultante.getPaterno());
-		refUsuarioRequest.setApellidoMaterno(consultante.getMaterno());
+		RefRequestHeader refRequestHeader=RefRequestHeader.Factory.newInstance();
+		refRequestHeader.setCanal(canal.getValor());
+		refRequestHeader.setCodigoAplicacion(codigoAplicacion.getValor());
+		refRequestHeader.setIdEmpresa(idEmpresa.getValor());
+		refRequestHeader.setUsuario(usuario.getRegistro());
+		refRequestHeader.setFechaHoraEnvio(fmtH.format(new Date()));
+		refRequestHeader.setIdTransaccion(fmtH2.format(new Date()));
+		refRequestHeader.setCodigoInterfaz(codigoInterfaz.getValor());
+		ProcesarUsuarioRENIECRequest refprocesarUsuarioRENIECRequest=ProcesarUsuarioRENIECRequest.Factory.newInstance();
+		refprocesarUsuarioRENIECRequest.setEmpresa(empresaCodigo.getValor());
+		refprocesarUsuarioRENIECRequest.setCodigo(consultante.getCodigoReniec());
+		refprocesarUsuarioRENIECRequest.setNombres(consultante.getNombres());
+		refprocesarUsuarioRENIECRequest.setApellidoPaterno(consultante.getPaterno());
+		refprocesarUsuarioRENIECRequest.setApellidoMaterno(consultante.getMaterno());
 		if(consultante.getNacimiento()!=null){
-			refUsuarioRequest.setFechaNacimiento(fmt.format(consultante.getNacimiento()));
+			refprocesarUsuarioRENIECRequest.setFechaNacimiento(fmt.format(consultante.getNacimiento()));
 		}
-		if(consultante.getTipoDOI()!=null){
-			refUsuarioRequest.setTipo(consultante.getTipoDOI().getCodigo());//Definir Tipo DNI
+		refprocesarUsuarioRENIECRequest.setTipo(TipoType.DNI);
+		if(ProcesoType.AC.toString().equals(proceso)){
+			refprocesarUsuarioRENIECRequest.setProceso(ProcesoType.AC);
 		}
-		refUsuarioRequest.setProceso(proceso);
+		if(ProcesoType.BT.toString().equals(proceso)){
+			refprocesarUsuarioRENIECRequest.setProceso(ProcesoType.BT);
+		}
+		if(ProcesoType.BD.toString().equals(proceso)){
+			refprocesarUsuarioRENIECRequest.setProceso(ProcesoType.BD);
+		}
+		if(ProcesoType.RA.toString().equals(proceso)){
+			refprocesarUsuarioRENIECRequest.setProceso(ProcesoType.RA);
+		}
+		if(ProcesoType.CO.toString().equals(proceso)){
+			refprocesarUsuarioRENIECRequest.setProceso(ProcesoType.CO);
+		}
 		
 		UsuarioResponse usuarioResponse=null;
 		
 		try {
-			usuarioResponse=procesarUsuarioRENIEC.respuestaTransaccion(refRequestHeader, refUsuarioRequest);
+			usuarioResponse=procesarUsuarioRENIEC.respuestaTransaccion(refRequestHeader, refprocesarUsuarioRENIECRequest);
 		} catch (Exception e) {
-			throw new ValidacionException("ws.error", null, e.getCause());
+			throw new ValidacionException(Constante.CODIGO_MENSAJE.WS_ERROR, null, e.getCause());
 		}
 		
 		return usuarioResponse;

@@ -4,7 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.grupobbva.pe.simr.service.message.UsuarioResponse;
+import com.pe.bbva.reniec.ws.UsuarioResponse;
 
 import pe.com.bbva.reniec.dominio.Consultante;
 import pe.com.bbva.reniec.dominio.Valor;

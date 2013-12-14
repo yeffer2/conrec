@@ -18,6 +18,7 @@ import pe.com.bbva.reniec.dominio.Permiso;
 import pe.com.bbva.reniec.dominio.Rol;
 import pe.com.bbva.reniec.dominio.Usuario;
 import pe.com.bbva.reniec.dominio.Valor;
+import pe.com.bbva.reniec.exception.ValidacionException;
 import pe.com.bbva.reniec.negocio.SeguridadService;
 import pe.com.bbva.reniec.persistencia.LDAP2DAO;
 import pe.com.bbva.reniec.persistencia.MembresiaDAO;
@@ -108,7 +109,8 @@ public class SeguridadServiceImpl extends ConfiguracionServiceImpl implements Se
 		if(usuario!=null){
 			Membresia membresia=membresiaDAO.obtenerHql("select m from Membresia m where m.valor=?", usuario.getRegistro());
 			if(membresia!=null){
-				List<Opcion> opciones=opcionDAO.buscarHql("select p.opcion from Permiso p where p.rol.id=? order by p.opcion.padre desc, p.opcion.orden", membresia.getRol().getId());
+				List<Opcion> opciones=opcionDAO.buscarHql("select p.opcion from Permiso p where p.rol.id=? and p.estado.codigo=? order by p.opcion.padre desc, p.opcion.orden", 
+						membresia.getRol().getId(), Constante.VALOR.REGISTRO_ESTADO.CODIGO.ACTIVO);
 				map=ReniecUtil.ordenarOpciones(opciones);
 			}
 		}
@@ -235,6 +237,10 @@ public class SeguridadServiceImpl extends ConfiguracionServiceImpl implements Se
 
 	@Override
 	public void guardarMembresia(Membresia membresia) {
+		Membresia membresiaBusqueda=membresiaDAO.obtenerHql("select m from Membresia m where valor=?", membresia.getValor());
+		if(membresiaBusqueda!=null){
+			throw new ValidacionException(Constante.CODIGO_MENSAJE.VALIDAR_EXISTE_VALOR,new Object[] {membresia.getValor()});
+		}
 		if(membresia.getId()==null){
 			membresiaDAO.crear(membresia);
 		}else{
@@ -322,6 +328,10 @@ public class SeguridadServiceImpl extends ConfiguracionServiceImpl implements Se
 
 	@Override
 	public void eliminarOpcion(Long id) {
+		List<Opcion> opciones=opcionDAO.buscarHql("select o from Opcion o where padre.id=?", id);
+		if(!opciones.isEmpty()){
+			throw new ValidacionException(Constante.CODIGO_MENSAJE.VALIDAR_DEPENDENCIA_OPCION,new Object[] {opciones.get(0).getPadre().getCodigo()});
+		}
 		opcionDAO.eliminarXId(id);
 	}
 	

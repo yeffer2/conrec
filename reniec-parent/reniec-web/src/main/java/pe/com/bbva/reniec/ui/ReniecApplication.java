@@ -7,12 +7,16 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import pe.com.bbva.reniec.dominio.Parametro;
 import pe.com.bbva.reniec.dominio.Usuario;
 import pe.com.bbva.reniec.exception.AlertaException;
 import pe.com.bbva.reniec.exception.ErrorException;
+import pe.com.bbva.reniec.negocio.ConfiguracionService;
 import pe.com.bbva.reniec.negocio.SeguridadService;
 import pe.com.bbva.reniec.utileria.Constante;
 import pe.com.bbva.reniec.utileria.Inject;
@@ -31,8 +35,11 @@ public class ReniecApplication extends Application{
 	@Autowired
 	private MessageSource messageSource;
 	@Autowired
-	private SeguridadService seguridadService;
+	private static SeguridadService seguridadService;
 	
+	static ConfiguracionService configuracionService;
+	private static WebApplicationContext springContext;
+
 	Window windowReniec;
 	
 	@Override
@@ -132,14 +139,29 @@ public class ReniecApplication extends Application{
 	}
 	
 	public static SystemMessages getSystemMessages() {
-		CustomizedSystemMessages customizedSystemMessages = new CustomizedSystemMessages();
-		
-		customizedSystemMessages.setSessionExpiredCaption("Sesión expirada");
-		customizedSystemMessages.setSessionExpiredMessage("Anote la información no guardada y haga <u>click aquí</u> para continuar.");
-		customizedSystemMessages.setSessionExpiredNotificationEnabled(true);
-		customizedSystemMessages.setSessionExpiredURL(null);
-		
-		return customizedSystemMessages;
+		Parametro parametroURL = getConfiguracionService().obtenerParametroxCodigo(Constante.PARAMETRO.URL_LOGOUT);
+		CustomizedSystemMessages m = new CustomizedSystemMessages();
+		m.setSessionExpiredCaption("Su sesión en WebSEAL ha terminado, favor de ingresar de nuevo.");
+		m.setSessionExpiredURL(parametroURL.getValor());
+		m.setCommunicationErrorCaption("Su sesión en WebSEAL ha terminado, favor de ingresar de nuevo.");
+		m.setCommunicationErrorURL(parametroURL.getValor());
+		return m;
+	}
+
+	public static ConfiguracionService getConfiguracionService() {
+		if(springContext == null){ 
+			ServletRequestAttributes requestAttributes = 
+					(ServletRequestAttributes)RequestContextHolder.currentRequestAttributes();
+			HttpServletRequest request = requestAttributes.getRequest();
+			HttpSession session = request.getSession(false);
+
+			springContext = 
+					WebApplicationContextUtils.getRequiredWebApplicationContext(session.getServletContext());
+			}
+		if(configuracionService == null){
+			configuracionService = (ConfiguracionService)springContext.getBean("configuracionService", ConfiguracionService.class);
+		}
+		return configuracionService;
 	}
 	
 }

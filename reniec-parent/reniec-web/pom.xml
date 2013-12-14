@@ -31,7 +31,7 @@
 			<version>1.0</version>
 		</dependency>
 		
-		 <!-- <dependency>
+		<!-- <dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin</artifactId>
 			<version>6.8.3-webseal</version>
@@ -60,7 +60,7 @@
 		</dependency>
 		<dependency>
 			<groupId>pe.com.bbva</groupId>
-  			<artifactId>adminUsuReniec</artifactId>
+  			<artifactId>procesarUsuarioRENIEC</artifactId>
   			<version>1.0.1</version>
 		</dependency>
 		
