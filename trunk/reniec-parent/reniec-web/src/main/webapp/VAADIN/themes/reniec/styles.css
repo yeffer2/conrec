@@ -345,3 +345,15 @@ overflow-x:scroll !important;
 .div-overflowx > div > div > div{
  overflow:visible;
 }
+
+.v-Notification-system p {
+ display: none;
+}
+
+.v-Notification-system i {
+ display: none;
+}
+
+.v-Notification-system table {
+ display: none;
+}

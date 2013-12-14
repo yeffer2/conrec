@@ -309,8 +309,8 @@ public class ConsultantesUI extends CustomComponent implements TextChangeListene
 					
 					id=(Long)item.getItemProperty("id").getValue();
 					txtRegistro.setValue(item.getItemProperty("registro").getValue());
-					txtCodigo.setValue(item.getItemProperty("codigo").getValue());
 					cmbTipoDOI.setValue(item.getItemProperty("tipoDOI").getValue());
+					txtCodigo.setValue(item.getItemProperty("codigo").getValue());
 					txtNumero.setValue(item.getItemProperty("numero").getValue());
 					txtNombres.setValue(item.getItemProperty("nombres").getValue());
 					txtPaterno.setValue(item.getItemProperty("paterno").getValue());

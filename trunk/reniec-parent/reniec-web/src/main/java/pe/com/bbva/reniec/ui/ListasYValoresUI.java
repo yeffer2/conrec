@@ -540,6 +540,7 @@ public class ListasYValoresUI extends CustomComponent implements TextChangeListe
 		if(event.getSource().equals(txtFiltroIdLista))
 		{
 			lista = obtenerListaFiltros();
+			lista.setId(null);
 			if(StringUtils.isNumeric(event.getText()))
 			{
 				if(StringUtils.isNotBlank(event.getText())){
@@ -578,6 +579,7 @@ public class ListasYValoresUI extends CustomComponent implements TextChangeListe
 		if(event.getSource().equals(txtFiltroIdValor))
 		{
 			valor = obtenerValorFiltros();
+			valor.setId(null);
 			if(StringUtils.isNumeric(event.getText()))
 			{
 				if(StringUtils.isNotBlank(event.getText())){

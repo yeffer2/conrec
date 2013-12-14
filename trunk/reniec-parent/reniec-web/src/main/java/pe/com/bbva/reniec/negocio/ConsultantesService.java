@@ -3,7 +3,7 @@ package pe.com.bbva.reniec.negocio;
 import java.io.Serializable;
 import java.util.List;
 
-import com.grupobbva.pe.simr.service.message.UsuarioResponse;
+import com.pe.bbva.reniec.ws.UsuarioResponse;
 
 import pe.com.bbva.reniec.dominio.Consultante;
 import pe.com.bbva.reniec.dominio.Valor;
