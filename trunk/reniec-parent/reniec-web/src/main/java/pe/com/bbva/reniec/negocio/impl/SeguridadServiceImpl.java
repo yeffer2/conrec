@@ -332,6 +332,8 @@ public class SeguridadServiceImpl extends ConfiguracionServiceImpl implements Se
 		if(!opciones.isEmpty()){
 			throw new ValidacionException(Constante.CODIGO_MENSAJE.VALIDAR_DEPENDENCIA_OPCION,new Object[] {opciones.get(0).getPadre().getCodigo()});
 		}
+		List<Permiso> permisos=permisoDAO.buscarHql("select p from Permiso p where opcion.id=?", id);
+		permisoDAO.eliminarTodos(permisos);
 		opcionDAO.eliminarXId(id);
 	}
 	
