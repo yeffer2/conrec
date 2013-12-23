@@ -35,7 +35,7 @@ public class ReniecApplication extends Application{
 	@Autowired
 	private MessageSource messageSource;
 	@Autowired
-	private static SeguridadService seguridadService;
+	private SeguridadService seguridadService;
 	
 	static ConfiguracionService configuracionService;
 	private static WebApplicationContext springContext;
