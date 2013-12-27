@@ -85,7 +85,7 @@ public class AutorizacionesWSImpl implements AutorizacionesWS {
 		if (consultanteConId != null)
 			consultante.setId(consultanteConId.getId());
 
-		UsuarioResponse usuarioModificado = consultantesService
+		UsuarioResponse usuarioModificado = getConsultantesService()
 				.guardarConsultanteWS(consultante, consultanteLocal.getAccion());
 
 		

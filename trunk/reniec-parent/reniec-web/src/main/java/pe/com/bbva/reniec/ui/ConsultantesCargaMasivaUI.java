@@ -262,18 +262,11 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 				Integer eleccion = (Integer) tblListaCargas.getValue();
 				if (eleccion != null) {
 					Item item = tblListaCargas.getItem(eleccion);
-					if (!((Valor) item.getItemProperty("objBaseTorigen")
-							.getValue()).getCodigo().equals(
-							Constante.VALOR.ORIGEN.CODIGO.LDAP)) {
-						tableDetalle.setVisible(true);
-						crearTablaDetalle(item);
-						mainLayout.setHeight("645");
-						setHeight("620");
-					} else {
-						tableDetalle.setVisible(false);
-						mainLayout.setHeight("290");
-						setHeight("290");
-					}
+					tableDetalle.setVisible(true);
+					crearTablaDetalle(item);
+					mainLayout.setHeight("645");
+					setHeight("620");
+					
 				} else {
 					tableDetalle.setVisible(false);
 					mainLayout.setHeight("290");
