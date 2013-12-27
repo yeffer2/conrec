@@ -5,6 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -34,6 +37,8 @@ import pe.gob.reniec.www.TipoType;
 public class ConsultantesServiceImpl extends ConfiguracionServiceImpl 
 		implements ConsultantesService{
 
+	protected final static Log logger = LogFactory.getLog(ConsultantesService.class);
+	
 	@Autowired
 	ConsultanteDAO consultanteDAO;
 	
@@ -92,47 +97,76 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 	@Override
 	public void guardarConsultante(Consultante consultante) {
 		String proceso="";
-		if(consultante.getEstado().getCodigo().equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.ACTIVO)){
-			proceso=Constante.WS_RENIEC.ENTRADA.PROCESO.ACTIVAR_USUARIO;
-		}
-		if(consultante.getEstado().getCodigo().equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.BAJA_TEMPORAL)){
-			proceso=Constante.WS_RENIEC.ENTRADA.PROCESO.BAJA_TEMPORAL;
-		}
-		if(consultante.getEstado().getCodigo().equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.BAJA_DEFINITIVA)){
-			proceso=Constante.WS_RENIEC.ENTRADA.PROCESO.BAJA_DEFINITIVA;
-		}
-		if(consultante.getEstado().getCodigo().equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.ERROR_RENIEC)){
-			Valor reniecSituacion=obtenerEstadoReniec(consultante);
-			consultante.setSituacion(reniecSituacion);
-		}
-		UsuarioResponse usuarioResponse=obtenerRENIECWS(consultante, proceso);
-		//System.out.println(usuarioResponse);
-		//FIXME Definir Variable de ERROR
-		if(usuarioResponse.getRefResponseHeader().getCodigoRespuesta().equals(Constante.WS_RENIEC.SALIDA.ERROR.NINGUN_ERROR)){
-			if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.ACTIVAR_USUARIO)){
+		boolean reprosesoErrorReniec=false;
+		if(!consultante.getNacionalidad().getCodigo().equals(Constante.VALOR.NACIONALIDAD_TIPO.CODIGO.EXTRANJERO)){
+			if(consultante.getEstado().getCodigo().equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.ACTIVO)){
+				proceso=Constante.WS_RENIEC.ENTRADA.PROCESO.ACTIVAR_USUARIO;
+			}
+			if(consultante.getEstado().getCodigo().equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.BAJA_TEMPORAL)){
+				proceso=Constante.WS_RENIEC.ENTRADA.PROCESO.BAJA_TEMPORAL;
+			}
+			if(consultante.getEstado().getCodigo().equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.BAJA_DEFINITIVA)){
+				proceso=Constante.WS_RENIEC.ENTRADA.PROCESO.BAJA_DEFINITIVA;
+			}
+			if(consultante.getEstado().getCodigo().equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.ERROR_RENIEC)){
+				Valor reniecSituacion=obtenerEstadoReniec(consultante);
+				consultante.setSituacion(reniecSituacion);
+				if(consultante.getSituacion()==null){
+					reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+							Constante.VALOR.RENIEC_SITUACION.CODIGO.ERROR_RENIEC);
+					consultante.setSituacion(reniecSituacion);
+				}
+				reprosesoErrorReniec=true;
+			}
+			
+			UsuarioResponse usuarioResponse=null;
+			if(!reprosesoErrorReniec){
+				usuarioResponse=obtenerRENIECWS(consultante, proceso);
+				//FIXME Definir Variable de ERROR
+				if(usuarioResponse.getRefResponseHeader().getCodigoRespuesta().equals(Constante.WS_RENIEC.SALIDA.ERROR.NINGUN_ERROR)){
+					if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.ACTIVAR_USUARIO)){
+						Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+								Constante.VALOR.RENIEC_SITUACION.CODIGO.ACTIVO);
+						consultante.setSituacion(reniecSituacion);
+					}
+					if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.BAJA_TEMPORAL)){
+						Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+								Constante.VALOR.RENIEC_SITUACION.CODIGO.BAJA_TEMPORAL);
+						consultante.setSituacion(reniecSituacion);
+					}
+					if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.BAJA_DEFINITIVA)){
+						Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+								Constante.VALOR.RENIEC_SITUACION.CODIGO.BAJA_DEFINITIVA);
+						consultante.setSituacion(reniecSituacion);
+					}
+				}else{
+					Valor usuarioEstado=obtenerValorxCodigo(Constante.LISTA.CODIGO.USUARIO_ESTADO, 
+							Constante.VALOR.USUARIO_ESTADO.CODIGO.ERROR_RENIEC);
+					consultante.setEstado(usuarioEstado);
+					Valor reniecSituacion=obtenerEstadoReniec(consultante);
+					consultante.setSituacion(reniecSituacion);
+					if(consultante.getSituacion()==null){
+						reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+								Constante.VALOR.RENIEC_SITUACION.CODIGO.ERROR_RENIEC);
+						consultante.setSituacion(reniecSituacion);
+					}
+				}
+			
+			}
+		}else{
+			if(consultante.getEstado().getCodigo().equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.ACTIVO)){
 				Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
 						Constante.VALOR.RENIEC_SITUACION.CODIGO.ACTIVO);
 				consultante.setSituacion(reniecSituacion);
 			}
-			if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.BAJA_TEMPORAL)){
+			if(consultante.getEstado().getCodigo().equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.BAJA_TEMPORAL)){
 				Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
 						Constante.VALOR.RENIEC_SITUACION.CODIGO.BAJA_TEMPORAL);
 				consultante.setSituacion(reniecSituacion);
 			}
-			if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.BAJA_DEFINITIVA)){
+			if(consultante.getEstado().getCodigo().equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.BAJA_DEFINITIVA)){
 				Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
 						Constante.VALOR.RENIEC_SITUACION.CODIGO.BAJA_DEFINITIVA);
-				consultante.setSituacion(reniecSituacion);
-			}
-		}else{
-			Valor usuarioEstado=obtenerValorxCodigo(Constante.LISTA.CODIGO.USUARIO_ESTADO, 
-					Constante.VALOR.USUARIO_ESTADO.CODIGO.ERROR_RENIEC);
-			consultante.setEstado(usuarioEstado);
-			Valor reniecSituacion=obtenerEstadoReniec(consultante);
-			consultante.setSituacion(reniecSituacion);
-			if(consultante.getSituacion()==null){
-				reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
-						Constante.VALOR.RENIEC_SITUACION.CODIGO.ERROR_RENIEC);
 				consultante.setSituacion(reniecSituacion);
 			}
 		}
@@ -143,6 +177,79 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 		}
 	}
 	
+	@Override
+	public void guardarConsultanteUI(Consultante consultante) {
+		String proceso="";
+		if(!consultante.getNacionalidad().getCodigo().equals(Constante.VALOR.NACIONALIDAD_TIPO.CODIGO.EXTRANJERO)){
+			if(consultante.getEstado().getCodigo().equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.ACTIVO)){
+				proceso=Constante.WS_RENIEC.ENTRADA.PROCESO.ACTIVAR_USUARIO;
+			}
+			if(consultante.getEstado().getCodigo().equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.BAJA_TEMPORAL)){
+				proceso=Constante.WS_RENIEC.ENTRADA.PROCESO.BAJA_TEMPORAL;
+			}
+			if(consultante.getEstado().getCodigo().equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.BAJA_DEFINITIVA)){
+				proceso=Constante.WS_RENIEC.ENTRADA.PROCESO.BAJA_DEFINITIVA;
+			}
+			if(consultante.getEstado().getCodigo().equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.ERROR_RENIEC)){
+				consultante.setSituacion(obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+						Constante.VALOR.RENIEC_SITUACION.CODIGO.ERROR_RENIEC));
+			}
+			UsuarioResponse usuarioResponse=null;
+			if(StringUtils.isNotBlank(proceso)){
+				usuarioResponse=obtenerRENIECWS(consultante, proceso);
+				//FIXME Definir Variable de ERROR
+				if(usuarioResponse.getRefResponseHeader().getCodigoRespuesta().equals(Constante.WS_RENIEC.SALIDA.ERROR.NINGUN_ERROR)){
+					if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.ACTIVAR_USUARIO)){
+						Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+								Constante.VALOR.RENIEC_SITUACION.CODIGO.ACTIVO);
+						consultante.setSituacion(reniecSituacion);
+					}else if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.BAJA_TEMPORAL)){
+						Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+								Constante.VALOR.RENIEC_SITUACION.CODIGO.BAJA_TEMPORAL);
+						consultante.setSituacion(reniecSituacion);
+					}else if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.BAJA_DEFINITIVA)){
+						Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+								Constante.VALOR.RENIEC_SITUACION.CODIGO.BAJA_DEFINITIVA);
+						consultante.setSituacion(reniecSituacion);
+					}else{
+						consultante.setSituacion(obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+								Constante.VALOR.RENIEC_SITUACION.CODIGO.ERROR_RENIEC));
+					}
+				}else{
+					Valor usuarioEstado=obtenerValorxCodigo(Constante.LISTA.CODIGO.USUARIO_ESTADO, 
+							Constante.VALOR.USUARIO_ESTADO.CODIGO.ERROR_RENIEC);
+					consultante.setEstado(usuarioEstado);
+					consultante.setSituacion(obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+							Constante.VALOR.RENIEC_SITUACION.CODIGO.ERROR_RENIEC));
+				}
+			}
+		}else{
+			if(consultante.getEstado().getCodigo().equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.ACTIVO)){
+				Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+						Constante.VALOR.RENIEC_SITUACION.CODIGO.ACTIVO);
+				consultante.setSituacion(reniecSituacion);
+			}
+			if(consultante.getEstado().getCodigo().equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.BAJA_TEMPORAL)){
+				Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+						Constante.VALOR.RENIEC_SITUACION.CODIGO.BAJA_TEMPORAL);
+				consultante.setSituacion(reniecSituacion);
+			}
+			if(consultante.getEstado().getCodigo().equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.BAJA_DEFINITIVA)){
+				Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+						Constante.VALOR.RENIEC_SITUACION.CODIGO.BAJA_DEFINITIVA);
+				consultante.setSituacion(reniecSituacion);
+			}
+			if(consultante.getEstado().getCodigo().equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.ERROR_RENIEC)){
+				consultante.setSituacion(obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+						Constante.VALOR.RENIEC_SITUACION.CODIGO.ERROR_RENIEC));
+			}
+		}
+		if(consultante.getId()==null){
+			consultanteDAO.crear(consultante);
+		}else{
+			consultanteDAO.actualizar(consultante);
+		}
+	}
 	
 	@Override
 	public UsuarioResponse guardarConsultanteWS(Consultante consultante, String proceso) {
@@ -204,6 +311,9 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 					equals(Constante.WS_RENIEC.SALIDA.MENSAJE.BAJA_DEFINITIVA)){
 				return obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
 						Constante.VALOR.RENIEC_SITUACION.CODIGO.BAJA_DEFINITIVA);
+			}else{
+				return obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+						Constante.VALOR.RENIEC_SITUACION.CODIGO.ERROR_RENIEC);
 			}
 		}
 		return null;
@@ -265,6 +375,10 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 		} catch (Exception e) {
 			throw new ValidacionException(Constante.CODIGO_MENSAJE.WS_ERROR, null, e.getCause());
 		}
+		logger.info(usuarioResponse);
+		System.out.println("++++RENIEC CONSULTA AL SERVICIO WEB INICIO++++");
+		System.out.println(usuarioResponse);
+		System.out.println("++++RENIEC CONSULTA AL SERVICIO WEB FIN++++");
 		
 		return usuarioResponse;
 	}

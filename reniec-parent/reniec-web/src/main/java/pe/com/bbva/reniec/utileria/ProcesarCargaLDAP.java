@@ -11,11 +11,13 @@ import org.springframework.context.ApplicationContext;
 
 import pe.com.bbva.reniec.dominio.Carga;
 import pe.com.bbva.reniec.dominio.Consultante;
+import pe.com.bbva.reniec.dominio.Detalle;
 import pe.com.bbva.reniec.dominioLDAP.Ldapperu2;
 import pe.com.bbva.reniec.dominio.Valor;
 import pe.com.bbva.reniec.negocio.CargaMasivaService;
 import pe.com.bbva.reniec.negocio.ConfiguracionService;
 import pe.com.bbva.reniec.negocio.ConsultantesService;
+import pe.com.bbva.reniec.negocio.DetalleService;
 import pe.com.bbva.reniec.negocio.LDAPService;
 
 public class ProcesarCargaLDAP {
@@ -30,6 +32,9 @@ public class ProcesarCargaLDAP {
 
 	@Autowired
 	CargaMasivaService cargaMasivaService;
+	
+	@Autowired
+	DetalleService detalleService;
 	
 	List<Consultante> consultantesLDAP = new ArrayList<Consultante>();
 	List<Consultante> consultantesReniec = new ArrayList<Consultante>();
@@ -47,7 +52,7 @@ public class ProcesarCargaLDAP {
 
 	public void procesarCarga(Date fecha, String mensaje) {
 		carga = new Carga();
-		
+		Long nroFilaInterno = 2L;
 		Valor origen = configuracionService.obtenerValorxCodigo(
 				Constante.LISTA.CODIGO.ORIGEN,
 				Constante.VALOR.ORIGEN.CODIGO.LDAP);
@@ -72,18 +77,28 @@ public class ProcesarCargaLDAP {
 		List<Ldapperu2> usuariosLdap = ldapService.obtenerUsuariosLDAP();
 		loopConsultante: for (Ldapperu2 usuario : usuariosLdap) {
 			try {
+				Detalle detalle = new Detalle();
+				detalle.setCarga(carga);
+				detalle.setNroFila(nroFilaInterno++);
 				consultante = (consultantesService
 						.obtenerConsultantePorIdentificador(usuario.getCodusu()) == null) ? new Consultante()
 						: consultantesService
 								.obtenerConsultantePorIdentificador(usuario
 										.getCodusu());
 				consultante.setIdentificador(usuario.getCodusu());
+				detalle.setIdentificador(usuario.getCodusu());
 				consultante.setCodigoReniec(usuario.getNumdoc());
+				detalle.setCodigoReniec(usuario.getNumdoc());
 				consultante.setTipoDOI(tipoDoi);
+				detalle.setTipoDoi(tipoDoi.getCodigo());
 				consultante.setDoi(usuario.getNumdoc());
+				detalle.setNumeroDoi(usuario.getNumdoc());
 				consultante.setNombres(usuario.getNombre());
+				detalle.setNombres(usuario.getNombre());
 				consultante.setPaterno(usuario.getApepat());
+				detalle.setPaterno(usuario.getApepat());
 				consultante.setMaterno(usuario.getApemat());
+				detalle.setMaterno(usuario.getApemat());
 
 				String nacimiento = usuario.getFecnac();
 				if (nacimiento == null)
@@ -91,6 +106,8 @@ public class ProcesarCargaLDAP {
 				SimpleDateFormat formatoDelTexto = new SimpleDateFormat(
 						formatoFecha);
 				consultante.setNacimiento(formatoDelTexto.parse(nacimiento));
+
+				detalle.setNacimiento(nacimiento);
 
 				Valor nacionalidad;
 				if (usuario.getCodpais().equals(codPaisPeru)) {
@@ -108,10 +125,13 @@ public class ProcesarCargaLDAP {
 						Constante.VALOR.USUARIO_ESTADO.CODIGO.ACTIVO);
 
 				consultante.setNacionalidad(nacionalidad);
+				detalle.setNacionalidad(nacionalidad.getCodigo());
 				if (usuario.getCodofi() == null)
 					continue loopConsultante;
 				consultante.setCentro(usuario.getCodofi());
+				detalle.setCentro(usuario.getCodofi());
 				consultante.setOrigen(origen);
+				detalle.setOrigen(origen.getCodigo());
 				if (consultante.getEstado() == null)
 					consultante.setEstado(estadoUsuario);
 				else {
@@ -132,10 +152,15 @@ public class ProcesarCargaLDAP {
 						continue loopConsultante;
 					}
 				}
+				detalle.setAccion(Constante.VALOR.ACCION.CODIGO.ACTIVACION);
 				
 				consultantesLDAP.add(consultante);
 				consultantesService.guardarConsultante(consultante);
 
+				detalle.setConsultante(consultante);
+				
+				detalleService.guardaDetalle(detalle);
+				
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
