@@ -26,6 +26,7 @@ import pe.com.bbva.reniec.dominio.Valor;
 import pe.com.bbva.reniec.exception.ValidacionException;
 import pe.com.bbva.reniec.negocio.ConsultantesService;
 import pe.com.bbva.reniec.persistencia.ConsultanteDAO;
+import pe.com.bbva.reniec.persistencia.UsuarioDAO;
 import pe.com.bbva.reniec.utileria.Busqueda;
 import pe.com.bbva.reniec.utileria.Constante;
 import pe.com.bbva.reniec.utileria.ReniecUtil;
@@ -41,6 +42,8 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 	
 	@Autowired
 	ConsultanteDAO consultanteDAO;
+	@Autowired
+	UsuarioDAO usuarioDAO;
 	
 	
 	public Consultante obtenerConsultantePorIdentificador(String identificador){
@@ -283,8 +286,8 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 			Valor usuarioEstado=obtenerValorxCodigo(Constante.LISTA.CODIGO.USUARIO_ESTADO, 
 					Constante.VALOR.USUARIO_ESTADO.CODIGO.ERROR_RENIEC);
 			consultante.setEstado(usuarioEstado);
-			Valor reniecSituacion=obtenerEstadoReniec(consultante);
-			consultante.setSituacion(reniecSituacion);
+			consultante.setSituacion(obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+					Constante.VALOR.RENIEC_SITUACION.CODIGO.ERROR_RENIEC));
 		}
 		if(consultante.getId()==null){
 			consultanteDAO.crear(consultante);
@@ -321,6 +324,9 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 	
 	private UsuarioResponse obtenerRENIECWS(Consultante consultante,String proceso) {
 		Usuario usuario=ReniecUtil.obtenerUsuarioSesion();
+		if(usuario==null){
+			usuario=usuarioDAO.obtener(1L);
+		}
 		Parametro wsURL=obtenerParametroxCodigo(Constante.PARAMETRO.WS_URL);
 		Parametro wsTimeOut=obtenerParametroxCodigo(Constante.PARAMETRO.WS_TIMEOUT);
 		Parametro empresaCodigo=obtenerParametroxCodigo(Constante.PARAMETRO.EMPRESA_CODIGO);
