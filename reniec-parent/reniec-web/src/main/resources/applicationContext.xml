@@ -22,6 +22,7 @@
 	<import resource="applicationContext-negocio.xml"/>
 	<import resource="applicationContext-quartz.xml"/>
 	<import resource="applicationContext-messages.xml"/>
+	<bean id="myApplicationContextAware" class="pe.com.bbva.reniec.utileria.MyApplicationContextAware" />
 	
 	<bean p:location="classpath:reniec.properties" class="org.springframework.beans.factory.config.PropertiesFactoryBean" id="deployProperties"/>
 	
