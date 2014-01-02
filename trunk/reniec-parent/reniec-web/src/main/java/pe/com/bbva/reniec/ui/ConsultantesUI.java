@@ -1,7 +1,5 @@
 package pe.com.bbva.reniec.ui;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -152,7 +150,6 @@ public class ConsultantesUI extends CustomComponent implements TextChangeListene
 	ConsultantesService consultantesService;
 	
 	Long id=null;
-	private DateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
 	
 	public ConsultantesUI() {
 		buildMainLayout();

@@ -8,7 +8,6 @@ import pe.com.bbva.reniec.dominio.util.IdBean;
 import pe.com.bbva.reniec.utileria.annotations.DefinicionVista;
 
 import java.util.Date;
-import java.util.List;
 
 /***
  * 

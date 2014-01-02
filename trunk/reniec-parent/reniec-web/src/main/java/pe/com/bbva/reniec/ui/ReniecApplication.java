@@ -3,8 +3,8 @@ package pe.com.bbva.reniec.ui;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.web.context.WebApplicationContext;
@@ -30,7 +30,7 @@ import com.vaadin.terminal.Terminal;
 @SuppressWarnings("serial")
 public class ReniecApplication extends Application{
 
-	private static final Log logger = LogFactory.getLog(ReniecApplication.class);
+	Logger logger = LogManager.getLogger(ReniecApplication.class.getName());
 	
 	@Autowired
 	private MessageSource messageSource;

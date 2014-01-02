@@ -6,8 +6,6 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -27,8 +25,6 @@ import pe.com.bbva.reniec.utileria.ReniecUtil;
 public abstract class BaseHibernate
 				<Entidad extends Serializable, TipoLlave extends Serializable>
 		extends HibernateDaoSupport implements BaseDAO<Entidad, TipoLlave> {
-	
-	protected final static Log logger = LogFactory.getLog(BaseHibernate.class);
 	
 	protected Class<Entidad> domainClass;
 	

@@ -1,15 +1,8 @@
 package pe.com.bbva.reniec.ws.impl;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.pe.bbva.reniec.ws.UsuarioResponse;
 
@@ -17,7 +10,6 @@ import pe.com.bbva.reniec.dominio.Consultante;
 import pe.com.bbva.reniec.dominio.Valor;
 import pe.com.bbva.reniec.negocio.ConsultantesService;
 import pe.com.bbva.reniec.utileria.Constante;
-import pe.com.bbva.reniec.utileria.Inject;
 import pe.com.bbva.reniec.utileria.MyContext;
 import pe.com.bbva.reniec.ws.AutorizacionesWS;
 import pe.com.bbva.reniec.ws.dominio.ConsultanteWS;
@@ -25,10 +17,7 @@ import pe.com.bbva.reniec.ws.dominio.RespuestaAutorizacion;
 
 public class AutorizacionesWSImpl implements AutorizacionesWS {
 	
-	protected final static Log logger = LogFactory.getLog(AutorizacionesWSImpl.class);
-
-	//@Autowired
-	//private ConsultantesService consultantesService;
+	Logger logger = LogManager.getLogger(AutorizacionesWS.class.getName());
 
 	public ConsultanteWS consultarAutorizacion(String identificador) {
 		ApplicationContext context = MyContext.getApplicationContext();
