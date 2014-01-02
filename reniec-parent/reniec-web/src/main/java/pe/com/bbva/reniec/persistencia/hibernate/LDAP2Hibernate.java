@@ -9,6 +9,8 @@ import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.naming.directory.InitialDirContext;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -34,6 +36,8 @@ import pe.com.bbva.reniec.utileria.Constante;
 @Repository
 @SuppressWarnings("serial")
 public class LDAP2Hibernate extends HibernateDaoSupport implements LDAP2DAO{
+	
+	Logger logger = LogManager.getLogger(LDAP2Hibernate.class.getName());
 	
 	private static final String KEY_VALIDATOR = "ldap.validator";
 	private static final String KEY_URL = "ldap.url";

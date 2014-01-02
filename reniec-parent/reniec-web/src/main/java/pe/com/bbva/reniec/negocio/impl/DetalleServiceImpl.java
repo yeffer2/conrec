@@ -8,7 +8,6 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import pe.com.bbva.reniec.dominio.Carga;
 import pe.com.bbva.reniec.dominio.Detalle;
 import pe.com.bbva.reniec.negocio.DetalleService;
 import pe.com.bbva.reniec.persistencia.DetalleDAO;
@@ -35,6 +34,7 @@ public class DetalleServiceImpl extends ConfiguracionServiceImpl implements
 		return detalleDAO.buscarHql("select d from Detalle d where d.carga.id = ?", idCarga);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public List<Detalle> cargaDetallesCriteria(Detalle detalle) {		
 		Busqueda filtro = Busqueda.forClass(Detalle.class);

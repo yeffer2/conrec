@@ -9,7 +9,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -34,7 +35,7 @@ import pe.com.bbva.reniec.utileria.ProcesarCargaLDAP;
  */
 public class CargarConsultantes implements Job {
 
-	Logger log = Logger.getLogger("cargarConsultantes");
+	Logger log = LogManager.getLogger("cargarConsultantes");
 
 	SchedulerContext schedulerContext;
 	JobExecutionContext contextoJob;

@@ -6,8 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -38,7 +38,7 @@ import pe.gob.reniec.www.TipoType;
 public class ConsultantesServiceImpl extends ConfiguracionServiceImpl 
 		implements ConsultantesService{
 
-	protected final static Log logger = LogFactory.getLog(ConsultantesService.class);
+	Logger logger = LogManager.getLogger(ConsultantesService.class.getName());
 	
 	@Autowired
 	ConsultanteDAO consultanteDAO;
