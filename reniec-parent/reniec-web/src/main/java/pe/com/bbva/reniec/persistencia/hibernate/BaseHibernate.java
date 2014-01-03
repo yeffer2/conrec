@@ -70,7 +70,7 @@ public abstract class BaseHibernate
 
 	@Transactional
 	public void actualizar(Entidad t) {
-		validarAuditoria(t);
+		validarAuditoriaActualizar(t);
 		getHibernateTemplate().update(t);
 	}
 
@@ -191,6 +191,19 @@ public abstract class BaseHibernate
 				auditoriaBean.setEditor(usuario);
 				auditoriaBean.setEdicion(new Date());
 			}
+		}
+	}
+	
+	private void validarAuditoriaActualizar(Entidad t){
+		if(t instanceof AuditoriaBean){
+			AuditoriaBean auditoriaBean=(AuditoriaBean)t;
+			Usuario usuario=ReniecUtil.obtenerUsuarioSesion();
+			if(usuario==null){
+				usuario=new Usuario();
+				usuario.setId(1L);
+			}
+			auditoriaBean.setEditor(usuario);
+			auditoriaBean.setEdicion(new Date());
 		}
 	}
 	

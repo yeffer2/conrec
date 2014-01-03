@@ -60,7 +60,9 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 				filtro.add(Restrictions.ilike("identificador", consultante.getIdentificador(), MatchMode.ANYWHERE));
 			}
 			if (consultante.getNombres() != null) {
-				filtro.add(Restrictions.ilike("nombres", consultante.getNombres(), MatchMode.ANYWHERE));
+				filtro.add(Restrictions.or(Restrictions.ilike("nombres", consultante.getNombres(), MatchMode.ANYWHERE), 
+						Restrictions.or(Restrictions.ilike("materno", consultante.getPaterno(), MatchMode.ANYWHERE),
+								Restrictions.ilike("paterno", consultante.getMaterno(), MatchMode.ANYWHERE))));
 			}
 			if (consultante.getCodigoReniec() != null) {
 				filtro.add(Restrictions.ilike("codigoReniec", consultante.getCodigoReniec(), MatchMode.ANYWHERE));
