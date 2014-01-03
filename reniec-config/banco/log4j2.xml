@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Appenders>
+	<RollingFile name="file" fileName="C:\\loging.log" filePattern="D:\\loging-%i.log">
+		<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"/>
+		<Policies>
+        	<SizeBasedTriggeringPolicy size="1 MB"/>
+      	</Policies>
+    </RollingFile>
+    <RollingFile name="ruta1" fileName="/pr/reniec/online/pe/web/log/reniec.log" 
+    			filePattern="/pr/reniec/online/pe/web/log/reniec-%i.log">
+		<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"/>
+		<Policies>
+        	<SizeBasedTriggeringPolicy size="1 MB"/>
+      	</Policies>
+    </RollingFile>
+    <RollingFile name="ruta2" fileName="/mnt/compartido/reniec/logs/reniec.log" 
+    			filePattern="/mnt/compartido/reniec/logs/reniec-%i.log">
+		<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"/>
+		<Policies>
+        	<SizeBasedTriggeringPolicy size="1 MB"/>
+      	</Policies>
+    </RollingFile>
+    <Console name="stdout" target="SYSTEM_OUT">
+    	<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"/>
+    </Console>
+  </Appenders>
+  <Loggers>
+    <Root level="info">
+      <AppenderRef ref="ruta1"/>
+      <AppenderRef ref="ruta2"/>
+    </Root>
+  </Loggers>
+</Configuration>
