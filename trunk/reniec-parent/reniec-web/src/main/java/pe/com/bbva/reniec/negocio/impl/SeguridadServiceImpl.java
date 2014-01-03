@@ -283,7 +283,7 @@ public class SeguridadServiceImpl extends ConfiguracionServiceImpl implements Se
 		List<Permiso> permisosU = ListUtils.union(updPermisosD, updPermisosA);
 		List<Permiso> permisos = ListUtils.union(permisosU, insPermisosA);
 		
-		permisoDAO.grabarTodos(permisos);		
+		permisoDAO.grabarTodos(permisos);
 	}
 
 	private void prepararLista(List<Permiso> lista, Valor estado)
