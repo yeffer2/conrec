@@ -31,4 +31,15 @@ public class LDAPServiceImpl extends ConfiguracionServiceImpl implements LDAPSer
 		return ldapdao.buscar(filtro);
 	}
 
+	@Override
+	public Ldapperu2 obtenerUsuarioLDAP(String registro) {
+		Busqueda filtro = Busqueda.forClass(Ldapperu2.class);
+		filtro.add(Restrictions.eq("codusu", registro));
+		List<Ldapperu2> list=ldapdao.buscar(filtro);
+		if(list!=null && !list.isEmpty()){
+			return list.get(0);
+		}
+		return null;
+	}
+
 }

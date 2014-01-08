@@ -118,7 +118,10 @@ public class Detalle extends IdBean implements Serializable {
 	@Formula(value="paterno || ' ' || paterno || ' ' || nombres")
 	private String nombreCompleto;
 	public void setNombreCompleto(String nombreCompleto){ this.nombreCompleto = nombreCompleto; }
-	public String getNombreCompleto(){		
+	public String getNombreCompleto(){
+		if(StringUtils.isNotBlank(nombreCompleto)){
+			return nombreCompleto;
+		}
 		return (StringUtils.isNotBlank(paterno)?paterno:"")+" "+
 				(StringUtils.isNotBlank(materno)?materno:"")+" "+
 				(StringUtils.isNotBlank(nombres)?nombres:"");

@@ -1,6 +1,7 @@
 package pe.com.bbva.reniec.negocio.impl;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -23,9 +24,12 @@ import pe.com.bbva.reniec.dominio.Consultante;
 import pe.com.bbva.reniec.dominio.Parametro;
 import pe.com.bbva.reniec.dominio.Usuario;
 import pe.com.bbva.reniec.dominio.Valor;
+import pe.com.bbva.reniec.dominioLDAP.Ldapperu2;
 import pe.com.bbva.reniec.exception.ValidacionException;
 import pe.com.bbva.reniec.negocio.ConsultantesService;
+import pe.com.bbva.reniec.negocio.LDAPService;
 import pe.com.bbva.reniec.persistencia.ConsultanteDAO;
+import pe.com.bbva.reniec.persistencia.LDAP2DAO;
 import pe.com.bbva.reniec.persistencia.UsuarioDAO;
 import pe.com.bbva.reniec.utileria.Busqueda;
 import pe.com.bbva.reniec.utileria.Constante;
@@ -44,6 +48,8 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 	ConsultanteDAO consultanteDAO;
 	@Autowired
 	UsuarioDAO usuarioDAO;
+	@Autowired
+	LDAPService ldapService;
 	
 	
 	public Consultante obtenerConsultantePorIdentificador(String identificador){
@@ -61,8 +67,8 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 			}
 			if (consultante.getNombres() != null) {
 				filtro.add(Restrictions.or(Restrictions.ilike("nombres", consultante.getNombres(), MatchMode.ANYWHERE), 
-						Restrictions.or(Restrictions.ilike("materno", consultante.getPaterno(), MatchMode.ANYWHERE),
-								Restrictions.ilike("paterno", consultante.getMaterno(), MatchMode.ANYWHERE))));
+						Restrictions.or(Restrictions.ilike("materno", consultante.getNombres(), MatchMode.ANYWHERE),
+								Restrictions.ilike("paterno", consultante.getNombres(), MatchMode.ANYWHERE))));
 			}
 			if (consultante.getCodigoReniec() != null) {
 				filtro.add(Restrictions.ilike("codigoReniec", consultante.getCodigoReniec(), MatchMode.ANYWHERE));
@@ -100,7 +106,8 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 	}
 
 	@Override
-	public void guardarConsultante(Consultante consultante) {
+	public String guardarConsultante(Consultante consultante) {
+		String resultado="";
 		String proceso="";
 		boolean reprosesoErrorReniec=false;
 		if(!consultante.getNacionalidad().getCodigo().equals(Constante.VALOR.NACIONALIDAD_TIPO.CODIGO.EXTRANJERO)){
@@ -132,34 +139,37 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 			UsuarioResponse usuarioResponse=null;
 			if(!reprosesoErrorReniec){
 				usuarioResponse=obtenerRENIECWS(consultante, proceso);
-				//FIXME Definir Variable de ERROR
+				resultado=mensajeRENIECWS(usuarioResponse);
 				if(usuarioResponse.getRefResponseHeader().getCodigoRespuesta().equals(Constante.WS_RENIEC.SALIDA.ERROR.NINGUN_ERROR)){
-					if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.ACTIVAR_USUARIO)){
-						Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
-								Constante.VALOR.RENIEC_SITUACION.CODIGO.ACTIVO);
-						consultante.setSituacion(reniecSituacion);
-					}
-					if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.BAJA_TEMPORAL)){
-						Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
-								Constante.VALOR.RENIEC_SITUACION.CODIGO.BAJA_TEMPORAL);
-						consultante.setSituacion(reniecSituacion);
-					}
-					if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.BAJA_DEFINITIVA)){
-						Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
-								Constante.VALOR.RENIEC_SITUACION.CODIGO.BAJA_DEFINITIVA);
-						consultante.setSituacion(reniecSituacion);
+					if(validarRENIECWS(usuarioResponse)){
+						if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.ACTIVAR_USUARIO)){
+							Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+									Constante.VALOR.RENIEC_SITUACION.CODIGO.ACTIVO);
+							consultante.setSituacion(reniecSituacion);
+						}
+						if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.BAJA_TEMPORAL)){
+							Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+									Constante.VALOR.RENIEC_SITUACION.CODIGO.BAJA_TEMPORAL);
+							consultante.setSituacion(reniecSituacion);
+						}
+						if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.BAJA_DEFINITIVA)){
+							Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+									Constante.VALOR.RENIEC_SITUACION.CODIGO.BAJA_DEFINITIVA);
+							consultante.setSituacion(reniecSituacion);
+						}
+					}else{
+						Valor usuarioEstado=obtenerValorxCodigo(Constante.LISTA.CODIGO.USUARIO_ESTADO, 
+								Constante.VALOR.USUARIO_ESTADO.CODIGO.ERROR_RENIEC);
+						consultante.setEstado(usuarioEstado);
+						consultante.setSituacion(obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+								Constante.VALOR.RENIEC_SITUACION.CODIGO.ERROR_RENIEC));
 					}
 				}else{
 					Valor usuarioEstado=obtenerValorxCodigo(Constante.LISTA.CODIGO.USUARIO_ESTADO, 
 							Constante.VALOR.USUARIO_ESTADO.CODIGO.ERROR_RENIEC);
 					consultante.setEstado(usuarioEstado);
-					Valor reniecSituacion=obtenerEstadoReniec(consultante);
-					consultante.setSituacion(reniecSituacion);
-					if(consultante.getSituacion()==null){
-						reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
-								Constante.VALOR.RENIEC_SITUACION.CODIGO.ERROR_RENIEC);
-						consultante.setSituacion(reniecSituacion);
-					}
+					consultante.setSituacion(obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+							Constante.VALOR.RENIEC_SITUACION.CODIGO.ERROR_RENIEC));
 				}
 			
 			}
@@ -185,10 +195,78 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 		}else{
 			consultanteDAO.actualizar(consultante);
 		}
+		return resultado;
+	}
+	
+	private boolean validarRENIECWS(UsuarioResponse usuarioResponse){
+		if(usuarioResponse.getRefUsuarioWSResponse().getOkDni().equals(Constante.WS_RENIEC.SALIDA.OKDNI.OK) &&
+				usuarioResponse.getRefUsuarioWSResponse().getOkNombres().equals(Constante.WS_RENIEC.SALIDA.OKNOMBRES.OK) &&
+				usuarioResponse.getRefUsuarioWSResponse().getOkApellidoPaterno().equals(Constante.WS_RENIEC.SALIDA.OKAPPRIMER.OK) &&
+				usuarioResponse.getRefUsuarioWSResponse().getOkApellidoMaterno().equals(Constante.WS_RENIEC.SALIDA.OKAPSEGUNDO.OK) &&
+				usuarioResponse.getRefUsuarioWSResponse().getOkFechaNacimiento().equals(Constante.WS_RENIEC.SALIDA.OKFECNACE.OK)){
+			return true;
+		}
+		return false;
+	}
+
+	private String mensajeRENIECWS(UsuarioResponse usuarioResponse){
+		String resultado=usuarioResponse.getRefResponseHeader().getCodigoRespuesta()+"-"+
+				usuarioResponse.getRefResponseHeader().getMensajeRespuesta();
+		if(usuarioResponse.getRefResponseHeader().getCodigoRespuesta().equals(Constante.WS_RENIEC.SALIDA.ERROR.NINGUN_ERROR)){
+			if(usuarioResponse.getRefUsuarioWSResponse().getOkDni().equals(Constante.WS_RENIEC.SALIDA.OKDNI.ERROR)){
+				resultado="DNI ERROR";
+				return resultado;
+			}
+			if(usuarioResponse.getRefUsuarioWSResponse().getOkNombres().equals(Constante.WS_RENIEC.SALIDA.OKNOMBRES.ERROR)){
+				resultado="Nombres ERROR";
+				return resultado;
+			}
+			if(usuarioResponse.getRefUsuarioWSResponse().getOkApellidoPaterno().equals(Constante.WS_RENIEC.SALIDA.OKAPPRIMER.ERROR)){
+				resultado="Apellido Paterno ERROR";
+				return resultado;
+			}
+			if(usuarioResponse.getRefUsuarioWSResponse().getOkApellidoMaterno().equals(Constante.WS_RENIEC.SALIDA.OKAPSEGUNDO.ERROR)){
+				resultado="Apellido Materno ERROR";
+				return resultado;
+			}
+			if(usuarioResponse.getRefUsuarioWSResponse().getOkFechaNacimiento().equals(Constante.WS_RENIEC.SALIDA.OKFECNACE.ERROR)){
+				resultado="Fecha Nacimiento ERROR";
+				return resultado;
+			}
+		}
+		return resultado;
+	}
+	
+	private String codigoRENIECWS(UsuarioResponse usuarioResponse){
+		String resultado=usuarioResponse.getRefResponseHeader().getCodigoRespuesta();
+		if(usuarioResponse.getRefResponseHeader().getCodigoRespuesta().equals(Constante.WS_RENIEC.SALIDA.ERROR.NINGUN_ERROR)){
+			if(usuarioResponse.getRefUsuarioWSResponse().getOkDni().equals(Constante.WS_RENIEC.SALIDA.OKDNI.ERROR)){
+				resultado="DNI";
+				return resultado;
+			}
+			if(usuarioResponse.getRefUsuarioWSResponse().getOkNombres().equals(Constante.WS_RENIEC.SALIDA.OKNOMBRES.ERROR)){
+				resultado="Nombres";
+				return resultado;
+			}
+			if(usuarioResponse.getRefUsuarioWSResponse().getOkApellidoPaterno().equals(Constante.WS_RENIEC.SALIDA.OKAPPRIMER.ERROR)){
+				resultado="Apellido Paterno";
+				return resultado;
+			}
+			if(usuarioResponse.getRefUsuarioWSResponse().getOkApellidoMaterno().equals(Constante.WS_RENIEC.SALIDA.OKAPSEGUNDO.ERROR)){
+				resultado="Apellido Materno";
+				return resultado;
+			}
+			if(usuarioResponse.getRefUsuarioWSResponse().getOkFechaNacimiento().equals(Constante.WS_RENIEC.SALIDA.OKFECNACE.ERROR)){
+				resultado="Fecha Nacimiento";
+				return resultado;
+			}
+		}
+		return resultado;
 	}
 	
 	@Override
-	public void guardarConsultanteUI(Consultante consultante) {
+	public String guardarConsultanteUI(Consultante consultante) {
+		String resultado="";
 		String proceso="";
 		if(!consultante.getNacionalidad().getCodigo().equals(Constante.VALOR.NACIONALIDAD_TIPO.CODIGO.EXTRANJERO)){
 			if(consultante.getEstado().getCodigo().equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.ACTIVO)){
@@ -212,21 +290,29 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 			UsuarioResponse usuarioResponse=null;
 			if(StringUtils.isNotBlank(proceso)){
 				usuarioResponse=obtenerRENIECWS(consultante, proceso);
-				//FIXME Definir Variable de ERROR
+				resultado=codigoRENIECWS(usuarioResponse);
 				if(usuarioResponse.getRefResponseHeader().getCodigoRespuesta().equals(Constante.WS_RENIEC.SALIDA.ERROR.NINGUN_ERROR)){
-					if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.ACTIVAR_USUARIO)){
-						Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
-								Constante.VALOR.RENIEC_SITUACION.CODIGO.ACTIVO);
-						consultante.setSituacion(reniecSituacion);
-					}else if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.BAJA_TEMPORAL)){
-						Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
-								Constante.VALOR.RENIEC_SITUACION.CODIGO.BAJA_TEMPORAL);
-						consultante.setSituacion(reniecSituacion);
-					}else if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.BAJA_DEFINITIVA)){
-						Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
-								Constante.VALOR.RENIEC_SITUACION.CODIGO.BAJA_DEFINITIVA);
-						consultante.setSituacion(reniecSituacion);
+					if(validarRENIECWS(usuarioResponse)){
+						if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.ACTIVAR_USUARIO)){
+							Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+									Constante.VALOR.RENIEC_SITUACION.CODIGO.ACTIVO);
+							consultante.setSituacion(reniecSituacion);
+						}else if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.BAJA_TEMPORAL)){
+							Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+									Constante.VALOR.RENIEC_SITUACION.CODIGO.BAJA_TEMPORAL);
+							consultante.setSituacion(reniecSituacion);
+						}else if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.BAJA_DEFINITIVA)){
+							Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+									Constante.VALOR.RENIEC_SITUACION.CODIGO.BAJA_DEFINITIVA);
+							consultante.setSituacion(reniecSituacion);
+						}else{
+							consultante.setSituacion(obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+									Constante.VALOR.RENIEC_SITUACION.CODIGO.ERROR_RENIEC));
+						}
 					}else{
+						Valor usuarioEstado=obtenerValorxCodigo(Constante.LISTA.CODIGO.USUARIO_ESTADO, 
+								Constante.VALOR.USUARIO_ESTADO.CODIGO.ERROR_RENIEC);
+						consultante.setEstado(usuarioEstado);
 						consultante.setSituacion(obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
 								Constante.VALOR.RENIEC_SITUACION.CODIGO.ERROR_RENIEC));
 					}
@@ -264,6 +350,7 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 		}else{
 			consultanteDAO.actualizar(consultante);
 		}
+		return resultado;
 	}
 	
 	@Override
@@ -399,6 +486,57 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 		System.out.println("++++RENIEC CONSULTA AL SERVICIO WEB FIN++++");
 		
 		return usuarioResponse;
+	}
+
+
+	@Override
+	public Consultante obtenerConsultanteLDAP(String registro, Valor origen) {
+		Consultante consultante=
+				consultanteDAO.obtenerHql("select cons from Consultante cons where identificador = ? and origen.id=?", 
+						registro, origen.getId());
+		if(consultante==null){
+			Ldapperu2 usuario=ldapService.obtenerUsuarioLDAP(registro);
+			if(usuario!=null){
+				Valor tipoDoi = obtenerValorxCodigo(
+						Constante.LISTA.CODIGO.DOI_TIPO,
+						Constante.VALOR.DOI_TIPO.CODIGO.DNI);
+				Valor nacionalidad;
+				if (usuario.getCodpais().equals("0504")) {
+					nacionalidad = obtenerValorxCodigo(
+							Constante.LISTA.CODIGO.NACIONALIDAD_TIPO,
+							Constante.VALOR.NACIONALIDAD_TIPO.CODIGO.PERUANA);
+				} else {
+					nacionalidad = obtenerValorxCodigo(
+									Constante.LISTA.CODIGO.NACIONALIDAD_TIPO,
+									Constante.VALOR.NACIONALIDAD_TIPO.CODIGO.EXTRANJERO);
+				}
+				consultante=new Consultante();
+				consultante.setIdentificador(usuario.getCodusu());
+				consultante.setCodigoReniec(usuario.getNumdoc());
+				consultante.setTipoDOI(tipoDoi);
+				consultante.setDoi(usuario.getNumdoc());
+				consultante.setNombres(usuario.getNombre());
+				consultante.setPaterno(usuario.getApepat());
+				consultante.setMaterno(usuario.getApemat());
+				String nacimiento = usuario.getFecnac();
+				if (nacimiento != null){
+					SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd-MM-yyyy");
+					try {
+						consultante.setNacimiento(formatoDelTexto.parse(nacimiento));
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
+				
+				consultante.setNacionalidad(nacionalidad);
+				consultante.setCentro(usuario.getCodofi());
+				consultante.setOrigen(origen);
+				return consultante;
+			}
+		}else{
+			return consultante;
+		}
+		return null;
 	}
 
 }

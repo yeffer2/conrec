@@ -55,8 +55,14 @@ public class DetalleServiceImpl extends ConfiguracionServiceImpl implements
 			if(detalle.getNumeroDoi() != null)
 				filtro.add(Restrictions.ilike("numeroDoi", detalle.getNumeroDoi(), MatchMode.ANYWHERE));
 			
-			if(detalle.getNombreCompleto() != null)
-				filtro.add(Restrictions.sqlRestriction("paterno || ' ' || materno || ' ' || nombres like ?", "%" + detalle.getNombreCompleto() + "%", Hibernate.STRING));
+			
+			if(!detalle.getNombreCompleto().trim().equals(""))
+				filtro.add(Restrictions.or(Restrictions.ilike("paterno", detalle.getNombreCompleto(), MatchMode.ANYWHERE), 
+					Restrictions.or(Restrictions.ilike("materno", detalle.getNombreCompleto(), MatchMode.ANYWHERE),
+							Restrictions.ilike("nombres", detalle.getNombreCompleto(), MatchMode.ANYWHERE))));
+			
+			if(detalle.getAccion() != null)
+				filtro.add(Restrictions.ilike("accion", detalle.getAccion(), MatchMode.ANYWHERE));
 			
 			if(detalle.getConsultante() != null){				
 				if (detalle.getConsultante().getEstado() != null){
@@ -68,7 +74,9 @@ public class DetalleServiceImpl extends ConfiguracionServiceImpl implements
 			
 				}
 			}
-		
+			
+			if(detalle.getMensaje() != null)
+				filtro.add(Restrictions.ilike("mensaje", detalle.getMensaje(), MatchMode.ANYWHERE));
 		}
 		return detalleDAO.buscar(filtro);
 	}

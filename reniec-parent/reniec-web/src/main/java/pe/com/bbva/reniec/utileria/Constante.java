@@ -1,5 +1,9 @@
 package pe.com.bbva.reniec.utileria;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 public abstract class Constante 
 {
 	
@@ -239,11 +243,72 @@ public abstract class Constante
 			{
 				public static final String NINGUN_ERROR = "0000";
 			}
+			public static Map<String, String> CODIGO_ERROR=new HashMap<String, String>();
+			static {
+		        Map<String, String> aMap = new HashMap<String, String>();
+		        aMap.put("5002", "Versión inválida");
+		        aMap.put("5003", "Longitud de cabecera inválida");
+		        aMap.put("5004", "Caracteres de verificación incorrectos");
+		        aMap.put("5008", "Servidor no válido");
+		        aMap.put("5009", "Tipo de consulta inválido");
+		        aMap.put("5010", "Tipo de consulta no permitida");
+		        aMap.put("5011", "No se ha ingresado subtipo de consulta");
+		        aMap.put("5020", "No existe la empresa ingresada para usar el servicio");
+		        aMap.put("5021", "La empresa registrada no está habilitada para usar el servicio");
+		        aMap.put("5030", "El usuario final de consulta ingresado no es válido");
+		        aMap.put("5031", "No se tiene información solicitada del usuario ingresado");
+		        aMap.put("5032", "El DNI no puede realizar consultas por encontrarse cancelado en el RUIPN");
+		        aMap.put("5033", "El DNI no puede realizar consultas por encontrarse restringido en el RUIPN");
+		        aMap.put("5034", "El DNI no puede realizar consultas por encontrarse observado en el RUIPN");
+		        aMap.put("5036", "El DNI se encuentra con baja temporal en el servicio");
+		        aMap.put("5037", "El DNI se encuentra con baja definitiva en el servicio");
+		        aMap.put("5100", "Longitud de trama de consulta inválida");
+		        aMap.put("5101", "Error en número de coincidencias solicitadas o inicio de grupo");
+		        aMap.put("5102", "Coincidencias superan el límite establecido");
+		        aMap.put("5103", "Error en base de datos");
+		        aMap.put("5104", "No se encontró información de la estructura solicitada");
+		        aMap.put("5105", "No se encontró los campos a mostrar para la estructura solicitada");
+		        aMap.put("5108", "Carácter ingresado en apellido paterno es inválido");
+		        aMap.put("5109", "Carácter ingresado en apellido materno es inválido");
+		        aMap.put("5110", "Carácter ingresado en nombres es inválido");
+		        aMap.put("5111", "El DNI solicitado se encuentra cancelado en el archivo magnético del RUIPN");
+		        aMap.put("5112", "El DNI solicitado se encuentra restringido en el archivo magnético del RUIPN");
+		        aMap.put("5113", "El DNI solicitado se encuentra observado en el archivo magnético del RUIPN");
+		        aMap.put("5114", "El DNI ingresado no es válido");
+		        aMap.put("5200", "No existen los datos solicitados");
+		        CODIGO_ERROR = Collections.unmodifiableMap(aMap);
+		    }			 
+			
 			public static abstract class MENSAJE
 			{
 				public static final String ACTIVAR_USUARIO = "ACTIVO";
 				public static final String BAJA_TEMPORAL = "BAJA TEMPORAL";
 				public static final String BAJA_DEFINITIVA = "BAJA DEFINITIVA";
+			}
+			public static abstract class OKDNI
+			{
+				public static final String OK = "OK";
+				public static final String ERROR = "ERROR";
+			}
+			public static abstract class OKNOMBRES
+			{
+				public static final String OK = "OK";
+				public static final String ERROR = "ERROR";
+			}
+			public static abstract class OKAPPRIMER
+			{
+				public static final String OK = "OK";
+				public static final String ERROR = "ERROR";
+			}
+			public static abstract class OKAPSEGUNDO
+			{
+				public static final String OK = "OK";
+				public static final String ERROR = "ERROR";
+			}
+			public static abstract class OKFECNACE
+			{
+				public static final String OK = "OK";
+				public static final String ERROR = "ERROR";
 			}
 		}
 	}

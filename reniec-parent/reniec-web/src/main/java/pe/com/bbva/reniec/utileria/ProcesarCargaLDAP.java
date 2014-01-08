@@ -80,11 +80,8 @@ public class ProcesarCargaLDAP {
 				Detalle detalle = new Detalle();
 				detalle.setCarga(carga);
 				detalle.setNroFila(nroFilaInterno++);
-				consultante = (consultantesService
-						.obtenerConsultantePorIdentificador(usuario.getCodusu()) == null) ? new Consultante()
-						: consultantesService
-								.obtenerConsultantePorIdentificador(usuario
-										.getCodusu());
+				consultante = consultantesService.obtenerConsultantePorIdentificador(usuario.getCodusu());
+				consultante = consultante==null ? new Consultante() : consultante;
 				consultante.setIdentificador(usuario.getCodusu());
 				detalle.setIdentificador(usuario.getCodusu());
 				consultante.setCodigoReniec(usuario.getNumdoc());
@@ -155,8 +152,8 @@ public class ProcesarCargaLDAP {
 				detalle.setAccion(Constante.VALOR.ACCION.CODIGO.ACTIVACION);
 				
 				consultantesLDAP.add(consultante);
-				consultantesService.guardarConsultante(consultante);
-
+				String resultado=consultantesService.guardarConsultante(consultante);
+				detalle.setMensaje(resultado);
 				detalle.setConsultante(consultante);
 				
 				detalleService.guardaDetalle(detalle);
