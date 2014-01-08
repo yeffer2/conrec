@@ -8,6 +8,6 @@ import pe.com.bbva.reniec.dominioLDAP.Ldapperu2;
 public interface LDAPService extends ConfiguracionService, Serializable {
 	
 	List<Ldapperu2> obtenerUsuariosLDAP();
-	
+	Ldapperu2 obtenerUsuarioLDAP(String registro);
 
 }

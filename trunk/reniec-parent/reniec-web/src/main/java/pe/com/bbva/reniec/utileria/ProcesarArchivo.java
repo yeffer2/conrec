@@ -107,15 +107,16 @@ public class ProcesarArchivo {
 		Consultante consultante;
 		Detalle detalle = new Detalle();
 		detalle.setCarga(carga);
-		detalle.setNroFila(nroFilaInterno++);
+		//detalle.setNroFila(nroFilaInterno++);
 		try {
 			/*
 			 * FIXME La definición marca un espacio para el numero de linea,
 			 * pero no viene en el archivo de ejemplo.
 			 */
 
-			// String numeroFila = lineaDatos.substring(0,10).trim();
-			// lineaDatos = lineaDatos.substring(10);
+			String numeroFila = lineaDatos.substring(0,10).trim();
+			lineaDatos = lineaDatos.substring(10);
+			detalle.setNroFila(Long.parseLong(numeroFila));
 
 			String identificador = lineaDatos.substring(0, 20).trim();
 			lineaDatos = lineaDatos.substring(20);
@@ -199,45 +200,25 @@ public class ProcesarArchivo {
 				estado = configuracionService.obtenerValorxCodigo(
 						Constante.LISTA.CODIGO.USUARIO_ESTADO,
 						Constante.VALOR.USUARIO_ESTADO.CODIGO.ACTIVO);
-				if (consultante.getEstado() == null)
-					consultante.setEstado(estado);
-				else if (consultante.getEstado().equals(
-						Constante.VALOR.USUARIO_ESTADO.CODIGO.BAJA_TEMPORAL))
-					consultante.setEstado(estado);
+				consultante.setEstado(estado);
 			} else if (accionValor.getCodigo().equals(
 					Constante.VALOR.ACCION.CODIGO.BAJA_TEMPORAL)) {
 				estado = configuracionService.obtenerValorxCodigo(
 						Constante.LISTA.CODIGO.USUARIO_ESTADO,
 						Constante.VALOR.USUARIO_ESTADO.CODIGO.BAJA_TEMPORAL);
-				if (consultante.getEstado() != null) {
-					if (consultante.getEstado().equals(
-							Constante.VALOR.USUARIO_ESTADO.CODIGO.ACTIVO))
-						consultante.setEstado(estado);
-				}
+				consultante.setEstado(estado);
 			} else if (accionValor.getCodigo().equals(
 					Constante.VALOR.ACCION.CODIGO.BAJA_DEFINITIVA)) {
 				estado = configuracionService.obtenerValorxCodigo(
 						Constante.LISTA.CODIGO.USUARIO_ESTADO,
 						Constante.VALOR.USUARIO_ESTADO.CODIGO.BAJA_DEFINITIVA);
-				if (consultante.getEstado() != null) {
-					if (consultante.getEstado().equals(
-							Constante.VALOR.USUARIO_ESTADO.CODIGO.ACTIVO)
-							|| consultante
-									.getEstado()
-									.equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.BAJA_TEMPORAL))
-						consultante.setEstado(estado);
-				}
+				consultante.setEstado(estado);
 			} else if (accionValor.getCodigo().equals(
 					Constante.VALOR.ACCION.CODIGO.REACTIVACION)) {
 				estado = configuracionService.obtenerValorxCodigo(
 						Constante.LISTA.CODIGO.USUARIO_ESTADO,
 						Constante.VALOR.USUARIO_ESTADO.CODIGO.ACTIVO);
-				if (consultante.getEstado() != null) {
-					if (consultante
-							.getEstado()
-							.equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.BAJA_TEMPORAL))
-						consultante.setEstado(estado);
-				}
+				consultante.setEstado(estado);
 			}
 			if (consultante.getEstado() == null)
 				return;

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import pe.com.bbva.reniec.dominio.Consultante;
 import pe.com.bbva.reniec.dominio.Valor;
 import pe.com.bbva.reniec.negocio.ConsultantesService;
+import pe.com.bbva.reniec.utileria.AlertDialog;
 import pe.com.bbva.reniec.utileria.BeanValidar;
 import pe.com.bbva.reniec.utileria.Constante;
 import pe.com.bbva.reniec.utileria.Inject;
@@ -23,8 +24,10 @@ import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.IndexedContainer;
+import com.vaadin.event.ShortcutListener;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
+import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.ui.AbstractTextField.TextChangeEventMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -38,6 +41,7 @@ import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 
 @SuppressWarnings("serial")
 public class ConsultantesUI extends CustomComponent implements TextChangeListener,ClickListener{
@@ -214,6 +218,14 @@ public class ConsultantesUI extends CustomComponent implements TextChangeListene
 		
 		cargarConsultante(null);
 		
+		txtRegistro.addShortcutListener(new ShortcutListener("", KeyCode.ENTER, null) {
+
+			@Override
+			public void handleAction(Object sender, Object target) {
+					shortCutEnter(sender, target);
+			}
+		});
+		
 		txtRegistro.setNullRepresentation("");
 		txtCodigo.setNullRepresentation("");
 		txtNombres.setNullRepresentation("");
@@ -284,6 +296,31 @@ public class ConsultantesUI extends CustomComponent implements TextChangeListene
 		btnGuardar.addListener(this);
 		btnEstadoReniec.addListener(this);
 		
+	}
+	
+	private void shortCutEnter(Object sender, Object target){
+		if(txtRegistro.equals(target)){
+			Valor origen=(Valor)cmbAplicativo.getValue();
+			if(origen!=null && origen.getCodigo().equals(Constante.VALOR.ORIGEN.CODIGO.LDAP)){
+				Consultante consultante=consultantesService.obtenerConsultanteLDAP((String)txtRegistro.getValue(), origen);
+				if(consultante!=null){
+					id=consultante.getId();
+					txtRegistro.setValue(consultante.getIdentificador());
+					cmbTipoDOI.setValue(consultante.getTipoDOI());
+					txtCodigo.setValue(consultante.getCodigoReniec());
+					txtNumero.setValue(consultante.getDoi());
+					txtNombres.setValue(consultante.getNombres());
+					txtPaterno.setValue(consultante.getPaterno());
+					txtMaterno.setValue(consultante.getMaterno());
+					pdfFecha.setValue(consultante.getNacimiento());
+					cmbNacionalidad.setValue(consultante.getNacionalidad());
+					txtCentro.setValue(consultante.getCentro());
+					cmbAplicativo.setValue(consultante.getOrigen());
+					cmbEstado.setValue(consultante.getEstado());
+					cmbEstadoReniec.setValue(null);
+				}
+			}
+		}
 	}
 	
 	private void cargarConsultante(Consultante filtro){
@@ -406,7 +443,20 @@ public class ConsultantesUI extends CustomComponent implements TextChangeListene
 				new BeanValidar("nacionalidad", new Object[]{"NACIONALIDAD"}, cmbNacionalidad),
 				new BeanValidar("centro", new Object[]{"CENTRO DE COSTO"}, txtCentro),
 				new BeanValidar("estado", new Object[]{"ESTADO"}, cmbEstado)});
-			consultantesService.guardarConsultanteUI(consultante);
+			String resultado=consultantesService.guardarConsultanteUI(consultante);
+			if(resultado.equals(Constante.WS_RENIEC.SALIDA.ERROR.NINGUN_ERROR)){
+				AlertDialog window=new AlertDialog("","Los datos han sido guardados con éxito","Aceptar","500px");
+				
+				Window windowHarec=getApplication().getMainWindow().getWindow();
+				windowHarec.getWindow().addWindow(window);
+			}else{
+				String mensaje=Constante.WS_RENIEC.SALIDA.CODIGO_ERROR.get(resultado);
+				mensaje=StringUtils.isBlank(mensaje)?resultado:mensaje;
+				AlertDialog window=new AlertDialog("","Los datos han sido guardados, pero hubo una incidencia en RENIEC, por favor reintentar. Error "+resultado,"Aceptar","500px");
+				
+				Window windowHarec=getApplication().getMainWindow().getWindow();
+				windowHarec.getWindow().addWindow(window);
+			}
 			limpiar();
 			txtRegistroFiltro.setValue(StringUtils.EMPTY);
 			txtNombresFiltro.setValue(StringUtils.EMPTY);
@@ -540,7 +590,7 @@ public class ConsultantesUI extends CustomComponent implements TextChangeListene
 		{
 			Valor aplicativo = new Valor();
 			aplicativo.setNombre(txtAplicativoFiltro.getValue().toString());
-			consultante.setEstado(aplicativo);
+			consultante.setOrigen(aplicativo);
 		}
 		return consultante;
 	}
