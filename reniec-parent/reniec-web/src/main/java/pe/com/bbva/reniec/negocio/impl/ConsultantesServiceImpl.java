@@ -106,6 +106,18 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 	}
 
 	@Override
+	public void guardarConsultanteSinWS(Consultante consultante) {
+		Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
+				Constante.VALOR.RENIEC_SITUACION.CODIGO.ACTIVO);
+		consultante.setSituacion(reniecSituacion);
+		if(consultante.getId()==null){
+			consultanteDAO.crear(consultante);
+		}else{
+			consultanteDAO.actualizar(consultante);
+		}
+	}
+	
+	@Override
 	public String guardarConsultante(Consultante consultante) {
 		String resultado="";
 		String proceso="";
