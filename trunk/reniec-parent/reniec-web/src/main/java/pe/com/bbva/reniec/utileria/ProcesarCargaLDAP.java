@@ -129,14 +129,18 @@ public class ProcesarCargaLDAP {
 				detalle.setCentro(usuario.getCodofi());
 				consultante.setOrigen(origen);
 				detalle.setOrigen(origen.getCodigo());
-				if (consultante.getEstado() == null)
+				
+				String resultado="";
+				if (consultante.getEstado() == null){
 					consultante.setEstado(estadoUsuario);
-				else {
-					if (consultante
+					resultado=consultantesService.guardarConsultante(consultante);
+				}else {
+					if(consultante
 							.getEstado()
 							.getCodigo()
-							.equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.ACTIVO)
-							|| consultante
+							.equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.ACTIVO)){
+						consultantesService.guardarConsultanteSinWS(consultante);
+					}else if (consultante
 									.getEstado()
 									.getCodigo()
 									.equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.BAJA_TEMPORAL)
@@ -145,6 +149,7 @@ public class ProcesarCargaLDAP {
 									.getCodigo()
 									.equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.ERROR_RENIEC)) {
 						consultante.setEstado(estadoUsuario);
+						resultado=consultantesService.guardarConsultante(consultante);
 					} else {
 						continue loopConsultante;
 					}
@@ -152,7 +157,7 @@ public class ProcesarCargaLDAP {
 				detalle.setAccion(Constante.VALOR.ACCION.CODIGO.ACTIVACION);
 				
 				consultantesLDAP.add(consultante);
-				String resultado=consultantesService.guardarConsultante(consultante);
+				
 				detalle.setMensaje(resultado);
 				detalle.setConsultante(consultante);
 				
