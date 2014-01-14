@@ -279,6 +279,14 @@ public class ConsultantesUI extends CustomComponent implements TextChangeListene
 		cmbAplicativo.setInputPrompt("Aplicativo Origen");
 		cmbAplicativo.setContainerDataSource(bicOrigen);
 		cmbAplicativo.setItemCaptionPropertyId("nombre");
+		cmbAplicativo.setImmediate(true);
+		cmbAplicativo.addListener(new ValueChangeListener() {
+			
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				obtenerLdap();
+			}
+		});
 		
 		List<Valor> listEstadoUsuario=consultantesService.obtenerValoresxLista(Constante.LISTA.CODIGO.USUARIO_ESTADO);
 		BeanItemContainer<Valor> bicEstadoUsuario = new BeanItemContainer<Valor>(Valor.class,  listEstadoUsuario);
@@ -300,25 +308,31 @@ public class ConsultantesUI extends CustomComponent implements TextChangeListene
 	
 	private void shortCutEnter(Object sender, Object target){
 		if(txtRegistro.equals(target)){
-			Valor origen=(Valor)cmbAplicativo.getValue();
-			if(origen!=null && origen.getCodigo().equals(Constante.VALOR.ORIGEN.CODIGO.LDAP)){
-				Consultante consultante=consultantesService.obtenerConsultanteLDAP((String)txtRegistro.getValue(), origen);
-				if(consultante!=null){
-					id=consultante.getId();
-					txtRegistro.setValue(consultante.getIdentificador());
-					cmbTipoDOI.setValue(consultante.getTipoDOI());
-					txtCodigo.setValue(consultante.getCodigoReniec());
-					txtNumero.setValue(consultante.getDoi());
-					txtNombres.setValue(consultante.getNombres());
-					txtPaterno.setValue(consultante.getPaterno());
-					txtMaterno.setValue(consultante.getMaterno());
-					pdfFecha.setValue(consultante.getNacimiento());
-					cmbNacionalidad.setValue(consultante.getNacionalidad());
-					txtCentro.setValue(consultante.getCentro());
-					cmbAplicativo.setValue(consultante.getOrigen());
-					cmbEstado.setValue(consultante.getEstado());
-					cmbEstadoReniec.setValue(null);
-				}
+			obtenerLdap();
+		}
+	}
+	
+	private void obtenerLdap(){
+		Valor origen=(Valor)cmbAplicativo.getValue();
+		if(origen!=null && origen.getCodigo().equals(Constante.VALOR.ORIGEN.CODIGO.LDAP)){
+			String registro=(String)txtRegistro.getValue();
+			registro=registro.toUpperCase();
+			Consultante consultante=consultantesService.obtenerConsultanteLDAP(registro, origen);
+			if(consultante!=null){
+				id=consultante.getId();
+				txtRegistro.setValue(consultante.getIdentificador());
+				cmbTipoDOI.setValue(consultante.getTipoDOI());
+				txtCodigo.setValue(consultante.getCodigoReniec());
+				txtNumero.setValue(consultante.getDoi());
+				txtNombres.setValue(consultante.getNombres());
+				txtPaterno.setValue(consultante.getPaterno());
+				txtMaterno.setValue(consultante.getMaterno());
+				pdfFecha.setValue(consultante.getNacimiento());
+				cmbNacionalidad.setValue(consultante.getNacionalidad());
+				txtCentro.setValue(consultante.getCentro());
+				cmbAplicativo.setValue(consultante.getOrigen());
+				cmbEstado.setValue(consultante.getEstado());
+				cmbEstadoReniec.setValue(null);
 			}
 		}
 	}
