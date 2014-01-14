@@ -493,9 +493,6 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 			throw new ValidacionException(Constante.CODIGO_MENSAJE.WS_ERROR, null, e.getCause());
 		}
 		logger.info(usuarioResponse);
-		System.out.println("++++RENIEC CONSULTA AL SERVICIO WEB INICIO++++");
-		System.out.println(usuarioResponse);
-		System.out.println("++++RENIEC CONSULTA AL SERVICIO WEB FIN++++");
 		
 		return usuarioResponse;
 	}

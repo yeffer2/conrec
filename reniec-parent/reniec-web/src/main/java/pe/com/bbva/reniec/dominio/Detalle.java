@@ -41,6 +41,7 @@ public class Detalle extends IdBean implements Serializable {
 	public void setCodigoReniec(String codigoReniec) {this.codigoReniec = codigoReniec;}
 	
 	@Column
+	@DefinicionVista(nombreVista = "REGISTRO")
 	private String identificador;
 	public String getIdentificador() {return this.identificador;}
 	public void setIdentificador(String identificador) {this.identificador = identificador;}

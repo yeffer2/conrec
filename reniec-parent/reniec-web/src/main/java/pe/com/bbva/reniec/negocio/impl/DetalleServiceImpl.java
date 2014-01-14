@@ -55,6 +55,9 @@ public class DetalleServiceImpl extends ConfiguracionServiceImpl implements
 			if(detalle.getNumeroDoi() != null)
 				filtro.add(Restrictions.ilike("numeroDoi", detalle.getNumeroDoi(), MatchMode.ANYWHERE));
 			
+			if(detalle.getIdentificador() != null)
+				filtro.add(Restrictions.ilike("identificador", detalle.getIdentificador(), MatchMode.ANYWHERE));
+			
 			
 			if(!detalle.getNombreCompleto().trim().equals(""))
 				filtro.add(Restrictions.or(Restrictions.ilike("paterno", detalle.getNombreCompleto(), MatchMode.ANYWHERE), 

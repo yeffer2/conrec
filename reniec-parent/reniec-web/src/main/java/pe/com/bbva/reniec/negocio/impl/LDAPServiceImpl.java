@@ -28,6 +28,7 @@ public class LDAPServiceImpl extends ConfiguracionServiceImpl implements LDAPSer
 		filtro.add(Restrictions.eq("tipdoc", Constante.VALOR.DOI_TIPO.CODIGO.DNI));
 		filtro.add(Restrictions.isNotNull("numdoc"));
 		filtro.add(Restrictions.ne("numdoc", "0"));
+		filtro.add(Restrictions.ne("numdoc", "00000000"));
 		return ldapdao.buscar(filtro);
 	}
 

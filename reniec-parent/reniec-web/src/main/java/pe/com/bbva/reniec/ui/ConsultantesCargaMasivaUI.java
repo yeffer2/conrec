@@ -2,10 +2,10 @@ package pe.com.bbva.reniec.ui;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,8 +38,6 @@ import com.vaadin.terminal.StreamResource;
 import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
@@ -50,13 +48,15 @@ import com.vaadin.ui.ProgressIndicator;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Upload;
+import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Upload.FinishedEvent;
 import com.vaadin.ui.Upload.FinishedListener;
 import com.vaadin.ui.Upload.StartedEvent;
 import com.vaadin.ui.Upload.StartedListener;
 import com.vaadin.ui.Upload.SucceededEvent;
 import com.vaadin.ui.Upload.SucceededListener;
-import com.vaadin.ui.VerticalLayout;
 
 public class ConsultantesCargaMasivaUI extends CustomComponent implements
 		ClickListener {
@@ -341,6 +341,7 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 		orden.add(new Object[] { "accion", 130, String.class });
 		orden.add(new Object[] { "estado", 100, Valor.class, bicEstadoReniec });
 		orden.add(new Object[] { "mensaje", 130, String.class });
+		orden.add(new Object[] { "identificador", 65, String.class });
 		TableConstructor tablaConstruct = new TableConstructor();
 		tablaConstruct.construirTablaSimple(tableDetalle, Detalle.class,
 				detalles, orden, pnlFiltrosDetalles, detalleService,
@@ -519,15 +520,15 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 		mainLayout.setWidth("1182px");
 		mainLayout.setHeight("290px");
 		mainLayout.setMargin(false);
-
+		
 		// top-level component properties
 		setWidth("1182px");
 		setHeight("290px");
-
+		
 		// pnlCargaArch
 		pnlCargaArch = buildPnlCargaArch();
 		mainLayout.addComponent(pnlCargaArch, "top:20.0px;left:821.0px;");
-
+		
 		// btnExportar
 		btnExportar = new Button();
 		btnExportar.setCaption("Exportar");
@@ -536,15 +537,15 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 		btnExportar.setWidth("119px");
 		btnExportar.setHeight("-1px");
 		mainLayout.addComponent(btnExportar, "top:294.0px;left:681.0px;");
-
+		
 		// layoutTablaCargas
 		layoutTablaCargas = buildLayoutTablaCargas();
 		mainLayout.addComponent(layoutTablaCargas, "top:10.0px;left:0.0px;");
-
+		
 		// layoutTablaDetalles
 		layoutTablaDetalles = buildLayoutTablaDetalles();
 		mainLayout.addComponent(layoutTablaDetalles, "top:322.0px;left:0.0px;");
-
+		
 		return mainLayout;
 	}
 
@@ -557,11 +558,11 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 		pnlCargaArch.setImmediate(false);
 		pnlCargaArch.setWidth("320px");
 		pnlCargaArch.setHeight("260px");
-
+		
 		// pnlCargaContenido
 		pnlCargaContenido = buildPnlCargaContenido();
 		pnlCargaArch.setContent(pnlCargaContenido);
-
+		
 		return pnlCargaArch;
 	}
 
@@ -573,7 +574,7 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 		pnlCargaContenido.setWidth("100.0%");
 		pnlCargaContenido.setHeight("239px");
 		pnlCargaContenido.setMargin(false);
-
+		
 		// lblId
 		lblId = new Label();
 		lblId.setImmediate(false);
@@ -581,14 +582,14 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 		lblId.setHeight("20px");
 		lblId.setValue("ID:");
 		pnlCargaContenido.addComponent(lblId, "top:21.0px;left:7.0px;");
-
+		
 		// txtId
 		txtId = new TextField();
 		txtId.setImmediate(false);
 		txtId.setWidth("143px");
 		txtId.setHeight("-1px");
 		pnlCargaContenido.addComponent(txtId, "top:17.0px;left:140.0px;");
-
+		
 		// label_1
 		label_1 = new Label();
 		label_1.setImmediate(false);
@@ -596,7 +597,7 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 		label_1.setHeight("-1px");
 		label_1.setValue("APLICACIÓN ORIGEN:");
 		pnlCargaContenido.addComponent(label_1, "top:48.0px;left:7.0px;");
-
+		
 		// cmbAplicacionOrigen
 		cmbAplicacionOrigen = new ComboBox();
 		cmbAplicacionOrigen.setImmediate(false);
@@ -604,7 +605,7 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 		cmbAplicacionOrigen.setHeight("-1px");
 		pnlCargaContenido.addComponent(cmbAplicacionOrigen,
 				"top:46.0px;left:140.0px;");
-
+		
 		// label_2
 		label_2 = new Label();
 		label_2.setImmediate(false);
@@ -612,14 +613,14 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 		label_2.setHeight("-1px");
 		label_2.setValue("TIPO:");
 		pnlCargaContenido.addComponent(label_2, "top:75.0px;left:7.0px;");
-
+		
 		// cmbTipo
 		cmbTipo = new ComboBox();
 		cmbTipo.setImmediate(false);
 		cmbTipo.setWidth("-1px");
 		cmbTipo.setHeight("-1px");
 		pnlCargaContenido.addComponent(cmbTipo, "top:73.0px;left:140.0px;");
-
+		
 		// label_3
 		label_3 = new Label();
 		label_3.setImmediate(false);
@@ -627,14 +628,14 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 		label_3.setHeight("-1px");
 		label_3.setValue("FECHA:");
 		pnlCargaContenido.addComponent(label_3, "top:106.0px;left:7.0px;");
-
+		
 		// datFecha
 		datFecha = new PopupDateField();
 		datFecha.setImmediate(false);
 		datFecha.setWidth("143px");
 		datFecha.setHeight("-1px");
 		pnlCargaContenido.addComponent(datFecha, "top:101.0px;left:140.0px;");
-
+		
 		// label_4
 		label_4 = new Label();
 		label_4.setImmediate(false);
@@ -642,7 +643,7 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 		label_4.setHeight("-1px");
 		label_4.setValue("ARCHIVO DE CARGA:");
 		pnlCargaContenido.addComponent(label_4, "top:133.0px;left:7.0px;");
-
+		
 		// btnProcesar
 		btnProcesar = new Button();
 		btnProcesar.setCaption("PROCESAR");
@@ -650,12 +651,12 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 		btnProcesar.setWidth("-1px");
 		btnProcesar.setHeight("-1px");
 		pnlCargaContenido.addComponent(btnProcesar, "top:181.0px;left:12.0px;");
-
+		
 		// pnlUploadFile
 		pnlUploadFile = buildPnlUploadFile();
 		pnlCargaContenido.addComponent(pnlUploadFile,
 				"top:127.0px;left:140.0px;");
-
+		
 		return pnlCargaContenido;
 	}
 
@@ -667,14 +668,14 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 		pnlUploadFile.setWidth("143px");
 		pnlUploadFile.setHeight("-1px");
 		pnlUploadFile.setMargin(false);
-
+		
 		// proIndicador
 		proIndicador = new ProgressIndicator();
 		proIndicador.setImmediate(false);
 		proIndicador.setWidth("-1px");
 		proIndicador.setHeight("-1px");
 		pnlUploadFile.addComponent(proIndicador);
-
+		
 		return pnlUploadFile;
 	}
 
@@ -687,7 +688,7 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 		layoutTablaCargas.setWidth("800px");
 		layoutTablaCargas.setHeight("275px");
 		layoutTablaCargas.setMargin(false);
-
+		
 		// tblListaCargas
 		tblListaCargas = new Table();
 		tblListaCargas.setImmediate(false);
@@ -695,7 +696,7 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 		tblListaCargas.setHeight("230px");
 		layoutTablaCargas.addComponent(tblListaCargas,
 				"top:27.0px;right:0.0px;left:0.0px;");
-
+		
 		// pnlFiltro
 		pnlFiltro = new HorizontalLayout();
 		pnlFiltro.setImmediate(false);
@@ -703,7 +704,7 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 		pnlFiltro.setHeight("-1px");
 		pnlFiltro.setMargin(false);
 		layoutTablaCargas.addComponent(pnlFiltro, "top:0.0px;left:0.0px;");
-
+		
 		return layoutTablaCargas;
 	}
 
@@ -713,10 +714,10 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 		layoutTablaDetalles = new AbsoluteLayout();
 		layoutTablaDetalles.setStyleName("div-overflowx");
 		layoutTablaDetalles.setImmediate(false);
-		layoutTablaDetalles.setWidth("800px");
+		layoutTablaDetalles.setWidth("900px");
 		layoutTablaDetalles.setHeight("295px");
 		layoutTablaDetalles.setMargin(false);
-
+		
 		// pnlFiltrosDetalles
 		pnlFiltrosDetalles = new HorizontalLayout();
 		pnlFiltrosDetalles.setImmediate(false);
@@ -725,7 +726,7 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 		pnlFiltrosDetalles.setMargin(false);
 		layoutTablaDetalles.addComponent(pnlFiltrosDetalles,
 				"top:5.0px;left:0.0px;");
-
+		
 		// tableDetalle
 		tableDetalle = new Table();
 		tableDetalle.setImmediate(false);
@@ -733,7 +734,7 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 		tableDetalle.setHeight("245px");
 		layoutTablaDetalles
 				.addComponent(tableDetalle, "top:30.0px;left:0.0px;");
-
+		
 		return layoutTablaDetalles;
 	}
 
