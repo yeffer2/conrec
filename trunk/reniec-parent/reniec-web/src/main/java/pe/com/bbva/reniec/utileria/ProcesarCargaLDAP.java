@@ -139,7 +139,7 @@ public class ProcesarCargaLDAP {
 							.getEstado()
 							.getCodigo()
 							.equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.ACTIVO)){
-						consultantesService.guardarConsultanteSinWS(consultante);
+						continue loopConsultante;
 					}else if (consultante
 									.getEstado()
 									.getCodigo()
