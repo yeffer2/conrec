@@ -336,12 +336,12 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 		ArrayList<Object[]> orden = new ArrayList<Object[]>();
 		orden.add(new Object[] { "id", 20, Long.class });
 		orden.add(new Object[] { "nroFila", 80, Long.class });
+		orden.add(new Object[] { "identificador", 65, String.class });
 		orden.add(new Object[] { "numeroDoi", 80, String.class });
 		orden.add(new Object[] { "nombreCompleto", 148, String.class });
 		orden.add(new Object[] { "accion", 130, String.class });
 		orden.add(new Object[] { "estado", 100, Valor.class, bicEstadoReniec });
 		orden.add(new Object[] { "mensaje", 130, String.class });
-		orden.add(new Object[] { "identificador", 65, String.class });
 		TableConstructor tablaConstruct = new TableConstructor();
 		tablaConstruct.construirTablaSimple(tableDetalle, Detalle.class,
 				detalles, orden, pnlFiltrosDetalles, detalleService,
@@ -428,23 +428,34 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 						String nombreArchivo = ((Valor) cmbAplicacionOrigen
 								.getValue()).getCodigo()
 								+ "."
-								+ formatoDate.format(datFecha.getValue())
-								+ ".txt";
+								+ formatoDate.format(datFecha.getValue());
 						Valor rutaArchivo = configuracionService
 								.obtenerValorxCodigo(
 										Constante.LISTA.CODIGO.RUTAS_ARCHIVOS,
 										((Valor) cmbAplicacionOrigen.getValue())
 												.getCodigo());
-
-						String nombreRuta = rutaArchivo.getDescripcion()
+						if(rutaArchivo==null){
+							throw new ValidacionException(
+									"Error ruta<br><br>",
+									"validar.existe.ruta",
+									new Object[] { ((Valor) cmbAplicacionOrigen.getValue())
+											.getCodigo() });
+						}
+						
+						String nombreRuta = rutaArchivo.getDescripcion()+File.separatorChar
 								+ nombreArchivo;
 
-						File archivo = new File(nombreRuta);
-						if (!archivo.exists()) {
+						File archivoMay = new File(nombreRuta+ ".TXT");
+						File archivoMin = new File(nombreRuta+ ".txt");
+						if (archivoMay.exists()) {
+							nombreRuta=nombreRuta+".TXT";
+						}else if(archivoMin.exists()){
+							nombreRuta=nombreRuta+".txt";
+						}else{
 							throw new ValidacionException(
 									"Error archivo<br><br>",
 									"validar.existe.archivo",
-									new Object[] { nombreArchivo });
+									new Object[] { nombreArchivo+ ".TXT" });
 						}
 
 						try {
@@ -464,7 +475,12 @@ public class ConsultantesCargaMasivaUI extends CustomComponent implements
 									(Date) datFecha.getValue(), nombreArchivo,
 									estado, "");
 							reconstruirTablaCargas();
-							archivo.delete();
+							if (archivoMay.exists()) {
+								archivoMay.delete();
+							}
+							if(archivoMin.exists()){
+								archivoMin.delete();
+							}
 							cargaReglasPanelCarga();
 						} catch (FileNotFoundException e) {
 							throw new ValidacionException(

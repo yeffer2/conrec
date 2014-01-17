@@ -29,7 +29,6 @@ import pe.com.bbva.reniec.exception.ValidacionException;
 import pe.com.bbva.reniec.negocio.ConsultantesService;
 import pe.com.bbva.reniec.negocio.LDAPService;
 import pe.com.bbva.reniec.persistencia.ConsultanteDAO;
-import pe.com.bbva.reniec.persistencia.LDAP2DAO;
 import pe.com.bbva.reniec.persistencia.UsuarioDAO;
 import pe.com.bbva.reniec.utileria.Busqueda;
 import pe.com.bbva.reniec.utileria.Constante;
@@ -103,18 +102,6 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 		}
 		filtro.addOrder(Order.asc("id"));
 		return consultanteDAO.buscar(filtro);
-	}
-
-	@Override
-	public void guardarConsultanteSinWS(Consultante consultante) {
-		Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
-				Constante.VALOR.RENIEC_SITUACION.CODIGO.ACTIVO);
-		consultante.setSituacion(reniecSituacion);
-		if(consultante.getId()==null){
-			consultanteDAO.crear(consultante);
-		}else{
-			consultanteDAO.actualizar(consultante);
-		}
 	}
 	
 	@Override

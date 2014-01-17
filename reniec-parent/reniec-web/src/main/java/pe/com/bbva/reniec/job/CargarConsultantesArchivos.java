@@ -63,40 +63,61 @@ public class CargarConsultantesArchivos implements Job {
 		List<Valor> obtenerOrigenes = getConfiguracionService()
 				.obtenerValoresxLista(Constante.LISTA.CODIGO.ORIGEN);
 		origenes: for (Valor origen : obtenerOrigenes) {
-			Date fechaProceso = new Date();
-			SimpleDateFormat formatoDate = new SimpleDateFormat(
-					formatoDateArchivo);
-			String nombreArchivo = origen.getCodigo() + "."
-					+ formatoDate.format(fechaProceso) + ".txt";
-			Valor rutaArchivo = configuracionService.obtenerValorxCodigo(
-					Constante.LISTA.CODIGO.RUTAS_ARCHIVOS, origen.getCodigo());
+			if(!origen.getCodigo().equals(Constante.VALOR.ORIGEN.CODIGO.LDAP)){
+				Date fechaProceso = new Date();
+				SimpleDateFormat formatoDate = new SimpleDateFormat(
+						formatoDateArchivo);
+				String nombreArchivo = origen.getCodigo() + "."
+						+ formatoDate.format(fechaProceso);
+				Valor rutaArchivo = configuracionService.obtenerValorxCodigo(
+						Constante.LISTA.CODIGO.RUTAS_ARCHIVOS, origen.getCodigo());
 
-			String nombreRuta = rutaArchivo.getDescripcion() + nombreArchivo;
+				if(rutaArchivo==null){
+					log.error("+++ No existe ruta para " + origen.getCodigo());
+					continue origenes;
+				}
+				String nombreRuta = rutaArchivo.getDescripcion()+ File.separatorChar + nombreArchivo;
+				
+				File archivoMay = new File(nombreRuta+ ".TXT");
+				File archivoMin = new File(nombreRuta+ ".txt");
+				if (archivoMay.exists()) {
+					nombreRuta=nombreRuta+".TXT";
+				}else if(archivoMin.exists()){
+					nombreRuta=nombreRuta+".txt";
+				}else{
+					log.error("+++ No existe el archivo " + nombreArchivo+ ".TXT");
+					continue origenes;
+				}
 
-			File archivo = new File(nombreRuta);
-			if (!archivo.exists()) {
-				log.error("+++ No existe el archivo " + nombreArchivo);
-				continue origenes;
-			}
+				try {
+					InputStream inputStream = new FileInputStream(nombreRuta);
 
-			try {
-				InputStream inputStream = new FileInputStream(nombreRuta);
+					Valor estado = configuracionService.obtenerValorxCodigo(
+							Constante.LISTA.CODIGO.REGISTRO_ESTADO,
+							Constante.VALOR.REGISTRO_ESTADO.CODIGO.ACTIVO);
+					ProcesarArchivo procesarArchivo = new ProcesarArchivo(
+							inputStream, getApplicationContext());
 
-				Valor estado = configuracionService.obtenerValorxCodigo(
-						Constante.LISTA.CODIGO.REGISTRO_ESTADO,
-						Constante.VALOR.REGISTRO_ESTADO.CODIGO.ACTIVO);
-				ProcesarArchivo procesarArchivo = new ProcesarArchivo(
-						inputStream, getApplicationContext());
+					Valor tipoCarga = configuracionService.obtenerValorxCodigo(
+							Constante.LISTA.CODIGO.CARGA_TIPO,
+							Constante.VALOR.CARGA_TIPO.CODIGO.AUTOMATICA);
 
-				Valor tipoCarga = configuracionService.obtenerValorxCodigo(
-						Constante.LISTA.CODIGO.CARGA_TIPO,
-						Constante.VALOR.CARGA_TIPO.CODIGO.AUTOMATICA);
-
-				procesarArchivo.cargarArchivo(tipoCarga, origen, fechaProceso,
-						nombreArchivo, estado, "");
-				archivo.delete();
-			} catch (FileNotFoundException e) {
-				log.error("+++ Error en el archivo " + nombreArchivo);
+					try {
+						procesarArchivo.cargarArchivo(tipoCarga, origen, fechaProceso,
+							nombreArchivo, estado, "");
+					}catch (Exception e){
+						log.error("+++ El tiempo de espera termino o la ruta del WebService no existe");
+						continue origenes;
+					}
+					if (archivoMay.exists()) {
+						archivoMay.delete();
+					}
+					if(archivoMin.exists()){
+						archivoMin.delete();
+					}
+				} catch (FileNotFoundException e) {
+					log.error("+++ Error en el archivo " + nombreArchivo);
+				}
 			}
 		}
 	}

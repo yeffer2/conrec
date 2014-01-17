@@ -11,7 +11,6 @@ import pe.com.bbva.reniec.dominio.Valor;
 public interface ConsultantesService extends ConfiguracionService,Serializable{
 
 	List<Consultante> obtenerConsultante(Consultante consultante);
-	void guardarConsultanteSinWS(Consultante consultante);
 	String guardarConsultante(Consultante consultante);
 	String guardarConsultanteUI(Consultante consultante);
 	Consultante obtenerConsultantePorIdentificador(String identificador);
