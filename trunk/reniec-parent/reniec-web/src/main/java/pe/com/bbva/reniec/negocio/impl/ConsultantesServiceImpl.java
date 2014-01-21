@@ -9,6 +9,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Hibernate;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -65,9 +66,7 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 				filtro.add(Restrictions.ilike("identificador", consultante.getIdentificador(), MatchMode.ANYWHERE));
 			}
 			if (consultante.getNombres() != null) {
-				filtro.add(Restrictions.or(Restrictions.ilike("nombres", consultante.getNombres(), MatchMode.ANYWHERE), 
-						Restrictions.or(Restrictions.ilike("materno", consultante.getNombres(), MatchMode.ANYWHERE),
-								Restrictions.ilike("paterno", consultante.getNombres(), MatchMode.ANYWHERE))));
+				filtro.add(Restrictions.sqlRestriction("lower(paterno||' '||materno||' '||nombres) like lower(?)", "%"+consultante.getNombres().trim()+"%",Hibernate.STRING));
 			}
 			if (consultante.getCodigoReniec() != null) {
 				filtro.add(Restrictions.ilike("codigoReniec", consultante.getCodigoReniec(), MatchMode.ANYWHERE));
