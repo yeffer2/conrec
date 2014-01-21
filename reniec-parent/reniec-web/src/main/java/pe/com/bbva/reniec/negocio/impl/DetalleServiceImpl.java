@@ -60,9 +60,8 @@ public class DetalleServiceImpl extends ConfiguracionServiceImpl implements
 			
 			
 			if(!detalle.getNombreCompleto().trim().equals(""))
-				filtro.add(Restrictions.or(Restrictions.ilike("paterno", detalle.getNombreCompleto(), MatchMode.ANYWHERE), 
-					Restrictions.or(Restrictions.ilike("materno", detalle.getNombreCompleto(), MatchMode.ANYWHERE),
-							Restrictions.ilike("nombres", detalle.getNombreCompleto(), MatchMode.ANYWHERE))));
+				filtro.add(Restrictions.sqlRestriction("lower(paterno||' '||materno||' '||nombres) like lower(?)", "%"+detalle.getNombreCompleto().trim()+"%",Hibernate.STRING));
+
 			
 			if(detalle.getAccion() != null)
 				filtro.add(Restrictions.ilike("accion", detalle.getAccion(), MatchMode.ANYWHERE));
