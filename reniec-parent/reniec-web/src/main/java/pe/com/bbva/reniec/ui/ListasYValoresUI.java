@@ -774,9 +774,15 @@ public class ListasYValoresUI extends CustomComponent implements TextChangeListe
 		if(StringUtils.isNotBlank((String)lblIdValor.getValue())){
 			valor.setId(Long.parseLong(lblIdValor.getValue().toString()));
 		}
-		valor.setCodigo(txtCodigoValor.getValue().toString().trim());
-		valor.setNombre(txtNombreValor.getValue().toString().trim());
-		valor.setDescripcion(txtDescripcionValor.getValue().toString().trim());
+		if(StringUtils.isNotBlank((String)txtCodigoValor.getValue())){
+			valor.setCodigo(txtCodigoValor.getValue().toString().trim());
+		}
+		if(StringUtils.isNotBlank((String)txtNombreValor.getValue())){
+			valor.setNombre(txtNombreValor.getValue().toString().trim());
+		}
+		if(StringUtils.isNotBlank((String)txtDescripcionValor.getValue())){
+			valor.setDescripcion(txtDescripcionValor.getValue().toString().trim());
+		}
 		if(txtOrdenValor.getValue()!=null && !txtOrdenValor.getValue().equals("")){
 		valor.setOrden(Integer.parseInt(txtOrdenValor.getValue().toString()));
 		}

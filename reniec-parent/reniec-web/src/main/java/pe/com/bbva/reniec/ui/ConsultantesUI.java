@@ -458,15 +458,22 @@ public class ConsultantesUI extends CustomComponent implements TextChangeListene
 				new BeanValidar("centro", new Object[]{"CENTRO DE COSTO"}, txtCentro),
 				new BeanValidar("estado", new Object[]{"ESTADO"}, cmbEstado)});
 			String resultado=consultantesService.guardarConsultanteUI(consultante);
-			if(resultado.equals(Constante.WS_RENIEC.SALIDA.ERROR.NINGUN_ERROR)){
-				AlertDialog window=new AlertDialog("","Los datos han sido guardados con éxito","Aceptar","500px");
-				
-				Window windowHarec=getApplication().getMainWindow().getWindow();
-				windowHarec.getWindow().addWindow(window);
+			if(!consultante.getNacionalidad().getCodigo().equals(Constante.VALOR.NACIONALIDAD_TIPO.CODIGO.EXTRANJERO)){
+				if(resultado.equals(Constante.WS_RENIEC.SALIDA.ERROR.NINGUN_ERROR)){
+					AlertDialog window=new AlertDialog("","Los datos han sido guardados con éxito","Aceptar","500px");
+					
+					Window windowHarec=getApplication().getMainWindow().getWindow();
+					windowHarec.getWindow().addWindow(window);
+				}else{
+					String mensaje=Constante.WS_RENIEC.SALIDA.CODIGO_ERROR.get(resultado);
+					mensaje=StringUtils.isBlank(mensaje)?resultado:mensaje;
+					AlertDialog window=new AlertDialog("","Los datos han sido guardados, pero hubo una incidencia en RENIEC, por favor reintentar. Error "+resultado,"Aceptar","500px");
+					
+					Window windowHarec=getApplication().getMainWindow().getWindow();
+					windowHarec.getWindow().addWindow(window);
+				}
 			}else{
-				String mensaje=Constante.WS_RENIEC.SALIDA.CODIGO_ERROR.get(resultado);
-				mensaje=StringUtils.isBlank(mensaje)?resultado:mensaje;
-				AlertDialog window=new AlertDialog("","Los datos han sido guardados, pero hubo una incidencia en RENIEC, por favor reintentar. Error "+resultado,"Aceptar","500px");
+				AlertDialog window=new AlertDialog("","Los datos han sido guardados con éxito","Aceptar","500px");
 				
 				Window windowHarec=getApplication().getMainWindow().getWindow();
 				windowHarec.getWindow().addWindow(window);

@@ -139,7 +139,7 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 				usuarioResponse=obtenerRENIECWS(consultante, proceso);
 				resultado=mensajeRENIECWS(usuarioResponse);
 				if(usuarioResponse.getRefResponseHeader().getCodigoRespuesta().equals(Constante.WS_RENIEC.SALIDA.ERROR.NINGUN_ERROR)){
-					if(validarRENIECWS(usuarioResponse)){
+					if(validarRENIECWS(usuarioResponse,proceso)){
 						if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.ACTIVAR_USUARIO)){
 							Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
 									Constante.VALOR.RENIEC_SITUACION.CODIGO.ACTIVO);
@@ -196,7 +196,10 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 		return resultado;
 	}
 	
-	private boolean validarRENIECWS(UsuarioResponse usuarioResponse){
+	private boolean validarRENIECWS(UsuarioResponse usuarioResponse, String proceso){
+		if(!proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.ACTIVAR_USUARIO)){
+			return true;
+		}
 		if(usuarioResponse.getRefUsuarioWSResponse().getOkDni().equals(Constante.WS_RENIEC.SALIDA.OKDNI.OK) &&
 				usuarioResponse.getRefUsuarioWSResponse().getOkNombres().equals(Constante.WS_RENIEC.SALIDA.OKNOMBRES.OK) &&
 				usuarioResponse.getRefUsuarioWSResponse().getOkApellidoPaterno().equals(Constante.WS_RENIEC.SALIDA.OKAPPRIMER.OK) &&
@@ -290,7 +293,7 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 				usuarioResponse=obtenerRENIECWS(consultante, proceso);
 				resultado=codigoRENIECWS(usuarioResponse);
 				if(usuarioResponse.getRefResponseHeader().getCodigoRespuesta().equals(Constante.WS_RENIEC.SALIDA.ERROR.NINGUN_ERROR)){
-					if(validarRENIECWS(usuarioResponse)){
+					if(validarRENIECWS(usuarioResponse,proceso)){
 						if(proceso.equals(Constante.WS_RENIEC.ENTRADA.PROCESO.ACTIVAR_USUARIO)){
 							Valor reniecSituacion=obtenerValorxCodigo(Constante.LISTA.CODIGO.RENIEC_SITUACION, 
 									Constante.VALOR.RENIEC_SITUACION.CODIGO.ACTIVO);
