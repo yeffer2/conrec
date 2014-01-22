@@ -139,6 +139,7 @@ public class ProcesarCargaLDAP {
 							.getEstado()
 							.getCodigo()
 							.equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.ACTIVO)){
+						consultantesLDAP.add(consultante);
 						continue loopConsultante;
 					}else if (consultante
 									.getEstado()
@@ -150,13 +151,12 @@ public class ProcesarCargaLDAP {
 									.equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.ERROR_RENIEC)) {
 						consultante.setEstado(estadoUsuario);
 						resultado=consultantesService.guardarConsultante(consultante);
+						consultantesLDAP.add(consultante);
 					} else {
 						continue loopConsultante;
 					}
 				}
 				detalle.setAccion(Constante.VALOR.ACCION.CODIGO.ACTIVACION);
-				
-				consultantesLDAP.add(consultante);
 				
 				detalle.setMensaje(resultado);
 				detalle.setConsultante(consultante);
