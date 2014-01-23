@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
@@ -157,8 +158,9 @@ public class ProcesarCargaLDAP {
 					}
 				}
 				detalle.setAccion(Constante.VALOR.ACCION.CODIGO.ACTIVACION);
-				
-				detalle.setMensaje(resultado);
+				String msj=Constante.WS_RENIEC.SALIDA.CODIGO_ERROR.get(resultado);
+				msj=StringUtils.isBlank(msj)?resultado:msj;
+				detalle.setMensaje(msj);
 				detalle.setConsultante(consultante);
 				
 				detalleService.guardaDetalle(detalle);
@@ -169,14 +171,14 @@ public class ProcesarCargaLDAP {
 			
 			
 		}
-		bajaTemporalConsultantes(origen);
+		bajaTemporalConsultantes(origen, nroFilaInterno);
 		carga.setFin(new Date());
 		cargaMasivaService.guardarCarga(carga);
 		
 
 	}
 
-	private void bajaTemporalConsultantes(Valor origen) {
+	private void bajaTemporalConsultantes(Valor origen, Long nroFilaInterno) {
 		Consultante consultanteReniec = new Consultante();
 		consultanteReniec.setOrigen(origen);
 		consultantesReniec = consultantesService.obtenerConsultante(consultanteReniec);
@@ -195,8 +197,32 @@ public class ProcesarCargaLDAP {
 				Constante.VALOR.USUARIO_ESTADO.CODIGO.BAJA_TEMPORAL);
 		for(Consultante consultanteBT : consultanteBajaTemporal){
 			if(!consultanteBT.getEstado().getCodigo().equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.BAJA_DEFINITIVA)){
+				Detalle detalle = new Detalle();
+				detalle.setCarga(carga);
+				detalle.setNroFila(nroFilaInterno++);
+				detalle.setIdentificador(consultanteBT.getIdentificador());
+				detalle.setCodigoReniec(consultanteBT.getCodigoReniec());
+				detalle.setTipoDoi(consultanteBT.getTipoDOI().getCodigo());
+				detalle.setNumeroDoi(consultanteBT.getDoi());
+				detalle.setNombres(consultanteBT.getNombres());
+				detalle.setPaterno(consultanteBT.getPaterno());
+				detalle.setMaterno(consultanteBT.getMaterno());
+				SimpleDateFormat formatoDelTexto = new SimpleDateFormat(
+						formatoFecha);
+				detalle.setNacimiento(formatoDelTexto.format(consultanteBT.getNacimiento()));
+				detalle.setNacionalidad(consultanteBT.getNacionalidad().getCodigo());
+				detalle.setCentro(consultanteBT.getCentro());
+				detalle.setOrigen(origen.getCodigo());
+				detalle.setAccion(Constante.VALOR.ACCION.CODIGO.BAJA_TEMPORAL);
 				consultanteBT.setEstado(estadoBT);
-				consultantesService.guardarConsultante(consultanteBT);
+				
+				String resultado=consultantesService.guardarConsultante(consultanteBT);
+				String msj=Constante.WS_RENIEC.SALIDA.CODIGO_ERROR.get(resultado);
+				msj=StringUtils.isBlank(msj)?resultado:msj;
+				detalle.setMensaje(msj);
+				detalle.setConsultante(consultanteBT);
+				
+				detalleService.guardaDetalle(detalle);
 			}
 			
 			

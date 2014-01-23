@@ -181,6 +181,17 @@ public class ConsultantesUI extends CustomComponent implements TextChangeListene
 		txtEstadoFiltro.setTextChangeEventMode(TextChangeEventMode.EAGER);
 		txtEstadoFiltro.addListener((TextChangeListener)this);
 		pdfFechaFiltro.setInputPrompt("Fecha");
+		pdfFechaFiltro.setImmediate(true);
+		pdfFechaFiltro.setParseErrorMessage("Error de formato");
+		pdfFechaFiltro.addListener(new ValueChangeListener() {
+			
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				Consultante consultante=obtenerFiltros();
+				consultante.setCreacion((Date)pdfFechaFiltro.getValue());
+				cargarConsultante(consultante);
+			}
+		});
 		txtAplicativoFiltro.setTextChangeEventMode(TextChangeEventMode.EAGER);
 		txtAplicativoFiltro.addListener((TextChangeListener)this);
 		
@@ -607,6 +618,10 @@ public class ConsultantesUI extends CustomComponent implements TextChangeListene
 			estado.setNombre(txtEstadoFiltro.getValue().toString());
 			consultante.setEstado(estado);
 		}
+		if(pdfFechaFiltro.getValue()!=null)
+		{
+			consultante.setCreacion((Date)pdfFechaFiltro.getValue());
+		}
 		if(StringUtils.isNotBlank(txtAplicativoFiltro.getValue().toString()))
 		{
 			Valor aplicativo = new Valor();
@@ -770,6 +785,7 @@ public class ConsultantesUI extends CustomComponent implements TextChangeListene
 		pdfFechaFiltro.setWidth("78px");
 		pdfFechaFiltro.setHeight("-1px");
 		pdfFechaFiltro.setInvalidAllowed(false);
+		pdfFechaFiltro.setResolution(4);
 		pblTablaFiltro.addComponent(pdfFechaFiltro);
 		
 		// txtAplicativoFiltro

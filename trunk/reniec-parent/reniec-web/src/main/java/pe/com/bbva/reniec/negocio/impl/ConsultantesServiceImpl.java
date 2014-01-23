@@ -3,6 +3,7 @@ package pe.com.bbva.reniec.negocio.impl;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.type.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -70,6 +72,17 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 			}
 			if (consultante.getCodigoReniec() != null) {
 				filtro.add(Restrictions.ilike("codigoReniec", consultante.getCodigoReniec(), MatchMode.ANYWHERE));
+			}
+			if (consultante.getCreacion() != null) {
+				Calendar calendar=Calendar.getInstance();
+				calendar.setTime(consultante.getCreacion());
+				calendar.set(Calendar.HOUR, 0);
+				calendar.set(Calendar.MINUTE, 0);
+				Date desde=calendar.getTime();
+				calendar.set(Calendar.HOUR, 24);
+				calendar.set(Calendar.MINUTE, 24);
+				Date hasta=calendar.getTime();
+				filtro.add(Restrictions.sqlRestriction("coalesce(this_.edicion,this_.creacion) between ? and ?", new Object[]{desde,hasta},new Type[]{Hibernate.DATE,Hibernate.DATE}));
 			}
 			if (consultante.getNacionalidad() != null && consultante.getNacionalidad().getNombre() != null) {
 				filtro.createAlias("nacionalidad", "n");
@@ -211,8 +224,7 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 	}
 
 	private String mensajeRENIECWS(UsuarioResponse usuarioResponse){
-		String resultado=usuarioResponse.getRefResponseHeader().getCodigoRespuesta()+"-"+
-				usuarioResponse.getRefResponseHeader().getMensajeRespuesta();
+		String resultado=usuarioResponse.getRefResponseHeader().getCodigoRespuesta();
 		if(usuarioResponse.getRefResponseHeader().getCodigoRespuesta().equals(Constante.WS_RENIEC.SALIDA.ERROR.NINGUN_ERROR)){
 			if(usuarioResponse.getRefUsuarioWSResponse().getOkDni().equals(Constante.WS_RENIEC.SALIDA.OKDNI.ERROR)){
 				resultado="DNI ERROR";

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
@@ -229,7 +230,10 @@ public class ProcesarArchivo {
 			consultante.setCentro(centro);
 			detalle.setCentro(centro);
 			
-			consultantesService.guardarConsultante(consultante);
+			String resultado=consultantesService.guardarConsultante(consultante);
+			String msj=Constante.WS_RENIEC.SALIDA.CODIGO_ERROR.get(resultado);
+			msj=StringUtils.isBlank(msj)?resultado:msj;
+			detalle.setMensaje(msj);
 			detalle.setConsultante(consultante);
 			
 			detalleService.guardaDetalle(detalle);
