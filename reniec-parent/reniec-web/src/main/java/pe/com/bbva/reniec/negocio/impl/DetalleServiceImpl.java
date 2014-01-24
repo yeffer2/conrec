@@ -60,7 +60,7 @@ public class DetalleServiceImpl extends ConfiguracionServiceImpl implements
 			
 			
 			if(!detalle.getNombreCompleto().trim().equals(""))
-				filtro.add(Restrictions.sqlRestriction("lower(paterno||' '||materno||' '||nombres) like lower(?)", "%"+detalle.getNombreCompleto().trim()+"%",Hibernate.STRING));
+				filtro.add(Restrictions.sqlRestriction("lower(this_.paterno||' '||this_.materno||' '||this_.nombres) like lower(?)", "%"+detalle.getNombreCompleto().trim()+"%",Hibernate.STRING));
 
 			
 			if(detalle.getAccion() != null)

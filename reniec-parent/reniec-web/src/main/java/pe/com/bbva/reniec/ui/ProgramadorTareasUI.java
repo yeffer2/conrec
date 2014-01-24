@@ -1,5 +1,7 @@
 package pe.com.bbva.reniec.ui;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -1025,10 +1027,11 @@ public class ProgramadorTareasUI extends CustomComponent implements ClickListene
 				item.getItemProperty("nombre").setValue(trigger.getTriggerName());
 				item.getItemProperty("prioridad").setValue(trigger.getPriority());
 				item.getItemProperty("expresion").setValue(cronTrigger.getCronExpression());
-				item.getItemProperty("inicio").setValue(this.formatoFecha(new Date(trigger.getStartTime())));
-				item.getItemProperty("termino").setValue(this.formatoFecha(new Date(trigger.getEndTime())));
-				item.getItemProperty("ultEjec").setValue(this.formatoFecha(new Date(trigger.getPrevFireTime())));
-				item.getItemProperty("sigEjec").setValue(this.formatoFecha(new Date(trigger.getNextFireTime())));
+				DateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
+				item.getItemProperty("inicio").setValue(dateFormat.format(new Date(trigger.getStartTime())));
+				item.getItemProperty("termino").setValue(dateFormat.format(new Date(trigger.getEndTime())));
+				item.getItemProperty("ultEjec").setValue(dateFormat.format(new Date(trigger.getPrevFireTime())));
+				item.getItemProperty("sigEjec").setValue(dateFormat.format(new Date(trigger.getNextFireTime())));
 				item.getItemProperty("estado").setValue(trigger.getTriggerState());	
 			}
 		}
