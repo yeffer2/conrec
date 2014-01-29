@@ -181,7 +181,7 @@ public class ProcesarCargaLDAP {
 	private void bajaTemporalConsultantes(Valor origen, Long nroFilaInterno) {
 		Consultante consultanteReniec = new Consultante();
 		consultanteReniec.setOrigen(origen);
-		consultantesReniec = consultantesService.obtenerConsultante(consultanteReniec);
+		consultantesReniec = consultantesService.obtenerConsultanteDarBaja(consultanteReniec);
 		List<Consultante> consultanteBajaTemporal = new  ArrayList<Consultante>();		
 		
 		iteradorLdap: for(Consultante consultanteReniecLocal: consultantesReniec){			

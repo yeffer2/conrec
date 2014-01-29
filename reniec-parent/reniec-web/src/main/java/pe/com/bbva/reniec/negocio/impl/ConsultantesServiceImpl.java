@@ -117,6 +117,25 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 	}
 	
 	@Override
+	public List<Consultante> obtenerConsultanteDarBaja(Consultante consultante) {
+		Busqueda filtro = Busqueda.forClass(Consultante.class);
+		if (consultante != null) {
+			filtro.createAlias("estado", "e");
+			filtro.createAlias("e.lista", "le");
+			filtro.add(Restrictions.eq("le.codigo", Constante.LISTA.CODIGO.USUARIO_ESTADO));
+			filtro.add(Restrictions.ne("e.codigo", Constante.VALOR.USUARIO_ESTADO.CODIGO.BAJA_TEMPORAL));
+			if (consultante.getOrigen() != null) {
+				filtro.createAlias("origen", "o");
+				filtro.createAlias("o.lista", "lo");
+				filtro.add(Restrictions.eq("lo.codigo", Constante.LISTA.CODIGO.ORIGEN));
+				filtro.add(Restrictions.ilike("o.nombre", consultante.getOrigen().getNombre(), MatchMode.ANYWHERE));
+			}
+		}
+		filtro.addOrder(Order.asc("id"));
+		return consultanteDAO.buscar(filtro);
+	}
+	
+	@Override
 	public String guardarConsultante(Consultante consultante) {
 		String resultado="";
 		String proceso="";
