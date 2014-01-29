@@ -124,6 +124,10 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 			filtro.createAlias("e.lista", "le");
 			filtro.add(Restrictions.eq("le.codigo", Constante.LISTA.CODIGO.USUARIO_ESTADO));
 			filtro.add(Restrictions.ne("e.codigo", Constante.VALOR.USUARIO_ESTADO.CODIGO.BAJA_TEMPORAL));
+			filtro.createAlias("nacionalidad", "n");
+			filtro.createAlias("n.lista", "ln");
+			filtro.add(Restrictions.eq("ln.codigo", Constante.LISTA.CODIGO.NACIONALIDAD_TIPO));
+			filtro.add(Restrictions.ne("n.codigo", Constante.VALOR.NACIONALIDAD_TIPO.CODIGO.EXTRANJERO));
 			if (consultante.getOrigen() != null) {
 				filtro.createAlias("origen", "o");
 				filtro.createAlias("o.lista", "lo");
