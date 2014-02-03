@@ -73,108 +73,113 @@ public class ProcesarCargaLDAP {
 		carga.setMensaje(mensaje);
 		carga.setInicio(new Date());
 		cargaMasivaService.guardarCarga(carga);
-		Consultante consultante = new Consultante();
-
-		List<Ldapperu2> usuariosLdap = ldapService.obtenerUsuariosLDAP();
-		loopConsultante: for (Ldapperu2 usuario : usuariosLdap) {
-			try {
-				Detalle detalle = new Detalle();
-				detalle.setCarga(carga);
-				detalle.setNroFila(nroFilaInterno++);
-				consultante = consultantesService.obtenerConsultantePorIdentificador(usuario.getCodusu());
-				consultante = consultante==null ? new Consultante() : consultante;
-				consultante.setIdentificador(usuario.getCodusu());
-				detalle.setIdentificador(usuario.getCodusu());
-				consultante.setCodigoReniec(usuario.getNumdoc());
-				detalle.setCodigoReniec(usuario.getNumdoc());
-				consultante.setTipoDOI(tipoDoi);
-				detalle.setTipoDoi(tipoDoi.getCodigo());
-				consultante.setDoi(usuario.getNumdoc());
-				detalle.setNumeroDoi(usuario.getNumdoc());
-				consultante.setNombres(usuario.getNombre());
-				detalle.setNombres(usuario.getNombre());
-				consultante.setPaterno(usuario.getApepat());
-				detalle.setPaterno(usuario.getApepat());
-				consultante.setMaterno(usuario.getApemat());
-				detalle.setMaterno(usuario.getApemat());
-
-				String nacimiento = usuario.getFecnac();
-				if (nacimiento == null)
-					continue loopConsultante;
-				SimpleDateFormat formatoDelTexto = new SimpleDateFormat(
-						formatoFecha);
-				consultante.setNacimiento(formatoDelTexto.parse(nacimiento));
-
-				detalle.setNacimiento(nacimiento);
-
-				Valor nacionalidad;
-				if (usuario.getCodpais().equals(codPaisPeru)) {
-					nacionalidad = configuracionService.obtenerValorxCodigo(
-							Constante.LISTA.CODIGO.NACIONALIDAD_TIPO,
-							Constante.VALOR.NACIONALIDAD_TIPO.CODIGO.PERUANA);
-				} else {
-					nacionalidad = configuracionService
-							.obtenerValorxCodigo(
-									Constante.LISTA.CODIGO.NACIONALIDAD_TIPO,
-									Constante.VALOR.NACIONALIDAD_TIPO.CODIGO.EXTRANJERO);
-				}
-				Valor estadoUsuario = configuracionService.obtenerValorxCodigo(
-						Constante.LISTA.CODIGO.USUARIO_ESTADO,
-						Constante.VALOR.USUARIO_ESTADO.CODIGO.ACTIVO);
-
-				consultante.setNacionalidad(nacionalidad);
-				detalle.setNacionalidad(nacionalidad.getCodigo());
-				if (usuario.getCodofi() == null)
-					continue loopConsultante;
-				consultante.setCentro(usuario.getCodofi());
-				detalle.setCentro(usuario.getCodofi());
-				consultante.setOrigen(origen);
-				detalle.setOrigen(origen.getCodigo());
-				
-				String resultado="";
-				if (consultante.getEstado() == null){
-					consultante.setEstado(estadoUsuario);
-					resultado=consultantesService.guardarConsultante(consultante);
-				}else {
-					if(consultante
-							.getEstado()
-							.getCodigo()
-							.equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.ACTIVO)){
-						consultantesLDAP.add(consultante);
+		try {
+			Consultante consultante = new Consultante();
+	
+			List<Ldapperu2> usuariosLdap = ldapService.obtenerUsuariosLDAP();
+			loopConsultante: for (Ldapperu2 usuario : usuariosLdap) {
+				try {
+					Detalle detalle = new Detalle();
+					detalle.setCarga(carga);
+					detalle.setNroFila(nroFilaInterno++);
+					consultante = consultantesService.obtenerConsultantePorIdentificador(usuario.getCodusu());
+					consultante = consultante==null ? new Consultante() : consultante;
+					consultante.setIdentificador(usuario.getCodusu());
+					detalle.setIdentificador(usuario.getCodusu());
+					consultante.setCodigoReniec(usuario.getNumdoc());
+					detalle.setCodigoReniec(usuario.getNumdoc());
+					consultante.setTipoDOI(tipoDoi);
+					detalle.setTipoDoi(tipoDoi.getCodigo());
+					consultante.setDoi(usuario.getNumdoc());
+					detalle.setNumeroDoi(usuario.getNumdoc());
+					consultante.setNombres(usuario.getNombre());
+					detalle.setNombres(usuario.getNombre());
+					consultante.setPaterno(usuario.getApepat());
+					detalle.setPaterno(usuario.getApepat());
+					consultante.setMaterno(usuario.getApemat());
+					detalle.setMaterno(usuario.getApemat());
+	
+					String nacimiento = usuario.getFecnac();
+					if (nacimiento == null)
 						continue loopConsultante;
-					}else if (consultante
-									.getEstado()
-									.getCodigo()
-									.equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.BAJA_TEMPORAL)
-									|| consultante
-									.getEstado()
-									.getCodigo()
-									.equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.ERROR_RENIEC)) {
+					SimpleDateFormat formatoDelTexto = new SimpleDateFormat(
+							formatoFecha);
+					consultante.setNacimiento(formatoDelTexto.parse(nacimiento));
+	
+					detalle.setNacimiento(nacimiento);
+	
+					Valor nacionalidad;
+					if (usuario.getCodpais().equals(codPaisPeru)) {
+						nacionalidad = configuracionService.obtenerValorxCodigo(
+								Constante.LISTA.CODIGO.NACIONALIDAD_TIPO,
+								Constante.VALOR.NACIONALIDAD_TIPO.CODIGO.PERUANA);
+					} else {
+						nacionalidad = configuracionService
+								.obtenerValorxCodigo(
+										Constante.LISTA.CODIGO.NACIONALIDAD_TIPO,
+										Constante.VALOR.NACIONALIDAD_TIPO.CODIGO.EXTRANJERO);
+					}
+					Valor estadoUsuario = configuracionService.obtenerValorxCodigo(
+							Constante.LISTA.CODIGO.USUARIO_ESTADO,
+							Constante.VALOR.USUARIO_ESTADO.CODIGO.ACTIVO);
+	
+					consultante.setNacionalidad(nacionalidad);
+					detalle.setNacionalidad(nacionalidad.getCodigo());
+					if (usuario.getCodofi() == null)
+						continue loopConsultante;
+					consultante.setCentro(usuario.getCodofi());
+					detalle.setCentro(usuario.getCodofi());
+					consultante.setOrigen(origen);
+					detalle.setOrigen(origen.getCodigo());
+					
+					String resultado="";
+					if (consultante.getEstado() == null){
 						consultante.setEstado(estadoUsuario);
 						resultado=consultantesService.guardarConsultante(consultante);
 						consultantesLDAP.add(consultante);
-					} else {
-						continue loopConsultante;
+					}else {
+						if(consultante
+								.getEstado()
+								.getCodigo()
+								.equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.ACTIVO)){
+							consultantesLDAP.add(consultante);
+							continue loopConsultante;
+						}else if (consultante
+										.getEstado()
+										.getCodigo()
+										.equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.BAJA_TEMPORAL)
+										|| consultante
+										.getEstado()
+										.getCodigo()
+										.equals(Constante.VALOR.USUARIO_ESTADO.CODIGO.ERROR_RENIEC)) {
+							consultante.setEstado(estadoUsuario);
+							resultado=consultantesService.guardarConsultante(consultante);
+							consultantesLDAP.add(consultante);
+						} else {
+							continue loopConsultante;
+						}
 					}
+					detalle.setAccion(Constante.VALOR.ACCION.CODIGO.ACTIVACION);
+					String msj=Constante.WS_RENIEC.SALIDA.CODIGO_ERROR.get(resultado);
+					msj=StringUtils.isBlank(msj)?resultado:msj;
+					detalle.setMensaje(msj);
+					detalle.setConsultante(consultante);
+					
+					detalleService.guardaDetalle(detalle);
+					
+				} catch (ParseException e) {
+					e.printStackTrace();
 				}
-				detalle.setAccion(Constante.VALOR.ACCION.CODIGO.ACTIVACION);
-				String msj=Constante.WS_RENIEC.SALIDA.CODIGO_ERROR.get(resultado);
-				msj=StringUtils.isBlank(msj)?resultado:msj;
-				detalle.setMensaje(msj);
-				detalle.setConsultante(consultante);
 				
-				detalleService.guardaDetalle(detalle);
 				
-			} catch (ParseException e) {
-				e.printStackTrace();
 			}
-			
-			
+			bajaTemporalConsultantes(origen, nroFilaInterno);
+		} catch (Exception e) {
+			carga.setMensaje("Error no se pudo procesar satisfactoriamente");
+		} finally {
+			carga.setFin(new Date());
+			cargaMasivaService.guardarCarga(carga);
 		}
-		bajaTemporalConsultantes(origen, nroFilaInterno);
-		carga.setFin(new Date());
-		cargaMasivaService.guardarCarga(carga);
-		
 
 	}
 

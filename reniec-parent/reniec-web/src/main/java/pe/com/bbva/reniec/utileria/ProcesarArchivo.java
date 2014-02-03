@@ -95,12 +95,13 @@ public class ProcesarArchivo {
 			
 		} catch (IOException e) {
 			e.printStackTrace();
+			carga.setMensaje("Error no se pudo procesar satisfactoriamente");
 			cargaMasivaService.guardarCarga(carga);
 
+		} finally {
+			carga.setFin(new Date());
+			cargaMasivaService.guardarCarga(carga);
 		}
-		carga.setFin(new Date());
-		cargaMasivaService.guardarCarga(carga);
-		
 
 	}
 
