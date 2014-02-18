@@ -51,6 +51,10 @@ public class ProcesarCargaLDAP {
 		Inject.injectScheduler(this, schedulerContext);
 	}
 
+	public void procesarCarga(){
+		consultantesService.cargarMasivaLDAP();
+	}
+	
 	public void procesarCarga(Date fecha, String mensaje) {
 		carga = new Carga();
 		Long nroFilaInterno = 2L;

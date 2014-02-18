@@ -476,9 +476,9 @@ public class ConsultantesUI extends CustomComponent implements TextChangeListene
 					Window windowHarec=getApplication().getMainWindow().getWindow();
 					windowHarec.getWindow().addWindow(window);
 				}else{
-					String mensaje=Constante.WS_RENIEC.SALIDA.CODIGO_ERROR.get(resultado);
-					mensaje=StringUtils.isBlank(mensaje)?resultado:mensaje;
-					AlertDialog window=new AlertDialog("","Los datos han sido guardados, pero hubo una incidencia en RENIEC, por favor reintentar. Error "+mensaje,"Aceptar","500px");
+					/*String mensaje=Constante.WS_RENIEC.SALIDA.CODIGO_ERROR.get(resultado);
+					mensaje=StringUtils.isBlank(mensaje)?resultado:mensaje;*/
+					AlertDialog window=new AlertDialog("","Los datos han sido guardados, pero hubo una incidencia en RENIEC, por favor reintentar. Error "+resultado,"Aceptar","500px");
 					
 					Window windowHarec=getApplication().getMainWindow().getWindow();
 					windowHarec.getWindow().addWindow(window);

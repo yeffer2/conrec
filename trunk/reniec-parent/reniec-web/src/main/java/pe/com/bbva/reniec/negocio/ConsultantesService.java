@@ -5,7 +5,9 @@ import java.util.List;
 
 import com.pe.bbva.reniec.ws.UsuarioResponse;
 
+import pe.com.bbva.reniec.dominio.Carga;
 import pe.com.bbva.reniec.dominio.Consultante;
+import pe.com.bbva.reniec.dominio.Detalle;
 import pe.com.bbva.reniec.dominio.Valor;
 
 public interface ConsultantesService extends ConfiguracionService,Serializable{
@@ -18,4 +20,6 @@ public interface ConsultantesService extends ConfiguracionService,Serializable{
 	Valor obtenerEstadoReniec(Consultante consultante);
 	UsuarioResponse guardarConsultanteWS(Consultante consultante, String proceso);
 	Consultante obtenerConsultanteLDAP(String registro, Valor origen);
+	
+	void cargarMasivaLDAP();
 }
