@@ -127,7 +127,7 @@ public class CargarConsultantes implements Job {
 	private void cargaAutomaticaLDAP() {
 		ProcesarCargaLDAP procesoLDAP = new ProcesarCargaLDAP(
 				getApplicationContext());
-		procesoLDAP.procesarCarga(new Date(), "");
+		procesoLDAP.procesarCarga();
 	}
 
 	public ConfiguracionService getConfiguracionService() {
