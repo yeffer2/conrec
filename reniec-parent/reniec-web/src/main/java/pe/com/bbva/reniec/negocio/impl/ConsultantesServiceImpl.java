@@ -313,27 +313,32 @@ public class ConsultantesServiceImpl extends ConfiguracionServiceImpl
 	
 	private String nuevoMensajeRENIECWS(UsuarioResponse usuarioResponse){
 		StringBuilder resultado=new StringBuilder();
-		resultado.append(usuarioResponse.getRefResponseHeader().getCodigoRespuesta());
+		String codigoRespuesta=usuarioResponse.getRefResponseHeader().getCodigoRespuesta();
+		String mensajeRespuesta=StringUtils.isNotBlank(usuarioResponse.getRefResponseHeader().getMensajeRespuesta())?
+				usuarioResponse.getRefResponseHeader().getMensajeRespuesta():"";
+		resultado.append(codigoRespuesta);
 		resultado.append(" ");
-		resultado.append(usuarioResponse.getRefResponseHeader().getMensajeRespuesta());
+		String mensaje=Constante.WS_RENIEC.SALIDA.CODIGO_ERROR.get(codigoRespuesta);
+		mensaje=StringUtils.isBlank(mensaje)?mensajeRespuesta:mensaje;
+		resultado.append(mensaje);
 		if(usuarioResponse.getRefUsuarioWSResponse()!=null){
-			if(usuarioResponse.getRefUsuarioWSResponse().getOkDni()!=null){
+			if(StringUtils.isNotBlank(usuarioResponse.getRefUsuarioWSResponse().getOkDni())){
 			resultado.append(" DNI: ");
 			resultado.append(usuarioResponse.getRefUsuarioWSResponse().getOkDni());
 			}
-			if(usuarioResponse.getRefUsuarioWSResponse().getOkNombres()!=null){
+			if(StringUtils.isNotBlank(usuarioResponse.getRefUsuarioWSResponse().getOkNombres())){
 			resultado.append(" NOM: ");
 			resultado.append(usuarioResponse.getRefUsuarioWSResponse().getOkNombres());
 			}
-			if(usuarioResponse.getRefUsuarioWSResponse().getOkApellidoPaterno()!=null){
+			if(StringUtils.isNotBlank(usuarioResponse.getRefUsuarioWSResponse().getOkApellidoPaterno())){
 			resultado.append(" APP: ");
 			resultado.append(usuarioResponse.getRefUsuarioWSResponse().getOkApellidoPaterno());
 			}
-			if(usuarioResponse.getRefUsuarioWSResponse().getOkApellidoMaterno()!=null){
+			if(StringUtils.isNotBlank(usuarioResponse.getRefUsuarioWSResponse().getOkApellidoMaterno())){
 			resultado.append(" APM: ");
 			resultado.append(usuarioResponse.getRefUsuarioWSResponse().getOkApellidoMaterno());
 			}
-			if(usuarioResponse.getRefUsuarioWSResponse().getOkFechaNacimiento()!=null){
+			if(StringUtils.isNotBlank(usuarioResponse.getRefUsuarioWSResponse().getOkFechaNacimiento())){
 			resultado.append(" FEN: ");
 			resultado.append(usuarioResponse.getRefUsuarioWSResponse().getOkFechaNacimiento());
 			}
